@@ -21,8 +21,8 @@ export function AcceptButton({ token }: AcceptButtonProps) {
       const data = await res.json();
       if (res.ok) {
         setDone(true);
-        // Broker admins go straight to /broker; realtors go through /setup
-        const dest = data.roleToAssign === 'broker_admin' ? '/broker' : '/setup';
+        // Agency admins go straight to /agency; providers go through /setup
+        const dest = data.roleToAssign === 'agency_admin' ? '/agency' : '/setup';
         setTimeout(() => (window.location.href = dest), 1500);
       } else {
         setError(data.error ?? 'Something went wrong.');

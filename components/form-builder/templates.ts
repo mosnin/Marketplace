@@ -384,16 +384,16 @@ export const BUYER_TEMPLATE: IntakeFormConfig = {
       ],
     },
 
-    // ── 4. Property ──
+    // ── 4. Service ──
     {
       id: id(),
-      title: 'Property',
+      title: 'Service',
       position: 3,
       questions: [
         {
           id: id(),
           type: 'radio',
-          label: 'What type of property are you looking for?',
+          label: 'What type of service are you looking for?',
           required: true,
           position: 0,
           options: [

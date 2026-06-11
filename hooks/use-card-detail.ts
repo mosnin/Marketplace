@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 
-export type CardType = 'contact' | 'deal' | 'tour' | 'property';
+export type CardType = 'contact' | 'deal' | 'appointment' | 'service';
 
 export interface CardDetailState<T = unknown> {
   data: T | null;

@@ -1,0 +1,8 @@
+{
+  "name": "koala-agency-tools",
+  "description": "Agency management tools for Koala. View team performance, manage unassigned leads, and track agent activity.",
+  "version": "1.0.0",
+  "author": { "name": "Koala", "url": "https://usekoala.com" },
+  "homepage": "https://usekoala.com",
+  "keywords": ["crm", "agency", "team", "real-estate", "koala"]
+}

@@ -19,9 +19,9 @@ type ParsedContact = {
   email: string | null;
   phone: string | null;
   type: 'rental' | 'buyer' | null;
-  stage: 'Qualifying' | 'Tour' | 'Application' | null;
+  stage: 'Qualifying' | 'Appointment' | 'Application' | null;
   monthlyBudget: number | null;
-  properties: string[];
+  services: string[];
   preferences: string | null;
   confidence: 'high' | 'medium' | 'low';
 };
@@ -34,7 +34,7 @@ type ParseError = {
 
 const SYSTEM_PROMPT = [
   'You are a CRM contact parser for a real-estate agent. Extract structured fields',
-  "from the realtor's note. Return JSON only — no prose.",
+  "from the provider's note. Return JSON only — no prose.",
   '',
   'Schema:',
   '{',
@@ -42,9 +42,9 @@ const SYSTEM_PROMPT = [
   '  "email": string | null,',
   '  "phone": string | null (digits only, no formatting),',
   '  "type": "rental" | "buyer" | null,',
-  '  "stage": "Qualifying" | "Tour" | "Application" | null,',
+  '  "stage": "Qualifying" | "Appointment" | "Application" | null,',
   '  "monthlyBudget": number | null (in dollars, derived from "$4200/mo" or similar),',
-  '  "properties": string[] (any addresses/listings mentioned),',
+  '  "services": string[] (any addresses/listings mentioned),',
   '  "preferences": string | null (free-text — neighborhood, bedroom count, pet-friendly, etc.),',
   '  "confidence": "high" | "medium" | "low"',
   '}',
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         // Wrap the user-controlled text so it can't be confused with an instruction.
-        { role: 'user', content: `Realtor note:\n"""\n${trimmed}\n"""` },
+        { role: 'user', content: `Provider note:\n"""\n${trimmed}\n"""` },
       ],
     });
     raw = completion.choices[0]?.message?.content ?? null;
@@ -206,7 +206,7 @@ export async function POST(req: NextRequest) {
     type: stageType(parsed.type),
     stage: stageName(parsed.stage),
     monthlyBudget: numberOrNull(parsed.monthlyBudget),
-    properties: stringArray(parsed.properties),
+    services: stringArray(parsed.services),
     preferences: stringOrNull(parsed.preferences),
     confidence: confidence(parsed.confidence),
   };
@@ -256,8 +256,8 @@ function stageType(v: unknown): 'rental' | 'buyer' | null {
   return v === 'rental' || v === 'buyer' ? v : null;
 }
 
-function stageName(v: unknown): 'Qualifying' | 'Tour' | 'Application' | null {
-  return v === 'Qualifying' || v === 'Tour' || v === 'Application' ? v : null;
+function stageName(v: unknown): 'Qualifying' | 'Appointment' | 'Application' | null {
+  return v === 'Qualifying' || v === 'Appointment' || v === 'Application' ? v : null;
 }
 
 function confidence(v: unknown): 'high' | 'medium' | 'low' {

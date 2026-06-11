@@ -59,15 +59,15 @@ export const RENTAL_APPLICATION_TEMPLATE: IntakeFormConfig = {
       ],
     },
     {
-      id: 'property-details',
-      title: 'Property Details',
-      description: 'Tell us about the property you\'re interested in.',
+      id: 'service-details',
+      title: 'Service Details',
+      description: 'Tell us about the service you\'re interested in.',
       position: 1,
       questions: [
         {
-          id: 'propertyAddress',
+          id: 'serviceAddress',
           type: 'text',
-          label: 'Property Address',
+          label: 'Service Address',
           placeholder: '123 Main St, Apt 4B',
           required: false,
           position: 0,
@@ -284,9 +284,9 @@ export const BUYER_INQUIRY_TEMPLATE: IntakeFormConfig = {
           scoring: { weight: 20 },
         },
         {
-          id: 'propertyType',
+          id: 'serviceType',
           type: 'select',
-          label: 'Property Type',
+          label: 'Service Type',
           required: false,
           position: 1,
           options: [
@@ -440,9 +440,9 @@ export const GENERAL_LEAD_CAPTURE_TEMPLATE: IntakeFormConfig = {
           required: false,
           position: 3,
           options: [
-            { value: 'buying', label: 'Buying a property' },
-            { value: 'renting', label: 'Renting a property' },
-            { value: 'selling', label: 'Selling a property' },
+            { value: 'buying', label: 'Buying a service' },
+            { value: 'renting', label: 'Renting a service' },
+            { value: 'selling', label: 'Selling a service' },
             { value: 'other', label: 'Other' },
           ],
         },

@@ -4,11 +4,11 @@ Two surfaces:
 
   log_activity_run (function_tool, agent-facing) — the agent calls this once
     at the end of a substantive run with a summary of what was decided. The
-    realtor sees these in the activity feed; brokers see them rolled up.
+    provider sees these in the activity feed; agencies see them rolled up.
 
-  persist_log (internal helper) — every lifecycle tool (book_tour,
-    advance_deal_stage, route_lead, send_property_packet, request_deal_review,
-    draft_message) calls this after a successful write so the broker rollup
+  persist_log (internal helper) — every lifecycle tool (book_appointment,
+    advance_deal_stage, route_lead, send_service_packet, request_deal_review,
+    draft_message) calls this after a successful write so the agency rollup
     has per-action signal instead of one summary per run.
 
 Both write to AgentActivityLog. Same shape, different callers.
@@ -36,8 +36,8 @@ async def persist_log(
 ) -> str:
     """Internal helper — write one row to AgentActivityLog. Returns the id.
 
-    Tools call this directly after a successful write so the broker rollup
-    sees concrete signal (e.g. action_type='tour_booked') rather than just
+    Tools call this directly after a successful write so the agency rollup
+    sees concrete signal (e.g. action_type='appointment_booked') rather than just
     end-of-run summaries. Failures here are swallowed by the caller — audit
     log writes should never abort the user-facing tool result.
     """
@@ -70,7 +70,7 @@ async def log_activity_run(
     deal_id: str | None = None,
 ) -> str:
     """Persist one AgentActivityLog row; call once per substantive run, skip trivial lookups."""
-    # action_type: short label (e.g. 'sweep', 'tour_followup').
+    # action_type: short label (e.g. 'sweep', 'appointment_followup').
     # outcome: completed|queued_for_approval|suggested|failed.
     # reasoning: 1-2 sentences describing what was decided and why.
     return await persist_log(

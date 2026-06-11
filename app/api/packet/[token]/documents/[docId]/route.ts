@@ -15,7 +15,7 @@ export async function GET(
   const { token, docId } = await params;
 
   const { data: packet } = await supabase
-    .from('PropertyPacket')
+    .from('ServicePacket')
     .select('includeDocumentIds, spaceId, expiresAt, revokedAt')
     .eq('token', token)
     .maybeSingle();

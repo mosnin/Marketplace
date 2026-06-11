@@ -16,11 +16,11 @@
 -- the database side of the contract.
 --
 -- Tenant scoping rule (single predicate, four tables): a Contact / Deal /
--- DealStage / Tour row is readable if its spaceId belongs to a Space
--- whose owner's clerkId matches the JWT's `sub` claim. Brokerage members
--- with shared access via BrokerageMembership are out of scope for this
+-- DealStage / Appointment row is readable if its spaceId belongs to a Space
+-- whose owner's clerkId matches the JWT's `sub` claim. Agency members
+-- with shared access via AgencyMembership are out of scope for this
 -- pass — they currently see zero events (same as today), and we'll add
--- their predicate in a follow-up once we observe the realtor path
+-- their predicate in a follow-up once we observe the provider path
 -- working in production.
 
 -- ── Contact ────────────────────────────────────────────────────────────
@@ -62,10 +62,10 @@ CREATE POLICY "realtime_authenticated_dealstage_select" ON "DealStage"
     )
   );
 
--- ── Tour ───────────────────────────────────────────────────────────────
-DROP POLICY IF EXISTS "deny_anon_tour_select" ON "Tour";
+-- ── Appointment ───────────────────────────────────────────────────────────────
+DROP POLICY IF EXISTS "deny_anon_appointment_select" ON "Appointment";
 
-CREATE POLICY "realtime_authenticated_tour_select" ON "Tour"
+CREATE POLICY "realtime_authenticated_appointment_select" ON "Appointment"
   FOR SELECT TO authenticated
   USING (
     "spaceId" IN (
@@ -87,4 +87,4 @@ CREATE INDEX IF NOT EXISTS idx_space_owner_clerk
 -- RLS denies by default. This explicit revoke makes the intent clear
 -- and survives any future ALL-role permissiveness someone might
 -- accidentally introduce.
-REVOKE SELECT ON "Contact", "Deal", "DealStage", "Tour" FROM anon;
+REVOKE SELECT ON "Contact", "Deal", "DealStage", "Appointment" FROM anon;

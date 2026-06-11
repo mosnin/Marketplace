@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStripe, pickSpacePriceId } from '@/lib/stripe';
 import { supabase } from '@/lib/supabase';
 import { requireSpaceOwner } from '@/lib/api-auth';
-import { getBrokerContext } from '@/lib/permissions';
+import { getAgencyContext } from '@/lib/permissions';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { PLANS } from '@/lib/plans';
 
-type BrokeragePlan = 'team' | 'team_plus';
+type AgencyPlan = 'team' | 'team_plus';
 
 /** Map plan → Stripe price env var. */
-function getBrokeragePriceEnv(plan: BrokeragePlan): string | undefined {
+function getAgencyPriceEnv(plan: AgencyPlan): string | undefined {
   switch (plan) {
     case 'team':
       return process.env.STRIPE_PRICE_TEAM;
@@ -23,8 +23,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const scope = body?.scope;
 
-    if (scope === 'brokerage') {
-      return handleBrokerageCheckout(req, body);
+    if (scope === 'agency') {
+      return handleAgencyCheckout(req, body);
     }
 
     // ── Space flow ─────────────────────────────────────────────────────────
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Billing not configured. Contact support.' }, { status: 503 });
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://my.usechippi.com';
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://my.usekoala.com';
 
     // Reuse existing Stripe customer or create one
     let customerId = stripeData?.stripeCustomerId;
@@ -178,31 +178,31 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * Brokerage-scoped checkout: creates/uses a Stripe customer + subscription
- * attached to the Brokerage row (NOT the broker_owner's personal Space).
+ * Agency-scoped checkout: creates/uses a Stripe customer + subscription
+ * attached to the Agency row (NOT the agency_owner's personal Space).
  */
-async function handleBrokerageCheckout(
+async function handleAgencyCheckout(
   _req: NextRequest,
   body: { plan?: string; scope?: string },
 ): Promise<NextResponse> {
-  // Auth: must be a broker (owner or admin), then enforce broker_owner only
-  const ctx = await getBrokerContext();
+  // Auth: must be a agency (owner or admin), then enforce agency_owner only
+  const ctx = await getAgencyContext();
   if (!ctx) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
-  if (ctx.membership.role !== 'broker_owner') {
+  if (ctx.membership.role !== 'agency_owner') {
     return NextResponse.json(
-      { error: 'Only the brokerage owner can manage billing.' },
+      { error: 'Only the agency owner can manage billing.' },
       { status: 403 },
     );
   }
 
   // Rate limit per authenticated DB user
-  const { allowed } = await checkRateLimit(`billing:brokerage:${ctx.dbUserId}`, 5, 60);
+  const { allowed } = await checkRateLimit(`billing:agency:${ctx.dbUserId}`, 5, 60);
   if (!allowed) return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
 
   // Validate plan input
-  const plan = body?.plan as BrokeragePlan | undefined;
+  const plan = body?.plan as AgencyPlan | undefined;
   if (plan !== 'team' && plan !== 'team_plus') {
     return NextResponse.json(
       { error: 'plan must be one of: team, team_plus' },
@@ -210,48 +210,48 @@ async function handleBrokerageCheckout(
     );
   }
 
-  const priceId = getBrokeragePriceEnv(plan);
+  const priceId = getAgencyPriceEnv(plan);
   if (!priceId) {
-    console.error('[checkout:brokerage] Plan not configured:', plan);
+    console.error('[checkout:agency] Plan not configured:', plan);
     return NextResponse.json({ error: 'Plan not configured' }, { status: 503 });
   }
 
-  // Load live Stripe columns for the Brokerage row (may not be on ctx.brokerage type yet)
-  const { data: brokerageStripe, error: brokerageQueryErr } = await supabase
-    .from('Brokerage')
+  // Load live Stripe columns for the Agency row (may not be on ctx.agency type yet)
+  const { data: agencyStripe, error: agencyQueryErr } = await supabase
+    .from('Agency')
     .select('id, name, ownerId, stripeCustomerId, stripeSubscriptionId, stripeSubscriptionStatus')
-    .eq('id', ctx.brokerage.id)
+    .eq('id', ctx.agency.id)
     .single();
 
-  if (brokerageQueryErr || !brokerageStripe) {
+  if (agencyQueryErr || !agencyStripe) {
     console.error(
-      '[checkout:brokerage] Brokerage query failed:',
-      brokerageQueryErr?.message,
-      brokerageQueryErr?.code,
+      '[checkout:agency] Agency query failed:',
+      agencyQueryErr?.message,
+      agencyQueryErr?.code,
     );
     return NextResponse.json(
-      { error: "Couldn't load brokerage — usually temporary." },
+      { error: "Couldn't load agency — usually temporary." },
       { status: 500 },
     );
   }
 
-  // Block if the brokerage already has an active or trialing subscription
-  const currentStatus = brokerageStripe.stripeSubscriptionStatus;
+  // Block if the agency already has an active or trialing subscription
+  const currentStatus = agencyStripe.stripeSubscriptionStatus;
   if (currentStatus === 'active' || currentStatus === 'trialing') {
     return NextResponse.json(
-      { error: 'Your brokerage already has an active subscription.' },
+      { error: 'Your agency already has an active subscription.' },
       { status: 400 },
     );
   }
   if (
-    brokerageStripe.stripeSubscriptionId &&
+    agencyStripe.stripeSubscriptionId &&
     (currentStatus === 'past_due' || currentStatus === 'unpaid')
   ) {
     return NextResponse.json(
       {
         error:
-          'Your brokerage has an existing subscription with a payment issue. Please update your payment method in billing settings.',
-        redirect: `/broker/billing`,
+          'Your agency has an existing subscription with a payment issue. Please update your payment method in billing settings.',
+        redirect: `/agency/billing`,
       },
       { status: 400 },
     );
@@ -261,49 +261,49 @@ async function handleBrokerageCheckout(
   try {
     stripe = getStripe();
   } catch (err: any) {
-    console.error('[checkout:brokerage] Stripe init failed:', err.message);
+    console.error('[checkout:agency] Stripe init failed:', err.message);
     return NextResponse.json({ error: 'Stripe not configured. Contact support.' }, { status: 500 });
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://my.usechippi.com';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://my.usekoala.com';
 
   // Reuse existing Stripe customer or create one (concurrency-safe)
-  let customerId = brokerageStripe.stripeCustomerId ?? null;
+  let customerId = agencyStripe.stripeCustomerId ?? null;
   if (!customerId) {
     const { data: owner } = await supabase
       .from('User')
       .select('email, name')
-      .eq('id', brokerageStripe.ownerId)
+      .eq('id', agencyStripe.ownerId)
       .single();
 
-    console.log('[checkout:brokerage] Creating Stripe customer for brokerage:', ctx.brokerage.id);
-    // Idempotency key bound to the brokerage — see the space-flow note
+    console.log('[checkout:agency] Creating Stripe customer for agency:', ctx.agency.id);
+    // Idempotency key bound to the agency — see the space-flow note
     // above. Concurrent create calls return the same Stripe customer
     // instead of leaving orphans in Stripe's customer list.
     const customer = await stripe.customers.create(
       {
         email: owner?.email,
-        name: owner?.name || brokerageStripe.name || undefined,
-        metadata: { brokerageId: ctx.brokerage.id },
+        name: owner?.name || agencyStripe.name || undefined,
+        metadata: { agencyId: ctx.agency.id },
       },
-      { idempotencyKey: `customer-create:brokerage:${ctx.brokerage.id}` },
+      { idempotencyKey: `customer-create:agency:${ctx.agency.id}` },
     );
     customerId = customer.id;
 
     // Conditional write: only persist if not already set by a concurrent request.
     const { data: updateResult } = await supabase
-      .from('Brokerage')
+      .from('Agency')
       .update({ stripeCustomerId: customerId })
-      .eq('id', ctx.brokerage.id)
+      .eq('id', ctx.agency.id)
       .is('stripeCustomerId', null)
       .select('stripeCustomerId')
       .single();
 
     if (!updateResult) {
       const { data: winner } = await supabase
-        .from('Brokerage')
+        .from('Agency')
         .select('stripeCustomerId')
-        .eq('id', ctx.brokerage.id)
+        .eq('id', ctx.agency.id)
         .single();
       if (winner?.stripeCustomerId) {
         customerId = winner.stripeCustomerId;
@@ -313,7 +313,7 @@ async function handleBrokerageCheckout(
 
   try {
     console.log(
-      '[checkout:brokerage] Creating checkout session, customer:',
+      '[checkout:agency] Creating checkout session, customer:',
       customerId,
       'price:',
       priceId,
@@ -325,15 +325,15 @@ async function handleBrokerageCheckout(
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
       subscription_data: {
-        metadata: { brokerageId: ctx.brokerage.id, plan },
+        metadata: { agencyId: ctx.agency.id, plan },
       },
-      success_url: `${appUrl}/broker/billing?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/broker/billing?canceled=1`,
-      metadata: { brokerageId: ctx.brokerage.id, plan },
+      success_url: `${appUrl}/agency/billing?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/agency/billing?canceled=1`,
+      metadata: { agencyId: ctx.agency.id, plan },
     });
 
     console.log(
-      '[checkout:brokerage] Session created:',
+      '[checkout:agency] Session created:',
       session.id,
       'url:',
       session.url?.slice(0, 50),
@@ -341,7 +341,7 @@ async function handleBrokerageCheckout(
     return NextResponse.json({ url: session.url });
   } catch (err: any) {
     console.error(
-      '[checkout:brokerage] session create failed:',
+      '[checkout:agency] session create failed:',
       err?.message,
       err?.stack?.slice(0, 200),
     );

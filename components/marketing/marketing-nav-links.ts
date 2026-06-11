@@ -17,8 +17,8 @@ export interface MarketingPlainLink {
 /* ─── Top-level nav items (flat) ─────────────────────────────────────── */
 
 export const TOP_LEVEL_NAV: MarketingPlainLink[] = [
-  { href: '/realtors', label: 'Realtors' },
-  { href: '/brokerages', label: 'Brokerages' },
+  { href: '/providers', label: 'Providers' },
+  { href: '/agencies', label: 'Agencies' },
   { href: '/integrations', label: 'Integrations' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/company', label: 'Company' },

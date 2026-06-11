@@ -122,14 +122,14 @@ export async function PATCH(
     if (body.address !== undefined) updates.address = body.address ? String(body.address).slice(0, 500) : null;
     if (body.notes !== undefined) updates.notes = body.notes ? String(body.notes).slice(0, 5000) : null;
     if (body.preferences !== undefined) updates.preferences = body.preferences ? String(body.preferences).slice(0, 5000) : null;
-    if (body.properties !== undefined) {
-      if (!Array.isArray(body.properties)) {
-        return NextResponse.json({ error: 'properties must be an array' }, { status: 400 });
+    if (body.services !== undefined) {
+      if (!Array.isArray(body.services)) {
+        return NextResponse.json({ error: 'services must be an array' }, { status: 400 });
       }
-      if (body.properties.length > 50) {
-        return NextResponse.json({ error: 'properties: max 50 entries' }, { status: 400 });
+      if (body.services.length > 50) {
+        return NextResponse.json({ error: 'services: max 50 entries' }, { status: 400 });
       }
-      updates.properties = body.properties
+      updates.services = body.services
         .filter((p: unknown): p is string => typeof p === 'string')
         .map((p: string) => p.slice(0, 500));
     }
@@ -185,9 +185,9 @@ export async function PATCH(
     }
 
     if (body.type !== undefined) {
-      const VALID_CONTACT_TYPES = ['QUALIFICATION', 'TOUR', 'APPLICATION'];
+      const VALID_CONTACT_TYPES = ['QUALIFICATION', 'APPOINTMENT', 'APPLICATION'];
       if (!VALID_CONTACT_TYPES.includes(body.type)) {
-        return NextResponse.json({ error: 'Invalid type. Must be QUALIFICATION, TOUR, or APPLICATION' }, { status: 400 });
+        return NextResponse.json({ error: 'Invalid type. Must be QUALIFICATION, APPOINTMENT, or APPLICATION' }, { status: 400 });
       }
       updates.type = body.type;
       if (body.type !== existing.type) {

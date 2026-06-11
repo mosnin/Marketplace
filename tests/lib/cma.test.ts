@@ -28,14 +28,14 @@ function comp(overrides: Partial<CmaComp>): CmaComp {
 }
 
 const SUBJECT: CmaSubject = {
-  propertyId: null,
+  serviceId: null,
   address: '500 Subject Ave',
   city: 'Oakland',
   stateRegion: 'CA',
   beds: 3,
   baths: 2,
   squareFeet: 2000,
-  propertyType: 'single_family',
+  serviceType: 'single_family',
   listPrice: null,
 };
 

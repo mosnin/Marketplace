@@ -31,7 +31,7 @@ export function createFormSnapshot(config: IntakeFormConfig): IntakeFormConfig {
 
 export interface ResolvedFormConfig {
   config: IntakeFormConfig | null;
-  source: 'custom' | 'brokerage' | 'legacy';
+  source: 'custom' | 'agency' | 'legacy';
 }
 
 /**
@@ -39,7 +39,7 @@ export interface ResolvedFormConfig {
  *
  * Resolution order:
  *   1. SpaceSetting.formConfig if source is 'custom'
- *   2. Brokerage.brokerageFormConfig if source is 'brokerage'
+ *   2. Agency.agencyFormConfig if source is 'agency'
  *   3. SpaceSetting.formConfig if present (fallback)
  *   4. null for legacy spaces with no dynamic form
  */
@@ -68,31 +68,31 @@ export async function resolveFormConfig(
     return { config: setting.formConfig as IntakeFormConfig, source: 'custom' };
   }
 
-  // Brokerage — fetch from the brokerage row for the freshest version
-  if (source === 'brokerage') {
+  // Agency — fetch from the agency row for the freshest version
+  if (source === 'agency') {
     // First try the space's cached copy
     if (setting.formConfig) {
-      return { config: setting.formConfig as IntakeFormConfig, source: 'brokerage' };
+      return { config: setting.formConfig as IntakeFormConfig, source: 'agency' };
     }
 
-    // Fall back to brokerage row
+    // Fall back to agency row
     const { data: space } = await supabase
       .from('Space')
-      .select('brokerageId')
+      .select('agencyId')
       .eq('id', spaceId)
       .maybeSingle();
 
-    if (space?.brokerageId) {
-      const { data: brokerage } = await supabase
-        .from('Brokerage')
-        .select('brokerageFormConfig')
-        .eq('id', space.brokerageId)
+    if (space?.agencyId) {
+      const { data: agency } = await supabase
+        .from('Agency')
+        .select('agencyFormConfig')
+        .eq('id', space.agencyId)
         .maybeSingle();
 
-      if (brokerage?.brokerageFormConfig) {
+      if (agency?.agencyFormConfig) {
         return {
-          config: brokerage.brokerageFormConfig as IntakeFormConfig,
-          source: 'brokerage',
+          config: agency.agencyFormConfig as IntakeFormConfig,
+          source: 'agency',
         };
       }
     }
@@ -241,13 +241,13 @@ function getLegacyDisplay(app: ApplicationData): DisplayField[] {
     fields.push({ label, value: display, sectionTitle: section });
   }
 
-  // Property
-  add('Property address', app.propertyAddress, 'Property');
-  add('Unit type', app.unitType, 'Property');
-  add('Move-in date', app.targetMoveInDate, 'Property');
-  add('Monthly rent', app.monthlyRent, 'Property');
-  add('Lease term', app.leaseTermPreference, 'Property');
-  add('Occupants', app.numberOfOccupants, 'Property');
+  // Service
+  add('Service address', app.serviceAddress, 'Service');
+  add('Unit type', app.unitType, 'Service');
+  add('Move-in date', app.targetMoveInDate, 'Service');
+  add('Monthly rent', app.monthlyRent, 'Service');
+  add('Lease term', app.leaseTermPreference, 'Service');
+  add('Occupants', app.numberOfOccupants, 'Service');
 
   // Applicant
   add('Legal name', app.legalName, 'Applicant');
@@ -287,7 +287,7 @@ function getLegacyDisplay(app: ApplicationData): DisplayField[] {
   // Buyer-specific
   add('Pre-approval status', app.preApprovalStatus, 'Buyer');
   add('Pre-approval amount', app.preApprovalAmount, 'Buyer');
-  add('Property type', app.propertyType, 'Buyer');
+  add('Service type', app.serviceType, 'Buyer');
   add('Bedrooms', app.bedrooms, 'Buyer');
   add('Bathrooms', app.bathrooms, 'Buyer');
   add('Budget', app.buyerBudget, 'Buyer');

@@ -3,10 +3,10 @@ import { supabase } from '@/lib/supabase';
 import { requireSpaceOwner } from '@/lib/api-auth';
 import {
   notificationForNewLeadsCount,
-  notificationForUpcomingTour,
+  notificationForUpcomingAppointment,
   notificationForFollowUpDue,
   notificationForWaitlist,
-  notificationForToursNeedingFollowUp,
+  notificationForAppointmentsNeedingFollowUp,
 } from '@/lib/notification-voice';
 
 /**
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       .from('Contact')
       .select('*', { count: 'exact', head: true })
       .eq('spaceId', space.id)
-      .is('brokerageId', null)
+      .is('agencyId', null)
       .contains('tags', ['new-lead']);
     if (newLeads && newLeads > 0) {
       const copy = notificationForNewLeadsCount(newLeads);
@@ -53,27 +53,27 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // 2. Tours starting in the next 24 hours
+    // 2. Appointments starting in the next 24 hours
     const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const { data: upcomingTours } = await supabase
-      .from('Tour')
-      .select('id, guestName, startsAt, propertyAddress')
+    const { data: upcomingAppointments } = await supabase
+      .from('Appointment')
+      .select('id, guestName, startsAt, serviceAddress')
       .eq('spaceId', space.id)
       .in('status', ['scheduled', 'confirmed'])
       .gte('startsAt', now.toISOString())
       .lte('startsAt', in24h.toISOString())
       .order('startsAt', { ascending: true })
       .limit(5);
-    for (const t of upcomingTours ?? []) {
-      const copy = notificationForUpcomingTour(
+    for (const t of upcomingAppointments ?? []) {
+      const copy = notificationForUpcomingAppointment(
         t.guestName,
         new Date(t.startsAt),
-        t.propertyAddress,
+        t.serviceAddress,
         now,
       );
       notifications.push({
-        id: `tour-${t.id}`,
-        type: 'upcoming_tour',
+        id: `appointment-${t.id}`,
+        type: 'upcoming_appointment',
         title: copy.title,
         description: copy.description,
         href: `/s/${slug}/calendar`,
@@ -106,7 +106,7 @@ export async function GET(req: NextRequest) {
 
     // 4. Waitlist entries needing attention
     const { count: waitlistCount } = await supabase
-      .from('TourWaitlist')
+      .from('AppointmentWaitlist')
       .select('*', { count: 'exact', head: true })
       .eq('spaceId', space.id)
       .eq('status', 'waiting');
@@ -123,9 +123,9 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // 5. Completed tours needing follow-up (no deal yet)
+    // 5. Completed appointments needing follow-up (no deal yet)
     const { data: completedNoFollowUp } = await supabase
-      .from('Tour')
+      .from('Appointment')
       .select('id, guestName, updatedAt')
       .eq('spaceId', space.id)
       .eq('status', 'completed')
@@ -133,19 +133,19 @@ export async function GET(req: NextRequest) {
       .limit(10);
 
     if (completedNoFollowUp?.length) {
-      const tourIds = completedNoFollowUp.map((t: any) => t.id);
-      const { data: dealsFromTours } = await supabase
+      const appointmentIds = completedNoFollowUp.map((t: any) => t.id);
+      const { data: dealsFromAppointments } = await supabase
         .from('Deal')
-        .select('sourceTourId')
+        .select('sourceAppointmentId')
         .eq('spaceId', space.id)
-        .in('sourceTourId', tourIds);
-      const dealsSet = new Set((dealsFromTours ?? []).map((d: any) => d.sourceTourId));
+        .in('sourceAppointmentId', appointmentIds);
+      const dealsSet = new Set((dealsFromAppointments ?? []).map((d: any) => d.sourceAppointmentId));
       const needsAction = completedNoFollowUp.filter((t: any) => !dealsSet.has(t.id));
       if (needsAction.length > 0) {
-        const copy = notificationForToursNeedingFollowUp(needsAction.length);
+        const copy = notificationForAppointmentsNeedingFollowUp(needsAction.length);
         notifications.push({
-          id: 'tours-need-action',
-          type: 'tour_needs_action',
+          id: 'appointments-need-action',
+          type: 'appointment_needs_action',
           title: copy.title,
           description: copy.description,
           href: `/s/${slug}/calendar`,

@@ -129,17 +129,17 @@ export default async function ApplicationStatusPage({
     readAt: string | null;
     createdAt: string;
   }[] = [];
-  let tours: {
+  let appointments: {
     id: string;
     startsAt: string;
     endsAt: string;
-    propertyAddress: string | null;
+    serviceAddress: string | null;
     notes: string | null;
     status: string;
   }[] = [];
 
   if (portalMode) {
-    const [historyResult, messageResult, tourResult] = await Promise.all([
+    const [historyResult, messageResult, appointmentResult] = await Promise.all([
       supabase
         .from('ApplicationStatusUpdate')
         .select('id, fromStatus, toStatus, note, createdAt')
@@ -151,8 +151,8 @@ export default async function ApplicationStatusPage({
         .eq('contactId', contact.id)
         .order('createdAt', { ascending: true }),
       supabase
-        .from('Tour')
-        .select('id, startsAt, endsAt, propertyAddress, notes, status')
+        .from('Appointment')
+        .select('id, startsAt, endsAt, serviceAddress, notes, status')
         .eq('contactId', contact.id)
         .in('status', ['scheduled', 'confirmed', 'completed'])
         .order('startsAt', { ascending: true }),
@@ -160,17 +160,17 @@ export default async function ApplicationStatusPage({
 
     statusHistory = historyResult.data ?? [];
     messages = messageResult.data ?? [];
-    tours = tourResult.data ?? [];
+    appointments = appointmentResult.data ?? [];
 
-    // Mark unread realtor messages as read
-    const unreadRealtorIds = messages
-      .filter((m) => m.senderType === 'realtor' && !m.readAt)
+    // Mark unread provider messages as read
+    const unreadProviderIds = messages
+      .filter((m) => m.senderType === 'provider' && !m.readAt)
       .map((m) => m.id);
-    if (unreadRealtorIds.length > 0) {
+    if (unreadProviderIds.length > 0) {
       await supabase
         .from('ApplicationMessage')
         .update({ readAt: new Date().toISOString() })
-        .in('id', unreadRealtorIds);
+        .in('id', unreadProviderIds);
     }
   }
 
@@ -193,7 +193,7 @@ export default async function ApplicationStatusPage({
         portalMode={portalMode}
         statusHistory={statusHistory}
         messages={messages}
-        tours={tours}
+        appointments={appointments}
         token={portalMode ? token! : null}
         slug={slug}
       />

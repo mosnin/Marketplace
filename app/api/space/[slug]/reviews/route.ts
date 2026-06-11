@@ -16,7 +16,7 @@ type ReviewRow = {
   resolvedAt: string | null;
   resolvedNote: string | null;
   requestingUserId: string;
-  brokerageId: string;
+  agencyId: string;
 };
 
 type DealLite = { id: string; title: string | null; value: number | null };
@@ -24,10 +24,10 @@ type DealLite = { id: string; title: string | null; value: number | null };
 /**
  * GET /api/space/[slug]/reviews?status=open|approved|closed|all
  *
- * Realtor-facing list of the caller's own review requests. Default status =
+ * Provider-facing list of the caller's own review requests. Default status =
  * 'all' (the dedicated /reviews page shows tabs for each state). Scoped to
  *   - requestingUserId === caller's User.id (so agents only see their own)
- *   - brokerageId === the Space's brokerageId
+ *   - agencyId === the Space's agencyId
  *
  * Sort: open first, then createdAt DESC within each group. Limit 200.
  */
@@ -38,8 +38,8 @@ export async function GET(req: NextRequest, { params }: Params) {
   if (authResult instanceof NextResponse) return authResult;
   const { userId: clerkId, space } = authResult;
 
-  // Space must belong to a brokerage for reviews to be meaningful.
-  if (!space.brokerageId) {
+  // Space must belong to a agency for reviews to be meaningful.
+  if (!space.agencyId) {
     return NextResponse.json([]);
   }
 
@@ -68,10 +68,10 @@ export async function GET(req: NextRequest, { params }: Params) {
   let query = supabase
     .from('DealReviewRequest')
     .select(
-      'id, dealId, status, reason, createdAt, resolvedAt, resolvedNote, requestingUserId, brokerageId',
+      'id, dealId, status, reason, createdAt, resolvedAt, resolvedNote, requestingUserId, agencyId',
     )
     .eq('requestingUserId', dbUser.id)
-    .eq('brokerageId', space.brokerageId);
+    .eq('agencyId', space.agencyId);
 
   if (statusFilter !== 'all') {
     query = query.eq('status', statusFilter);
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest, { params }: Params) {
   if (rowsErr) {
     logger.error(
       '[space/reviews/GET] list failed',
-      { slug, brokerageId: space.brokerageId },
+      { slug, agencyId: space.agencyId },
       rowsErr,
     );
     return NextResponse.json({ error: 'Failed to load reviews' }, { status: 500 });

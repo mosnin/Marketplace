@@ -1,5 +1,5 @@
 /**
- * Chippi Proprietary Lead Scoring Engine
+ * Koala Proprietary Lead Scoring Engine
  *
  * Deterministic, weighted scoring system for rental and buyer leads.
  * Produces consistent scores across runs — no LLM dependency for the score itself.
@@ -354,7 +354,7 @@ function scoreApplicationCompleteness(input: ScoringInput): CategoryResult {
     input.email,               // email
     input.phone,               // phone
     app.targetMoveInDate,
-    app.propertyAddress,
+    app.serviceAddress,
     app.monthlyRent,
     app.monthlyGrossIncome,
     app.employmentStatus,
@@ -494,7 +494,7 @@ function computeDataCompleteness(input: ScoringInput): number {
     input.email,               // email
     input.phone,               // phone
     app.targetMoveInDate,
-    app.propertyAddress,
+    app.serviceAddress,
     app.monthlyRent,
     app.monthlyGrossIncome,
     app.employmentStatus,
@@ -518,7 +518,7 @@ function computeBuyerDataCompleteness(input: ScoringInput): number {
     input.phone,                                   // phone
     app.buyerBudget,
     app.preApprovalStatus,
-    app.propertyType,
+    app.serviceType,
     app.bedrooms,
     app.bathrooms,
     app.mustHaves,
@@ -574,7 +574,7 @@ function collectInsights(categories: CategoryResult[], penalties: RiskPenalty[],
     if (!app.buyerBudget) missingInformation.push('Buyer budget');
     if (!app.buyerTimeline && !app.targetMoveInDate) missingInformation.push('Purchase timeline');
     if (!app.housingSituation && !app.currentHousingStatus) missingInformation.push('Current housing situation');
-    if (!app.propertyType) missingInformation.push('Desired property type');
+    if (!app.serviceType) missingInformation.push('Desired service type');
     if (!app.firstTimeBuyer) missingInformation.push('First-time buyer status');
     if (!app.bedrooms) missingInformation.push('Bedroom preferences');
     if (!app.bathrooms) missingInformation.push('Bathroom preferences');
@@ -584,7 +584,7 @@ function collectInsights(categories: CategoryResult[], penalties: RiskPenalty[],
     if (!app.employmentStatus) missingInformation.push('Employment status');
     if (!app.targetMoveInDate) missingInformation.push('Target move-in date');
     if (!app.monthlyRent && !input.budget) missingInformation.push('Target monthly rent');
-    if (!app.propertyAddress) missingInformation.push('Property address');
+    if (!app.serviceAddress) missingInformation.push('Service address');
     if (app.numberOfOccupants == null) missingInformation.push('Number of occupants');
     if (app.hasPets == null) missingInformation.push('Pet information');
     if (!app.leaseTermPreference) missingInformation.push('Lease term preference');
@@ -606,7 +606,7 @@ export const BUYER_WEIGHTS = {
   preApproval: 0.30,
   budgetAlignment: 0.20,
   timelineUrgency: 0.15,
-  propertySpecificity: 0.15,
+  serviceSpecificity: 0.15,
   housingSituation: 0.10,
   completeness: 0.10,
 } as const;
@@ -761,15 +761,15 @@ function scoreBuyerFirstTime(input: ScoringInput): { rawScore: number; signals: 
   return { rawScore, signals };
 }
 
-function scoreBuyerPropertySpecificity(input: ScoringInput): { rawScore: number; signals: string[] } {
+function scoreBuyerServiceSpecificity(input: ScoringInput): { rawScore: number; signals: string[] } {
   const app = input.applicationData;
   const signals: string[] = [];
   let specificityPoints = 0;
   const maxPoints = 5;
 
-  if (app?.propertyType) {
+  if (app?.serviceType) {
     specificityPoints++;
-    signals.push(`Property type: ${app.propertyType}`);
+    signals.push(`Service type: ${app.serviceType}`);
   }
 
   if (app?.bedrooms) {
@@ -794,7 +794,7 @@ function scoreBuyerPropertySpecificity(input: ScoringInput): { rawScore: number;
   }
 
   if (specificityPoints === 0) {
-    signals.push('No property preferences specified');
+    signals.push('No service preferences specified');
   }
 
   const rawScore = Math.min(1.0, specificityPoints / maxPoints);
@@ -819,7 +819,7 @@ function scoreBuyerCompleteness(input: ScoringInput): { rawScore: number; signal
     input.phone,
     app.buyerBudget,
     app.preApprovalStatus,
-    app.propertyType,
+    app.serviceType,
     app.bedrooms,
     app.bathrooms,
     app.mustHaves,
@@ -920,7 +920,7 @@ function collectBuyerInsights(
     if (!app.buyerTimeline && !app.targetMoveInDate) missingInformation.push('Purchase timeline');
     if (!app.housingSituation && !app.currentHousingStatus) missingInformation.push('Current housing situation');
     if (!app.firstTimeBuyer) missingInformation.push('First-time buyer status');
-    if (!app.propertyType) missingInformation.push('Desired property type');
+    if (!app.serviceType) missingInformation.push('Desired service type');
     if (!app.bedrooms) missingInformation.push('Bedroom preferences');
     if (!app.bathrooms) missingInformation.push('Bathroom preferences');
     if (!app.mustHaves) missingInformation.push('Must-have features');
@@ -943,7 +943,7 @@ function computeBuyerScore(input: ScoringInput): ScoringEngineResult {
   const preApproval = scoreBuyerPreApproval(input);
   const budgetAlignment = scoreBuyerBudgetAlignment(input);
   const timeline = scoreBuyerTimeline(input);
-  const specificity = scoreBuyerPropertySpecificity(input);
+  const specificity = scoreBuyerServiceSpecificity(input);
   const housing = scoreBuyerHousingSituation(input);
   const completenessResult = scoreBuyerCompleteness(input);
 
@@ -951,7 +951,7 @@ function computeBuyerScore(input: ScoringInput): ScoringEngineResult {
     { name: 'preApproval', ...preApproval },
     { name: 'budgetAlignment', ...budgetAlignment },
     { name: 'timelineUrgency', ...timeline },
-    { name: 'propertySpecificity', ...specificity },
+    { name: 'serviceSpecificity', ...specificity },
     { name: 'housingSituation', ...housing },
     { name: 'completeness', ...completenessResult },
   ];
@@ -961,7 +961,7 @@ function computeBuyerScore(input: ScoringInput): ScoringEngineResult {
     'affordability',           // preApproval
     'employmentStability',     // budgetAlignment
     'moveInUrgency',           // timelineUrgency
-    'applicationCompleteness', // propertySpecificity
+    'applicationCompleteness', // serviceSpecificity
     'householdFit',            // housingSituation
     'affordability',           // completeness (reuse placeholder)
   ];

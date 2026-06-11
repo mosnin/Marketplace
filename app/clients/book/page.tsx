@@ -5,28 +5,28 @@ import { getClientUser } from '@/lib/client-auth';
 import { getClientPortalData } from '@/lib/client-portal-data';
 import { TITLE_FONT } from '@/lib/typography';
 import { PortalEmptyState } from '../portal-ui';
-import { BookTourForm } from './book-form';
+import { BookAppointmentForm } from './book-form';
 
 export const dynamic = 'force-dynamic';
 
-export default async function BookTourPage() {
+export default async function BookAppointmentPage() {
   const user = await getClientUser();
   if (!user) redirect('/clients/login');
   if (!user.emailVerifiedAt) redirect('/clients/verify');
 
-  const { applications, tours } = await getClientPortalData(user.email);
+  const { applications, appointments } = await getClientPortalData(user.email);
 
-  // Realtors the client is already engaged with (from applications + tours).
+  // Providers the client is already engaged with (from applications + appointments).
   // Booking with a stranger isn't a portal flow — the public /book/[slug] page
   // covers that. Here we only offer agents the client already has a thread with.
   const bySlug = new Map<string, string>();
   for (const a of applications) {
-    if (a.realtorSlug) bySlug.set(a.realtorSlug, a.realtorName ?? a.realtorSlug);
+    if (a.providerSlug) bySlug.set(a.providerSlug, a.providerName ?? a.providerSlug);
   }
-  for (const t of tours) {
-    if (t.realtorSlug) bySlug.set(t.realtorSlug, t.realtorName ?? t.realtorSlug);
+  for (const t of appointments) {
+    if (t.providerSlug) bySlug.set(t.providerSlug, t.providerName ?? t.providerSlug);
   }
-  const realtors = Array.from(bySlug.entries()).map(([slug, name]) => ({ slug, name }));
+  const providers = Array.from(bySlug.entries()).map(([slug, name]) => ({ slug, name }));
 
   return (
     <main className="mx-auto max-w-3xl space-y-12 px-4 py-10 pb-16 sm:px-6">
@@ -39,7 +39,7 @@ export default async function BookTourPage() {
           Back to your portal
         </Link>
         <div className="space-y-1.5">
-          <p className="text-sm text-muted-foreground">Book a tour.</p>
+          <p className="text-sm text-muted-foreground">Book a appointment.</p>
           <h1 className="text-3xl tracking-tight text-foreground" style={TITLE_FONT}>
             Pick a time to see a place.
           </h1>
@@ -49,14 +49,14 @@ export default async function BookTourPage() {
         </div>
       </header>
 
-      {realtors.length === 0 ? (
+      {providers.length === 0 ? (
         <PortalEmptyState
           headline="No agents to book with yet."
-          whatsNext="Once you've applied or toured with an agent, you can book more tours here."
+          whatsNext="Once you've applied or appointmented with an agent, you can book more appointments here."
         />
       ) : (
-        <BookTourForm
-          realtors={realtors}
+        <BookAppointmentForm
+          providers={providers}
           guestName={user.name ?? ''}
           guestEmail={user.email}
           guestPhone={user.phone ?? ''}

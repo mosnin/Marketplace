@@ -28,8 +28,8 @@
 - `/admin/audit-log`
 - `/admin/billing`
 - `/admin/broadcast`
-- `/admin/brokerages`
-- `/admin/brokerages/[id]`
+- `/admin/agencies`
+- `/admin/agencies/[id]`
 - `/admin/cohorts`
 - `/admin/form-analytics`
 - `/admin/invitations`
@@ -46,7 +46,7 @@
 - `/apply/[slug]/chat`
 - `/apply/[slug]/privacy`
 - `/apply/[slug]/status`
-- `/apply/b/[brokerageId]`
+- `/apply/b/[agencyId]`
 
 **auth** (1)
 
@@ -65,48 +65,48 @@
 - `/book/[slug]`
 - `/book/[slug]/embed`
 
-**broker** (32)
+**agency** (32)
 
-- `/broker`
-- `/broker/activity`
-- `/broker/agent-activity`
-- `/broker/analytics`
-- `/broker/billing`
-- `/broker/brief`
-- `/broker/chippi`
-- `/broker/commissions`
-- `/broker/deals`
-- `/broker/forecast`
-- `/broker/import-export`
-- `/broker/integrations`
-- `/broker/invitations`
-- `/broker/leaderboard`
-- `/broker/leads`
-- `/broker/members`
-- `/broker/my-leads`
-- `/broker/people`
-- `/broker/pipeline`
-- `/broker/properties`
-- `/broker/realtors`
-- `/broker/realtors/[userId]`
-- `/broker/reviews`
-- `/broker/reviews/[id]`
-- `/broker/settings`
-- `/broker/settings/auto-assignment`
-- `/broker/settings/form-builder`
-- `/broker/settings/mcp`
-- `/broker/settings/profile`
-- `/broker/settings/routing-rules`
-- `/broker/templates`
-- `/broker/usage`
+- `/agency`
+- `/agency/activity`
+- `/agency/agent-activity`
+- `/agency/analytics`
+- `/agency/billing`
+- `/agency/brief`
+- `/agency/koala`
+- `/agency/commissions`
+- `/agency/deals`
+- `/agency/forecast`
+- `/agency/import-export`
+- `/agency/integrations`
+- `/agency/invitations`
+- `/agency/leaderboard`
+- `/agency/leads`
+- `/agency/members`
+- `/agency/my-leads`
+- `/agency/people`
+- `/agency/pipeline`
+- `/agency/services`
+- `/agency/providers`
+- `/agency/providers/[userId]`
+- `/agency/reviews`
+- `/agency/reviews/[id]`
+- `/agency/settings`
+- `/agency/settings/auto-assignment`
+- `/agency/settings/form-builder`
+- `/agency/settings/mcp`
+- `/agency/settings/profile`
+- `/agency/settings/routing-rules`
+- `/agency/templates`
+- `/agency/usage`
 
-**brokerage** (1)
+**agency** (1)
 
-- `/brokerage`
+- `/agency`
 
-**brokerages** (1)
+**agencies** (1)
 
-- `/brokerages`
+- `/agencies`
 
 **clients** (8)
 
@@ -135,7 +135,7 @@
 
 - `/integrations`
 - `/integrations/callback`
-- `/integrations/callback/brokerage`
+- `/integrations/callback/agency`
 
 **invite** (3)
 
@@ -158,8 +158,8 @@
 
 **login** (2)
 
-- `/login/broker/[[...sign-in]]`
-- `/login/realtor/[[...sign-in]]`
+- `/login/agency/[[...sign-in]]`
+- `/login/provider/[[...sign-in]]`
 
 **p** (1)
 
@@ -177,9 +177,9 @@
 
 - `/privacy`
 
-**realtors** (1)
+**providers** (1)
 
-- `/realtors`
+- `/providers`
 
 **s** (86)
 
@@ -195,23 +195,23 @@
 - `/s/[slug]/analytics/form-traffic`
 - `/s/[slug]/analytics/leads`
 - `/s/[slug]/analytics/pipeline`
-- `/s/[slug]/analytics/tours`
+- `/s/[slug]/analytics/appointments`
 - `/s/[slug]/billing`
 - `/s/[slug]/calendar`
 - `/s/[slug]/calls`
-- `/s/[slug]/chippi`
-- `/s/[slug]/chippi/activity`
-- `/s/[slug]/chippi/approvals`
-- `/s/[slug]/chippi/brief`
-- `/s/[slug]/chippi/drafts`
-- `/s/[slug]/chippi/full-day`
-- `/s/[slug]/chippi/history`
-- `/s/[slug]/chippi/inbox`
-- `/s/[slug]/chippi/log`
-- `/s/[slug]/chippi/memory`
-- `/s/[slug]/chippi/tasks`
-- `/s/[slug]/chippi/tasks/[taskId]`
-- `/s/[slug]/chippi/today`
+- `/s/[slug]/koala`
+- `/s/[slug]/koala/activity`
+- `/s/[slug]/koala/approvals`
+- `/s/[slug]/koala/brief`
+- `/s/[slug]/koala/drafts`
+- `/s/[slug]/koala/full-day`
+- `/s/[slug]/koala/history`
+- `/s/[slug]/koala/inbox`
+- `/s/[slug]/koala/log`
+- `/s/[slug]/koala/memory`
+- `/s/[slug]/koala/tasks`
+- `/s/[slug]/koala/tasks/[taskId]`
+- `/s/[slug]/koala/today`
 - `/s/[slug]/cma`
 - `/s/[slug]/commissions`
 - `/s/[slug]/communication`
@@ -237,16 +237,16 @@
 - `/s/[slug]/leads/[id]`
 - `/s/[slug]/profile`
 - `/s/[slug]/profile-page`
-- `/s/[slug]/properties`
-- `/s/[slug]/properties/[id]`
-- `/s/[slug]/properties/commissions`
-- `/s/[slug]/properties/new`
+- `/s/[slug]/services`
+- `/s/[slug]/services/[id]`
+- `/s/[slug]/services/commissions`
+- `/s/[slug]/services/new`
 - `/s/[slug]/reviews`
 - `/s/[slug]/reviews/[id]`
 - `/s/[slug]/routines`
 - `/s/[slug]/settings`
 - `/s/[slug]/settings/appearance`
-- `/s/[slug]/settings/brokerage`
+- `/s/[slug]/settings/agency`
 - `/s/[slug]/settings/content`
 - `/s/[slug]/settings/form-fields`
 - `/s/[slug]/settings/integrations`
@@ -266,7 +266,7 @@
 - `/s/[slug]/swarm`
 - `/s/[slug]/swarm/[runId]`
 - `/s/[slug]/sync`
-- `/s/[slug]/tours`
+- `/s/[slug]/appointments`
 - `/s/[slug]/whatsapp`
 - `/s/[slug]/whatsapp/[id]`
 
@@ -294,9 +294,9 @@
 
 - `/terms`
 
-**tour** (1)
+**appointment** (1)
 
-- `/tour/[token]`
+- `/appointment/[token]`
 
 **trial** (1)
 
@@ -317,8 +317,8 @@
 - `/api/admin/announcements/[id]`
 - `/api/admin/billing`
 - `/api/admin/broadcast`
-- `/api/admin/brokerages`
-- `/api/admin/brokerages/[id]`
+- `/api/admin/agencies`
+- `/api/admin/agencies/[id]`
 - `/api/admin/dlq`
 - `/api/admin/dlq/[eventId]`
 - `/api/admin/invitations`
@@ -392,10 +392,10 @@
 **/api/ai** (14)
 
 - `/api/ai/attachments`
-- `/api/ai/broker-conversations`
-- `/api/ai/broker-conversations/[id]`
-- `/api/ai/broker-messages`
-- `/api/ai/broker-task`
+- `/api/ai/agency-conversations`
+- `/api/ai/agency-conversations/[id]`
+- `/api/ai/agency-messages`
+- `/api/ai/agency-task`
 - `/api/ai/conversations`
 - `/api/ai/conversations/[id]`
 - `/api/ai/health`
@@ -418,8 +418,8 @@
 - `/api/applications/pdf`
 - `/api/applications/portal`
 - `/api/applications/portal/message`
-- `/api/applications/portal/tour-request`
-- `/api/applications/portal/tour/[tourId]/respond`
+- `/api/applications/portal/appointment-request`
+- `/api/applications/portal/appointment/[appointmentId]/respond`
 - `/api/applications/status`
 
 **/api/auth** (1)
@@ -437,57 +437,57 @@
 
 - `/api/brief/unsubscribe`
 
-**/api/broker** (45)
+**/api/agency** (45)
 
-- `/api/broker/activity`
-- `/api/broker/agent-activity`
-- `/api/broker/assign-lead`
-- `/api/broker/billing/cancel`
-- `/api/broker/billing/portal`
-- `/api/broker/commissions/export`
-- `/api/broker/commissions/ledger/[id]`
-- `/api/broker/contacts`
-- `/api/broker/create`
-- `/api/broker/export`
-- `/api/broker/form-config`
-- `/api/broker/form-config/push`
-- `/api/broker/integrations`
-- `/api/broker/integrations/[id]`
-- `/api/broker/integrations/connect/[toolkit]`
-- `/api/broker/invitations/[id]`
-- `/api/broker/invite`
-- `/api/broker/invite/bulk`
-- `/api/broker/join`
-- `/api/broker/join-code`
-- `/api/broker/lead-note`
-- `/api/broker/leads/[id]`
-- `/api/broker/leads/export`
-- `/api/broker/leads/import`
-- `/api/broker/members/[id]`
-- `/api/broker/members/[id]/offboard`
-- `/api/broker/members/[id]/role`
-- `/api/broker/morning`
-- `/api/broker/notifications`
-- `/api/broker/profile`
-- `/api/broker/properties`
-- `/api/broker/properties/[id]/assign`
-- `/api/broker/realtors/[userId]`
-- `/api/broker/reviews`
-- `/api/broker/reviews/[id]`
-- `/api/broker/reviews/[id]/comments`
-- `/api/broker/routing-rules`
-- `/api/broker/routing-rules/[id]`
-- `/api/broker/settings`
-- `/api/broker/stats`
-- `/api/broker/team-activity`
-- `/api/broker/templates`
-- `/api/broker/templates/[id]`
-- `/api/broker/templates/[id]/publish`
-- `/api/broker/unassign-lead`
+- `/api/agency/activity`
+- `/api/agency/agent-activity`
+- `/api/agency/assign-lead`
+- `/api/agency/billing/cancel`
+- `/api/agency/billing/portal`
+- `/api/agency/commissions/export`
+- `/api/agency/commissions/ledger/[id]`
+- `/api/agency/contacts`
+- `/api/agency/create`
+- `/api/agency/export`
+- `/api/agency/form-config`
+- `/api/agency/form-config/push`
+- `/api/agency/integrations`
+- `/api/agency/integrations/[id]`
+- `/api/agency/integrations/connect/[toolkit]`
+- `/api/agency/invitations/[id]`
+- `/api/agency/invite`
+- `/api/agency/invite/bulk`
+- `/api/agency/join`
+- `/api/agency/join-code`
+- `/api/agency/lead-note`
+- `/api/agency/leads/[id]`
+- `/api/agency/leads/export`
+- `/api/agency/leads/import`
+- `/api/agency/members/[id]`
+- `/api/agency/members/[id]/offboard`
+- `/api/agency/members/[id]/role`
+- `/api/agency/morning`
+- `/api/agency/notifications`
+- `/api/agency/profile`
+- `/api/agency/services`
+- `/api/agency/services/[id]/assign`
+- `/api/agency/providers/[userId]`
+- `/api/agency/reviews`
+- `/api/agency/reviews/[id]`
+- `/api/agency/reviews/[id]/comments`
+- `/api/agency/routing-rules`
+- `/api/agency/routing-rules/[id]`
+- `/api/agency/settings`
+- `/api/agency/stats`
+- `/api/agency/team-activity`
+- `/api/agency/templates`
+- `/api/agency/templates/[id]`
+- `/api/agency/templates/[id]/publish`
+- `/api/agency/unassign-lead`
 
-**/api/brokerages** (1)
+**/api/agencies** (1)
 
-- `/api/brokerages/leads`
+- `/api/agencies/leads`
 
 **/api/calendar** (1)
 
@@ -503,12 +503,12 @@
 - `/api/cards/[type]/[id]`
 - `/api/cards/contact/[id]`
 
-**/api/chippi** (4)
+**/api/koala** (4)
 
-- `/api/chippi/approvals`
-- `/api/chippi/post-tour`
-- `/api/chippi/post-tour/execute`
-- `/api/chippi/transcribe`
+- `/api/koala/approvals`
+- `/api/koala/post-appointment`
+- `/api/koala/post-appointment/execute`
+- `/api/koala/transcribe`
 
 **/api/clients** (11)
 
@@ -546,7 +546,7 @@
 **/api/cron** (10)
 
 - `/api/cron/agent-sweep`
-- `/api/cron/broker-weekly-report`
+- `/api/cron/agency-weekly-report`
 - `/api/cron/cleanup`
 - `/api/cron/daily-briefing`
 - `/api/cron/draft-outcomes`
@@ -695,17 +695,17 @@
 - `/api/profile-page/cover-photo`
 - `/api/profile-page/profile-photo`
 
-**/api/properties** (4)
+**/api/services** (4)
 
-- `/api/properties`
-- `/api/properties/[id]`
-- `/api/properties/[id]/packets`
-- `/api/properties/[id]/packets/[packetId]`
+- `/api/services`
+- `/api/services/[id]`
+- `/api/services/[id]/packets`
+- `/api/services/[id]/packets/[packetId]`
 
 **/api/public** (3)
 
 - `/api/public/apply`
-- `/api/public/apply/brokerage`
+- `/api/public/apply/agency`
 - `/api/public/intake-chat`
 
 **/api/push** (1)
@@ -764,24 +764,24 @@
 
 - `/api/sync`
 
-**/api/tours** (16)
+**/api/appointments** (16)
 
-- `/api/tours`
-- `/api/tours/[id]`
-- `/api/tours/[id]/prep`
-- `/api/tours/available`
-- `/api/tours/book`
-- `/api/tours/convert`
-- `/api/tours/feedback`
-- `/api/tours/gcal`
-- `/api/tours/manage`
-- `/api/tours/overrides`
-- `/api/tours/overrides/[id]`
-- `/api/tours/properties`
-- `/api/tours/properties/[id]`
-- `/api/tours/reminders`
-- `/api/tours/waitlist`
-- `/api/tours/waitlist/notify`
+- `/api/appointments`
+- `/api/appointments/[id]`
+- `/api/appointments/[id]/prep`
+- `/api/appointments/available`
+- `/api/appointments/book`
+- `/api/appointments/convert`
+- `/api/appointments/feedback`
+- `/api/appointments/gcal`
+- `/api/appointments/manage`
+- `/api/appointments/overrides`
+- `/api/appointments/overrides/[id]`
+- `/api/appointments/services`
+- `/api/appointments/services/[id]`
+- `/api/appointments/reminders`
+- `/api/appointments/waitlist`
+- `/api/appointments/waitlist/notify`
 
 **/api/upload** (2)
 
@@ -810,7 +810,7 @@
 | Path | Schedule |
 |------|----------|
 | `/api/cron/agent-sweep` | `0 */4 * * *` |
-| `/api/cron/broker-weekly-report` | `0 9 * * 1` |
+| `/api/cron/agency-weekly-report` | `0 9 * * 1` |
 | `/api/cron/cleanup` | `0 3 * * *` |
 | `/api/cron/daily-briefing` | `0 * * * *` |
 | `/api/cron/draft-outcomes` | `0 3 * * *` |
@@ -832,17 +832,17 @@
 Two hand-maintained catalogs. A new agent verb must be added in **both** or
 the runtimes diverge — this table makes the drift visible.
 
-- **In both runtimes (7):** `add_property`, `create_deal`, `create_plan`, `find_stuck_deals`, `read_attachment`, `request_deal_review`, `send_property_packet`
+- **In both runtimes (7):** `add_service`, `create_deal`, `create_plan`, `find_stuck_deals`, `read_attachment`, `request_deal_review`, `send_service_packet`
 
-- **TS only (49):** `add_checklist_item`, `add_person`, `analyze_realtor`, `archive_person`, `assign_lead_to_realtor`, `attach_file_to_property`, `attach_property_to_deal`, `block_time`, `cancel_tour`, `check_availability`, `clear_followup`, `delegate_task`, `draft_email`, `draft_sms`, `find_comparable_properties`, `find_deal`, `find_overdue_followups`, `find_person`, `find_property`, `find_quiet_hot_persons`, `find_tours`, `list_files`, `log_call`, `log_email_sent`, `log_meeting`, `log_sms_sent`, `mark_deal_lost`, `mark_deal_won`, `mark_person_cold`, `mark_person_hot`, `merge_persons`, `move_deal_stage`, `note_on_deal`, `note_on_person`, `note_on_property`, `pipeline_summary`, `propose_tour_times`, `read_file`, `recall_history`, `reschedule_tour`, `schedule_tour`, `send_email`, `send_sms`, `set_followup`, `summarize_realtor`, `update_deal_close_date`, `update_deal_probability`, `update_deal_value`, `update_property_status`
+- **TS only (49):** `add_checklist_item`, `add_person`, `analyze_provider`, `archive_person`, `assign_lead_to_provider`, `attach_file_to_service`, `attach_service_to_deal`, `block_time`, `cancel_appointment`, `check_availability`, `clear_followup`, `delegate_task`, `draft_email`, `draft_sms`, `find_comparable_services`, `find_deal`, `find_overdue_followups`, `find_person`, `find_service`, `find_quiet_hot_persons`, `find_appointments`, `list_files`, `log_call`, `log_email_sent`, `log_meeting`, `log_sms_sent`, `mark_deal_lost`, `mark_deal_won`, `mark_person_cold`, `mark_person_hot`, `merge_persons`, `move_deal_stage`, `note_on_deal`, `note_on_person`, `note_on_service`, `pipeline_summary`, `propose_appointment_times`, `read_file`, `recall_history`, `reschedule_appointment`, `schedule_appointment`, `send_email`, `send_sms`, `set_followup`, `summarize_provider`, `update_deal_close_date`, `update_deal_probability`, `update_deal_value`, `update_service_status`
 
-- **Python only (46):** `add_intake_question`, `advance_deal_stage`, `analyze_portfolio`, `ask_realtor`, `audit_response_times`, `book_tour`, `call_integration_tool`, `change_member_role`, `commission_report`, `create_contact`, `draft_message`, `edit_studio_image`, `find_at_risk_agents`, `find_breached_leads`, `find_contacts`, `find_deals`, `find_integration_tool`, `find_unassigned_leads`, `flag_deal_for_broker_review`, `generate_priority_list`, `generate_studio_image`, `get_contact_activity`, `get_intake_form`, `log_activity_run`, `manage_goal`, `manage_routines`, `offboard_member`, `outcome`, `process_inbound_message`, `read_realtor_morning_story`, `realtor_performance`, `reassign_lead`, `recall_docs`, `recall_memory`, `remove_intake_question`, `route_lead`, `save_intake_form`, `send_email_now`, `send_sms_now`, `send_team_announcement`, `set_routing_rule`, `store_memory`, `team_health`, `update_contact`, `update_deal`, `update_intake_question`
+- **Python only (46):** `add_intake_question`, `advance_deal_stage`, `analyze_portfolio`, `ask_provider`, `audit_response_times`, `book_appointment`, `call_integration_tool`, `change_member_role`, `commission_report`, `create_contact`, `draft_message`, `edit_studio_image`, `find_at_risk_agents`, `find_breached_leads`, `find_contacts`, `find_deals`, `find_integration_tool`, `find_unassigned_leads`, `flag_deal_for_agency_review`, `generate_priority_list`, `generate_studio_image`, `get_contact_activity`, `get_intake_form`, `log_activity_run`, `manage_goal`, `manage_routines`, `offboard_member`, `outcome`, `process_inbound_message`, `read_provider_morning_story`, `provider_performance`, `reassign_lead`, `recall_docs`, `recall_memory`, `remove_intake_question`, `route_lead`, `save_intake_form`, `send_email_now`, `send_sms_now`, `send_team_announcement`, `set_routing_rule`, `store_memory`, `team_health`, `update_contact`, `update_deal`, `update_intake_question`
 
 ## Data model (supabase/schema.sql)
 
-**Tables (101):** `AIUserProfile`, `AffiliateAccount`, `AgentActivityLog`, `AgentDraft`, `AgentGoal`, `AgentMemory`, `AgentPausedRun`, `AgentQuestion`, `AgentSettings`, `AgentTask`, `AgentTrajectory`, `Announcement`, `AnnouncementDismissal`, `AppKnowledgeDoc`, `ApplicationMessage`, `ApplicationStatusUpdate`, `Artifact`, `ArtifactVersion`, `Attachment`, `AuditLog`, `Brief`, `BriefTipHistory`, `BrokerConversation`, `BrokerMessage`, `BrokerNotification`, `Brokerage`, `BrokerageIntegrationConnection`, `BrokerageMembership`, `BrokerageRemoval`, `BrokerageTemplate`, `CalendarEvent`, `CalendarEventMirror`, `CalendarNote`, `CallLog`, `ChatUsage`, `ClientAuthCode`, `ClientDocument`, `ClientInfoRequest`, `ClientMessage`, `ClientUser`, `CmaReport`, `CommissionLedger`, `CommissionSplit`, `Contact`, `ContactDocument`, `Conversation`, `CreditLot`, `CreditTxn`, `CustomAgent`, `DeadLetterEvent`, `Deal`, `DealActivity`, `DealChecklistItem`, `DealContact`, `DealDocument`, `DealReviewComment`, `DealReviewRequest`, `DealRoutingRule`, `DealStage`, `DisabledSpace`, `DocumentEmbedding`, `EmailBroadcast`, `ExecutionStep`, `File`, `FormAnalyticsEvent`, `FormDraft`, `GoalDecomposition`, `GoogleCalendarToken`, `IntegrationConnection`, `IntegrationTrigger`, `Invitation`, `McpApiKey`, `McpAuthCode`, `Message`, `MessageTemplate`, `Note`, `Pipeline`, `ProfilePage`, `Property`, `PropertyPacket`, `PushSubscription`, `Routine`, `SignatureRequest`, `Space`, `SpaceSetting`, `StudioBrand`, `StudioGeneration`, `StudioPost`, `SupportTicket`, `SwarmEvent`, `SwarmMember`, `SwarmRun`, `TaskCheckpoint`, `TaskDependency`, `TelemetryEvent`, `Tour`, `TourAvailabilityOverride`, `TourFeedback`, `TourPropertyProfile`, `TourWaitlist`, `User`
+**Tables (101):** `AIUserProfile`, `AffiliateAccount`, `AgentActivityLog`, `AgentDraft`, `AgentGoal`, `AgentMemory`, `AgentPausedRun`, `AgentQuestion`, `AgentSettings`, `AgentTask`, `AgentTrajectory`, `Announcement`, `AnnouncementDismissal`, `AppKnowledgeDoc`, `ApplicationMessage`, `ApplicationStatusUpdate`, `Artifact`, `ArtifactVersion`, `Attachment`, `AuditLog`, `Brief`, `BriefTipHistory`, `AgencyConversation`, `AgencyMessage`, `AgencyNotification`, `Agency`, `AgencyIntegrationConnection`, `AgencyMembership`, `AgencyRemoval`, `AgencyTemplate`, `CalendarEvent`, `CalendarEventMirror`, `CalendarNote`, `CallLog`, `ChatUsage`, `ClientAuthCode`, `ClientDocument`, `ClientInfoRequest`, `ClientMessage`, `ClientUser`, `CmaReport`, `CommissionLedger`, `CommissionSplit`, `Contact`, `ContactDocument`, `Conversation`, `CreditLot`, `CreditTxn`, `CustomAgent`, `DeadLetterEvent`, `Deal`, `DealActivity`, `DealChecklistItem`, `DealContact`, `DealDocument`, `DealReviewComment`, `DealReviewRequest`, `DealRoutingRule`, `DealStage`, `DisabledSpace`, `DocumentEmbedding`, `EmailBroadcast`, `ExecutionStep`, `File`, `FormAnalyticsEvent`, `FormDraft`, `GoalDecomposition`, `GoogleCalendarToken`, `IntegrationConnection`, `IntegrationTrigger`, `Invitation`, `McpApiKey`, `McpAuthCode`, `Message`, `MessageTemplate`, `Note`, `Pipeline`, `ProfilePage`, `Service`, `ServicePacket`, `PushSubscription`, `Routine`, `SignatureRequest`, `Space`, `SpaceSetting`, `StudioBrand`, `StudioGeneration`, `StudioPost`, `SupportTicket`, `SwarmEvent`, `SwarmMember`, `SwarmRun`, `TaskCheckpoint`, `TaskDependency`, `TelemetryEvent`, `Appointment`, `AppointmentAvailabilityOverride`, `AppointmentFeedback`, `AppointmentServiceProfile`, `AppointmentWaitlist`, `User`
 
-**RPCs (23):** `book_tour_atomic`, `charge_credits_for_chat_usage`, `cleanup_agent_data`, `create_brokerage_with_owner`, `create_space_with_defaults`, `current_user_internal_id`, `ensure_agent_settings_for_space`, `grant_credits`, `match_agent_memory`, `match_documents`, `match_documents_hybrid`, `offboard_brokerage_member`, `purge_credit_rows_for_account`, `refund_credit_txn`, `reorder_deal`, `resolve_billing_account_for_space`, `routine_next_run_at`, `routine_set_next_run`, `search_knowledge_docs`, `spend_credits`, `stamp_brief_enabled_at`, `sync_commission_ledger`, `update_updated_at_column`
+**RPCs (23):** `book_appointment_atomic`, `charge_credits_for_chat_usage`, `cleanup_agent_data`, `create_agency_with_owner`, `create_space_with_defaults`, `current_user_internal_id`, `ensure_agent_settings_for_space`, `grant_credits`, `match_agent_memory`, `match_documents`, `match_documents_hybrid`, `offboard_agency_member`, `purge_credit_rows_for_account`, `refund_credit_txn`, `reorder_deal`, `resolve_billing_account_for_space`, `routine_next_run_at`, `routine_set_next_run`, `search_knowledge_docs`, `spend_credits`, `stamp_brief_enabled_at`, `sync_commission_ledger`, `update_updated_at_column`
 
 **Migrations:** 162 (latest: `20260702000000_enable_rls_on_unprotected_tables.sql`)
 
@@ -862,7 +862,7 @@ the runtimes diverge — this table makes the drift visible.
 - Upstash Redis — queue / dedupe / locks / cache  (`@upstash/redis`)
 - Vercel Analytics  (`@vercel/analytics`)
 - FirstPromoter — affiliate tracking  (`FIRST_PROMOTER_*`)
-- Google Calendar — OAuth tour sync  (`GOOGLE_CLIENT_*`)
+- Google Calendar — OAuth appointment sync  (`GOOGLE_CLIENT_*`)
 - Modal — Python agent sandbox (agent/modal_app.py)  (`MODAL_*`)
 - Wasabi — S3-compatible file storage  (`WASABI_*`)
 - Web Push (VAPID) — browser notifications  (`VAPID_*`)

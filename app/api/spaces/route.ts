@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
     supabase
       .from('SpaceSetting')
       .select(
-        'notifications, smsNotifications, notifyNewLeads, notifyTourBookings, notifyNewDeals, notifyFollowUps, phoneNumber, timezone,' +
+        'notifications, smsNotifications, notifyNewLeads, notifyAppointmentBookings, notifyNewDeals, notifyFollowUps, phoneNumber, timezone,' +
         'briefEnabled, briefHour, briefEmail, briefSms,' +
-        'bio, socialLinks, businessName, realtorPhotoUrl, privacyPolicyHtml,' +
+        'bio, socialLinks, businessName, providerPhotoUrl, privacyPolicyHtml,' +
         'intakeAccentColor, intakeBorderRadius, intakeFont, intakeDarkMode,' +
         'intakeHeaderBgColor, intakeHeaderGradient, intakeFaviconUrl, logoUrl,' +
         'intakePageTitle, intakePageIntro, intakeVideoUrl,' +
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
   // actually read; `??` fallbacks below handle nulls.
   const settings = settingsRes.data as (Partial<SpaceSetting> & {
     logoUrl?: string | null;
-    realtorPhotoUrl?: string | null;
+    providerPhotoUrl?: string | null;
   }) | null;
   const owner = ownerRes.data as { email: string } | null;
 
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
       notifications: settings?.notifications ?? true,
       smsNotifications: settings?.smsNotifications ?? false,
       notifyNewLeads: settings?.notifyNewLeads ?? true,
-      notifyTourBookings: settings?.notifyTourBookings ?? true,
+      notifyAppointmentBookings: settings?.notifyAppointmentBookings ?? true,
       notifyNewDeals: settings?.notifyNewDeals ?? true,
       notifyFollowUps: settings?.notifyFollowUps ?? true,
       phoneNumber: settings?.phoneNumber ?? '',
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
       bio: settings?.bio ?? '',
       socialLinks: settings?.socialLinks ?? { instagram: '', linkedin: '', facebook: '' },
       businessName: settings?.businessName ?? '',
-      realtorPhotoUrl: settings?.realtorPhotoUrl ?? '',
+      providerPhotoUrl: settings?.providerPhotoUrl ?? '',
       privacyPolicyHtml: settings?.privacyPolicyHtml ?? '',
       // Appearance settings
       intakeAccentColor: settings?.intakeAccentColor ?? '#ff964f',
@@ -113,7 +113,7 @@ export async function PATCH(req: NextRequest) {
     notifications,
     smsNotifications,
     notifyNewLeads,
-    notifyTourBookings,
+    notifyAppointmentBookings,
     notifyNewDeals,
     notifyFollowUps,
     briefEnabled,
@@ -133,7 +133,7 @@ export async function PATCH(req: NextRequest) {
   const bio             = typeof body.bio             === 'string' ? body.bio.slice(0, 500)             : undefined;
   const socialLinks     = body.socialLinks && typeof body.socialLinks === 'object' ? body.socialLinks    : undefined;
   const logoUrl         = typeof body.logoUrl         === 'string' ? body.logoUrl.slice(0, 500)         : undefined;
-  const realtorPhotoUrl = typeof body.realtorPhotoUrl === 'string' ? body.realtorPhotoUrl.slice(0, 500)  : undefined;
+  const providerPhotoUrl = typeof body.providerPhotoUrl === 'string' ? body.providerPhotoUrl.slice(0, 500)  : undefined;
   const businessName    = typeof body.businessName    === 'string' ? body.businessName.slice(0, 200)     : undefined;
   // Appearance fields
   const intakeAccentColor    = typeof body.intakeAccentColor    === 'string' ? body.intakeAccentColor.slice(0, 50)    : undefined;
@@ -199,18 +199,18 @@ export async function PATCH(req: NextRequest) {
   const updateFields: Record<string, unknown> = {};
   if (name !== undefined) updateFields.name = name;
   if (emoji !== undefined) updateFields.emoji = emoji;
-  if (body.brokerageId && typeof body.brokerageId === 'string') {
-    // SECURITY: only allow associating with a brokerage the owner is actually a
-    // member of. brokerageId drives credit-pool routing (lib/billing/account.ts);
+  if (body.agencyId && typeof body.agencyId === 'string') {
+    // SECURITY: only allow associating with a agency the owner is actually a
+    // member of. agencyId drives credit-pool routing (lib/billing/account.ts);
     // accepting an arbitrary value would let a user point their space at any
-    // brokerage's billing pool.
+    // agency's billing pool.
     const { data: membership } = await supabase
-      .from('BrokerageMembership')
+      .from('AgencyMembership')
       .select('userId')
-      .eq('brokerageId', body.brokerageId)
+      .eq('agencyId', body.agencyId)
       .eq('userId', space.ownerId)
       .maybeSingle();
-    if (membership) updateFields.brokerageId = body.brokerageId;
+    if (membership) updateFields.agencyId = body.agencyId;
   }
 
   // Handle slug change
@@ -262,7 +262,7 @@ export async function PATCH(req: NextRequest) {
   if (typeof notifications === 'boolean') settingsPayload.notifications = notifications;
   if (typeof smsNotifications === 'boolean') settingsPayload.smsNotifications = smsNotifications;
   if (typeof notifyNewLeads === 'boolean') settingsPayload.notifyNewLeads = notifyNewLeads;
-  if (typeof notifyTourBookings === 'boolean') settingsPayload.notifyTourBookings = notifyTourBookings;
+  if (typeof notifyAppointmentBookings === 'boolean') settingsPayload.notifyAppointmentBookings = notifyAppointmentBookings;
   if (typeof notifyNewDeals === 'boolean') settingsPayload.notifyNewDeals = notifyNewDeals;
   if (typeof notifyFollowUps === 'boolean') settingsPayload.notifyFollowUps = notifyFollowUps;
   if (typeof briefEnabled === 'boolean') settingsPayload.briefEnabled = briefEnabled;
@@ -280,7 +280,7 @@ export async function PATCH(req: NextRequest) {
   if (bio !== undefined) settingsPayload.bio = bio;
   if (socialLinks !== undefined) settingsPayload.socialLinks = socialLinks;
   if (logoUrl !== undefined) settingsPayload.logoUrl = logoUrl;
-  if (realtorPhotoUrl !== undefined) settingsPayload.realtorPhotoUrl = realtorPhotoUrl;
+  if (providerPhotoUrl !== undefined) settingsPayload.providerPhotoUrl = providerPhotoUrl;
   if (businessName !== undefined) settingsPayload.businessName = businessName;
   if (rawPrivacyPolicyUrl !== undefined) settingsPayload.privacyPolicyUrl = rawPrivacyPolicyUrl || null;
   if (consentCheckboxLabel !== undefined) settingsPayload.consentCheckboxLabel = consentCheckboxLabel || null;
@@ -307,26 +307,26 @@ export async function PATCH(req: NextRequest) {
   if (intakeFairHousingNotice !== undefined) settingsPayload.intakeFairHousingNotice = intakeFairHousingNotice || null;
   if (intakeShowEqualHousingMark !== undefined) settingsPayload.intakeShowEqualHousingMark = intakeShowEqualHousingMark;
 
-  // Tour availability settings
-  if (typeof body.tourDuration === 'number' && [15, 30, 45, 60, 90, 120].includes(body.tourDuration)) {
-    settingsPayload.tourDuration = body.tourDuration;
+  // Appointment availability settings
+  if (typeof body.appointmentDuration === 'number' && [15, 30, 45, 60, 90, 120].includes(body.appointmentDuration)) {
+    settingsPayload.appointmentDuration = body.appointmentDuration;
   }
-  if (typeof body.tourBufferMinutes === 'number' && [0, 15, 30, 45, 60].includes(body.tourBufferMinutes)) {
-    settingsPayload.tourBufferMinutes = body.tourBufferMinutes;
+  if (typeof body.appointmentBufferMinutes === 'number' && [0, 15, 30, 45, 60].includes(body.appointmentBufferMinutes)) {
+    settingsPayload.appointmentBufferMinutes = body.appointmentBufferMinutes;
   }
-  if (typeof body.tourStartHour === 'number' && body.tourStartHour >= 0 && body.tourStartHour <= 23) {
-    settingsPayload.tourStartHour = body.tourStartHour;
+  if (typeof body.appointmentStartHour === 'number' && body.appointmentStartHour >= 0 && body.appointmentStartHour <= 23) {
+    settingsPayload.appointmentStartHour = body.appointmentStartHour;
   }
-  if (typeof body.tourEndHour === 'number' && body.tourEndHour >= 1 && body.tourEndHour <= 24) {
-    settingsPayload.tourEndHour = body.tourEndHour;
+  if (typeof body.appointmentEndHour === 'number' && body.appointmentEndHour >= 1 && body.appointmentEndHour <= 24) {
+    settingsPayload.appointmentEndHour = body.appointmentEndHour;
   }
-  if (Array.isArray(body.tourDaysAvailable)) {
-    const validDays = body.tourDaysAvailable.filter((d: unknown) => typeof d === 'number' && d >= 0 && d <= 6);
-    settingsPayload.tourDaysAvailable = validDays;
+  if (Array.isArray(body.appointmentDaysAvailable)) {
+    const validDays = body.appointmentDaysAvailable.filter((d: unknown) => typeof d === 'number' && d >= 0 && d <= 6);
+    settingsPayload.appointmentDaysAvailable = validDays;
   }
-  if (Array.isArray(body.tourBlockedDates)) {
-    const validDates = body.tourBlockedDates.filter((d: unknown) => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d as string));
-    settingsPayload.tourBlockedDates = validDates;
+  if (Array.isArray(body.appointmentBlockedDates)) {
+    const validDates = body.appointmentBlockedDates.filter((d: unknown) => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d as string));
+    settingsPayload.appointmentBlockedDates = validDates;
   }
 
   const { error: settingsError } = await supabase

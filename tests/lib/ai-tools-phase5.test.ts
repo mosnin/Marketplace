@@ -66,7 +66,7 @@ const { notifyNewDealMock } = vi.hoisted(() => ({ notifyNewDealMock: vi.fn(async
 vi.mock('@/lib/notify', () => ({ notifyNewDeal: notifyNewDealMock }));
 
 import { moveDealStageTool } from '@/lib/ai-tools/tools/move-deal-stage';
-import { scheduleTourTool } from '@/lib/ai-tools/tools/schedule-tour';
+import { scheduleAppointmentTool } from '@/lib/ai-tools/tools/schedule-appointment';
 import { addChecklistItemTool } from '@/lib/ai-tools/tools/add-checklist-item';
 import { sendSmsTool } from '@/lib/ai-tools/tools/send-sms';
 import { createDealTool } from '@/lib/ai-tools/tools/create-deal';
@@ -119,15 +119,15 @@ describe('moveDealStageTool', () => {
   });
 });
 
-// ── schedule_tour ────────────────────────────────────────────────────────
-describe('scheduleTourTool', () => {
+// ── schedule_appointment ────────────────────────────────────────────────────────
+describe('scheduleAppointmentTool', () => {
   it('requires approval', () => {
-    expect(scheduleTourTool.requiresApproval).toBe(true);
+    expect(scheduleAppointmentTool.requiresApproval).toBe(true);
   });
 
   it('rejects a schema with no invitee (neither contactId nor guest fields)', () => {
     expect(() =>
-      scheduleTourTool.parameters.parse({
+      scheduleAppointmentTool.parameters.parse({
         startsAt: '2026-05-01T14:00:00.000Z',
         endsAt: '2026-05-01T15:00:00.000Z',
       }),
@@ -136,7 +136,7 @@ describe('scheduleTourTool', () => {
 
   it('rejects when endsAt is not after startsAt', () => {
     expect(() =>
-      scheduleTourTool.parameters.parse({
+      scheduleAppointmentTool.parameters.parse({
         guestName: 'A',
         guestEmail: 'a@b.com',
         startsAt: '2026-05-01T15:00:00.000Z',
@@ -145,31 +145,31 @@ describe('scheduleTourTool', () => {
     ).toThrow();
   });
 
-  it('creates a tour for a walk-in guest', async () => {
+  it('creates a appointment for a walk-in guest', async () => {
     mockByTable = {
-      Tour: {
+      Appointment: {
         single: {
-          id: 'tour_1',
+          id: 'appointment_1',
           startsAt: '2026-05-01T14:00:00.000Z',
           endsAt: '2026-05-01T15:00:00.000Z',
         },
       },
     };
-    const result = await scheduleTourTool.handler(
+    const result = await scheduleAppointmentTool.handler(
       {
         guestName: 'Walk-in',
         guestEmail: 'walk@in.com',
         startsAt: '2026-05-01T14:00:00.000Z',
         endsAt: '2026-05-01T15:00:00.000Z',
-        propertyAddress: '123 Main',
+        serviceAddress: '123 Main',
       },
       makeCtx(),
     );
-    expect(result.display).toBe('tours');
-    expect(result.summary).toMatch(/Tour scheduled/);
-    const tours = (result.data as { tours: { contactId: string | null }[] }).tours;
-    expect(tours).toHaveLength(1);
-    expect(tours[0].contactId).toBeNull();
+    expect(result.display).toBe('appointments');
+    expect(result.summary).toMatch(/Appointment scheduled/);
+    const appointments = (result.data as { appointments: { contactId: string | null }[] }).appointments;
+    expect(appointments).toHaveLength(1);
+    expect(appointments[0].contactId).toBeNull();
   });
 });
 

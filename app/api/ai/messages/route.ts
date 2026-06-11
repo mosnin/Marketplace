@@ -62,10 +62,10 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Surface guard: broker-Chippi and team conversations have their own
-    // broker-gated routes. Never serve them through the realtor messages
-    // endpoint, even when the caller owns the space. A broker_owner also
-    // owns their personal realtor space, so ownership alone is not isolation.
+    // Surface guard: agency-Koala and team conversations have their own
+    // agency-gated routes. Never serve them through the provider messages
+    // endpoint, even when the caller owns the space. A agency_owner also
+    // owns their personal provider space, so ownership alone is not isolation.
     // The reserved-title check lives in lib/chat/conversation-access.
     if (isReservedConversationTitle(conv.title)) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });

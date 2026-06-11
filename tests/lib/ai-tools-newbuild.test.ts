@@ -1,7 +1,7 @@
 /**
  * NEW_BUILD — the 5 chat-cutover tools that closed the gap doc:
- *   add_property, update_deal_probability, request_deal_review,
- *   send_property_packet, read_attachment.
+ *   add_service, update_deal_probability, request_deal_review,
+ *   send_service_packet, read_attachment.
  *
  * Two cases per tool: happy path + a representative failure mode.
  * Mock pattern mirrors phase14.
@@ -49,10 +49,10 @@ vi.mock('@/lib/supabase', () => {
   return { supabase: { from: vi.fn((table: string) => makeChain(table)) } };
 });
 
-import { addPropertyTool } from '@/lib/ai-tools/tools/add-property';
+import { addServiceTool } from '@/lib/ai-tools/tools/add-service';
 import { updateDealProbabilityTool } from '@/lib/ai-tools/tools/update-deal-probability';
 import { requestDealReviewTool } from '@/lib/ai-tools/tools/request-deal-review';
-import { sendPropertyPacketTool } from '@/lib/ai-tools/tools/send-property-packet';
+import { sendServicePacketTool } from '@/lib/ai-tools/tools/send-service-packet';
 import { readAttachmentTool } from '@/lib/ai-tools/tools/read-attachment';
 import type { ToolContext } from '@/lib/ai-tools/types';
 
@@ -68,20 +68,20 @@ beforeEach(() => {
   mockByTable = {};
 });
 
-// ── add_property ─────────────────────────────────────────────────────────
-describe('addPropertyTool', () => {
+// ── add_service ─────────────────────────────────────────────────────────
+describe('addServiceTool', () => {
   it('requires approval', () => {
-    expect(addPropertyTool.requiresApproval).toBe(true);
+    expect(addServiceTool.requiresApproval).toBe(true);
   });
 
   it('summariseCall mentions the address', () => {
-    const out = addPropertyTool.summariseCall!({ address: '412 Elm St' } as never);
+    const out = addServiceTool.summariseCall!({ address: '412 Elm St' } as never);
     expect(out).toMatch(/412 Elm St/);
   });
 
   it('inserts with defaults and echoes the address', async () => {
-    mockByTable = { Property: { rows: [], error: null } };
-    const result = await addPropertyTool.handler(
+    mockByTable = { Service: { rows: [], error: null } };
+    const result = await addServiceTool.handler(
       { address: '412 Elm St', listPrice: 850_000 },
       makeCtx(),
     );
@@ -91,9 +91,9 @@ describe('addPropertyTool', () => {
     expect(data.listingStatus).toBe('active');
   });
 
-  it('returns error when Property insert fails', async () => {
-    mockByTable = { Property: { error: { message: 'unique violation' } } };
-    const result = await addPropertyTool.handler(
+  it('returns error when Service insert fails', async () => {
+    mockByTable = { Service: { error: { message: 'unique violation' } } };
+    const result = await addServiceTool.handler(
       { address: '412 Elm St' },
       makeCtx(),
     );
@@ -158,10 +158,10 @@ describe('requestDealReviewTool', () => {
     ).toThrow();
   });
 
-  it('refuses when the workspace has no brokerage', async () => {
+  it('refuses when the workspace has no agency', async () => {
     mockByTable = {
       Deal: { single: { id: 'd_1', title: 'Big deal' } },
-      Space: { single: { id: 'space_1', ownerId: 'u_owner', brokerageId: null } },
+      Space: { single: { id: 'space_1', ownerId: 'u_owner', agencyId: null } },
     };
     const result = await requestDealReviewTool.handler(
       { dealId: 'd_1', reason: 'Unusual commission split needs sign-off' },
@@ -172,24 +172,24 @@ describe('requestDealReviewTool', () => {
   });
 });
 
-// ── send_property_packet ─────────────────────────────────────────────────
-describe('sendPropertyPacketTool', () => {
+// ── send_service_packet ─────────────────────────────────────────────────
+describe('sendServicePacketTool', () => {
   it('requires approval', () => {
-    expect(sendPropertyPacketTool.requiresApproval).toBe(true);
+    expect(sendServicePacketTool.requiresApproval).toBe(true);
   });
 
   it('summariseCall mentions both halves of the action', () => {
-    const out = sendPropertyPacketTool.summariseCall!({
+    const out = sendServicePacketTool.summariseCall!({
       contactId: 'c_abcd1234',
-      propertyId: 'p_wxyz5678',
+      serviceId: 'p_wxyz5678',
     } as never);
     expect(out.toLowerCase()).toContain('packet');
   });
 
   it('errors when the contact is missing', async () => {
     mockByTable = { Contact: { single: null } };
-    const result = await sendPropertyPacketTool.handler(
-      { contactId: 'missing', propertyId: 'p_1' },
+    const result = await sendServicePacketTool.handler(
+      { contactId: 'missing', serviceId: 'p_1' },
       makeCtx(),
     );
     expect(result.display).toBe('error');
@@ -212,7 +212,7 @@ describe('readAttachmentTool', () => {
           mimeType: 'application/pdf',
           sizeBytes: 250_000,
           extractionStatus: 'done',
-          extractedText: 'Property disclosure for 412 Elm St.\nLine two.',
+          extractedText: 'Service disclosure for 412 Elm St.\nLine two.',
         },
       },
     };
@@ -229,7 +229,7 @@ describe('readAttachmentTool', () => {
     expect(data.mimeType).toBe('application/pdf');
     expect(data.hasExtractedText).toBe(true);
     // Description is the FIRST line only — never the full body.
-    expect(data.description).toMatch(/Property disclosure/);
+    expect(data.description).toMatch(/Service disclosure/);
     expect(data.description).not.toMatch(/Line two/);
   });
 

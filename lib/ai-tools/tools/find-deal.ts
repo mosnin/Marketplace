@@ -61,7 +61,7 @@ interface DealContext {
   daysInStage: number | null;
   daysSinceUpdate: number | null;
   contact_name: string | null;
-  property_address: string | null;
+  service_address: string | null;
   close_date: string | null;
 }
 
@@ -123,7 +123,7 @@ async function enrichOne(
     daysInStage: null,
     daysSinceUpdate: daysSince(d.updatedAt, now),
     contact_name: contactName,
-    property_address: d.address,
+    service_address: d.address,
     close_date: d.closeDate,
   };
 }

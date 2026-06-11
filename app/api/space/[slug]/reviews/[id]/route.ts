@@ -15,7 +15,7 @@ type ReviewRow = {
   resolvedByUserId: string | null;
   resolvedNote: string | null;
   requestingUserId: string;
-  brokerageId: string;
+  agencyId: string;
 };
 
 type CommentRow = {
@@ -37,7 +37,7 @@ type DealLite = { id: string; title: string | null; value: number | null };
  *   - the review row's requestingUserId matches the caller's DB User.id.
  *
  * Any other case returns 404 so we don't leak existence of reviews the caller
- * doesn't own, even within the same brokerage.
+ * doesn't own, even within the same agency.
  */
 export async function GET(_req: NextRequest, { params }: Params) {
   const { slug, id: reviewId } = await params;
@@ -46,7 +46,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
   if (authResult instanceof NextResponse) return authResult;
   const { userId: clerkId, space } = authResult;
 
-  if (!space.brokerageId) {
+  if (!space.agencyId) {
     return NextResponse.json({ error: 'Review not found' }, { status: 404 });
   }
 
@@ -66,7 +66,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
   const { data: row, error } = await supabase
     .from('DealReviewRequest')
     .select(
-      'id, dealId, status, reason, createdAt, resolvedAt, resolvedByUserId, resolvedNote, requestingUserId, brokerageId',
+      'id, dealId, status, reason, createdAt, resolvedAt, resolvedByUserId, resolvedNote, requestingUserId, agencyId',
     )
     .eq('id', reviewId)
     .maybeSingle<ReviewRow>();
@@ -76,12 +76,12 @@ export async function GET(_req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: 'Failed to load review' }, { status: 500 });
   }
   // Ownership gate — 404 for anything the caller doesn't own. We check both
-  // requestingUserId and brokerageId; the latter defends against a freak
-  // cross-brokerage collision where the agent changed brokerages.
+  // requestingUserId and agencyId; the latter defends against a freak
+  // cross-agency collision where the agent changed agencies.
   if (
     !row ||
     row.requestingUserId !== dbUser.id ||
-    row.brokerageId !== space.brokerageId
+    row.agencyId !== space.agencyId
   ) {
     return NextResponse.json({ error: 'Review not found' }, { status: 404 });
   }
