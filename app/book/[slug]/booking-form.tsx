@@ -569,14 +569,14 @@ export function BookingForm({ slug, duration: defaultDuration, businessName, tim
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="serviceAddress" className={FIELD_LABEL}>
-                      Service address <span className="ml-1 text-[11px] font-normal text-muted-foreground">(optional)</span>
+                      Location <span className="ml-1 text-[11px] font-normal text-muted-foreground">(optional)</span>
                     </Label>
                     <input
                       id="serviceAddress"
                       type="text"
                       value={serviceAddress}
                       onChange={(e) => setServiceAddress(e.target.value)}
-                      placeholder="123 Main St"
+                      placeholder="Your address or preferred meeting spot"
                       className={INPUT_CLASS}
                     />
                   </div>

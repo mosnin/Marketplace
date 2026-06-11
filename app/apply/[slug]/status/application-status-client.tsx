@@ -1010,7 +1010,7 @@ function AppointmentRequestPanel({
 
       <div className="space-y-1.5">
         <label htmlFor="appointment-address" className="text-xs font-medium text-muted-foreground">
-          Service (optional)
+          Location or service detail (optional)
         </label>
         <input
           id="appointment-address"
@@ -1018,7 +1018,7 @@ function AppointmentRequestPanel({
           value={serviceAddress}
           onChange={(e) => setServiceAddress(e.target.value)}
           disabled={submitting}
-          placeholder="25 Park Slope Place, Brooklyn"
+          placeholder="Your address or preferred meeting spot"
           className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm transition-colors duration-150 outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:opacity-50"
           maxLength={300}
         />
@@ -1034,7 +1034,7 @@ function AppointmentRequestPanel({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           disabled={submitting}
-          placeholder="Bringing my partner; we'd love a video walkthrough first if possible."
+          placeholder="Anything we should know before we meet."
           className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm transition-colors duration-150 outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:opacity-50 resize-none"
           maxLength={1000}
         />
@@ -1077,29 +1077,28 @@ function NextStepsText({ status, businessName }: { status: string; businessName:
     case 'received':
       return (
         <p className="text-sm text-muted-foreground">
-          {businessName} will review your inquiry and may reach out with questions. This
+          {businessName} will review your request and may reach out with questions. This
           typically takes 1-3 business days.
         </p>
       );
     case 'under_review':
       return (
         <p className="text-sm text-muted-foreground">
-          Your application is actively being reviewed. {businessName} may contact you for
+          Your request is actively being reviewed. {businessName} may contact you for
           additional information. Hang tight!
         </p>
       );
     case 'appointment_scheduled':
       return (
         <p className="text-sm text-muted-foreground">
-          A appointment has been scheduled for you. {businessName} will reach out with details about
+          An appointment has been scheduled for you. {businessName} will reach out with details about
           timing and location.
         </p>
       );
     case 'approved':
       return (
         <p className="text-sm text-muted-foreground">
-          Congratulations! {businessName} will reach out with next steps, including lease signing
-          details.
+          Great news! {businessName} will reach out with next steps to get you started.
         </p>
       );
     case 'waitlisted':
@@ -1111,21 +1110,21 @@ function NextStepsText({ status, businessName }: { status: string; businessName:
     case 'needs_info':
       return (
         <p className="text-sm text-muted-foreground">
-          {businessName} needs additional information to process your application. Please check
+          {businessName} needs additional information to move forward. Please check
           your messages or email for details.
         </p>
       );
     case 'declined':
       return (
         <p className="text-sm text-muted-foreground">
-          Unfortunately your application was not approved at this time. {businessName} may provide
+          Unfortunately this request wasn&apos;t a fit at this time. {businessName} may provide
           more details separately.
         </p>
       );
     default:
       return (
         <p className="text-sm text-muted-foreground">
-          {businessName} will review your application and reach out with updates.
+          {businessName} will review your request and reach out with updates.
         </p>
       );
   }

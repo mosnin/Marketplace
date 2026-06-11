@@ -47,7 +47,7 @@ export const revalidate = 0;
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const space = await getSpaceFromSlug(slug);
-  if (!space) return { title: 'Application — Koala' };
+  if (!space) return { title: 'Inquiry — Koala' };
 
   const { data: settings } = await supabase
     .from('SpaceSetting')
@@ -57,9 +57,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const name = settings?.businessName || space.name;
   return {
-    title: `${name} — Application`,
-    description: `Submit your application to ${name}.`,
-    openGraph: { title: `${name} — Application`, description: `Submit your application to ${name}.` },
+    title: `${name} — Inquiry`,
+    description: `Submit your service inquiry to ${name}.`,
+    openGraph: { title: `${name} — Inquiry`, description: `Submit your service inquiry to ${name}.` },
   };
 }
 
@@ -151,8 +151,8 @@ export default async function PublicApplyPage({
     isVerified: boolean | null;
   } | null;
 
-  const pageTitle = settings?.intakePageTitle || 'Application';
-  const pageIntro = settings?.intakePageIntro || "Share your preferences and we'll follow up with next steps.";
+  const pageTitle = settings?.intakePageTitle || 'Get in touch';
+  const pageIntro = settings?.intakePageIntro || "Tell us what you're looking for and we'll follow up with next steps.";
   const businessName = settings?.businessName || space.name;
   const agentName = ownerData?.name || businessName;
   const isVerified = settings?.isVerified === true;

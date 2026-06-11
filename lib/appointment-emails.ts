@@ -103,11 +103,11 @@ async function sendEmail(to: string, subject: string, html: string) {
 
 export async function sendAppointmentConfirmation(data: AppointmentEmailData) {
   const { guestName, guestEmail, businessName, startsAt, endsAt, serviceAddress } = data;
-  const subject = `Appointment Confirmed — ${formatDate(startsAt)}`;
+  const subject = `Session Confirmed — ${formatDate(startsAt)}`;
 
   const body = `
     <p style="margin:0 0 12px;font-size:15px;color:#111827;line-height:1.6">Hi ${esc(guestName)},</p>
-    <p style="margin:0 0 4px;font-size:15px;color:#111827;line-height:1.6">Your appointment with <strong>${esc(businessName)}</strong> has been confirmed:</p>
+    <p style="margin:0 0 4px;font-size:15px;color:#111827;line-height:1.6">Your session with <strong>${esc(businessName)}</strong> has been confirmed:</p>
     ${detailBox([
       { label: 'Date', value: formatDate(startsAt) },
       { label: 'Time', value: `${formatTime(startsAt)} – ${formatTime(endsAt)}` },
@@ -116,57 +116,57 @@ export async function sendAppointmentConfirmation(data: AppointmentEmailData) {
     <p style="margin:0;font-size:14px;color:#374151;line-height:1.5">If you need to reschedule or cancel, please reply to this email.</p>
   `;
 
-  const html = wrapHtml(businessName, 'Appointment confirmed', body, `Sent by ${esc(businessName)}`);
+  const html = wrapHtml(businessName, 'Session confirmed', body, `Sent by ${esc(businessName)}`);
   await sendEmail(guestEmail, subject, html);
 }
 
 export async function sendAppointmentReminder(data: AppointmentEmailData) {
   const { guestName, guestEmail, businessName, startsAt, endsAt, serviceAddress } = data;
-  const subject = `Reminder: Appointment Tomorrow — ${formatTime(startsAt)}`;
+  const subject = `Reminder: Session Tomorrow — ${formatTime(startsAt)}`;
 
   const body = `
     <p style="margin:0 0 12px;font-size:15px;color:#111827;line-height:1.6">Hi ${esc(guestName)},</p>
-    <p style="margin:0 0 4px;font-size:15px;color:#111827;line-height:1.6">Friendly reminder — you have an appointment scheduled tomorrow with <strong>${esc(businessName)}</strong>:</p>
+    <p style="margin:0 0 4px;font-size:15px;color:#111827;line-height:1.6">Friendly reminder — you have a session scheduled tomorrow with <strong>${esc(businessName)}</strong>:</p>
     ${detailBox([
       { label: 'Date', value: formatDate(startsAt) },
       { label: 'Time', value: `${formatTime(startsAt)} – ${formatTime(endsAt)}` },
       { label: 'Service', value: serviceAddress ?? '' },
     ])}
-    <p style="margin:0;font-size:14px;color:#374151;line-height:1.5">We look forward to seeing you!</p>
+    <p style="margin:0;font-size:14px;color:#374151;line-height:1.5">We look forward to seeing you.</p>
   `;
 
-  const html = wrapHtml(businessName, 'Appointment reminder', body, `Sent by ${esc(businessName)}`);
+  const html = wrapHtml(businessName, 'Session reminder', body, `Sent by ${esc(businessName)}`);
   await sendEmail(guestEmail, subject, html);
 }
 
 export async function sendAppointmentFollowUp(data: AppointmentEmailData) {
   const { guestName, guestEmail, businessName, serviceAddress } = data;
-  const subject = `Thanks for appointmenting with ${businessName}!`;
+  const subject = `Thanks for your session with ${businessName}`;
 
   const body = `
     <p style="margin:0 0 12px;font-size:15px;color:#111827;line-height:1.6">Hi ${esc(guestName)},</p>
     <p style="margin:0 0 4px;font-size:15px;color:#111827;line-height:1.6">
-      Thank you for appointmenting${serviceAddress ? ` <strong>${esc(serviceAddress)}</strong>` : ''} with us. We hope you enjoyed the visit.
+      Thank you for your session${serviceAddress ? ` with <strong>${esc(serviceAddress)}</strong>` : ''}. We hope it was everything you were looking for.
     </p>
     <p style="margin:12px 0 0;font-size:14px;color:#374151;line-height:1.5">
-      If you have any questions or would like to move forward, simply reply to this email and we'll get back to you right away.
+      If you have any questions or would like to book again, simply reply to this email and we'll get back to you right away.
     </p>
     <p style="margin:16px 0 0;font-size:14px;color:#111827">Best regards,<br/><strong>${esc(businessName)}</strong></p>
   `;
 
-  const html = wrapHtml(businessName, 'Thanks for visiting!', body, `Sent by ${esc(businessName)}`);
+  const html = wrapHtml(businessName, 'Thanks for your session', body, `Sent by ${esc(businessName)}`);
   await sendEmail(guestEmail, subject, html);
 }
 
 export async function sendAgentNotification(agentEmail: string, data: AppointmentEmailData) {
   const { guestName, guestEmail, guestPhone = null, startsAt, serviceAddress, businessName, slug } = data;
-  const subject = `New Appointment Booked — ${guestName} on ${formatDate(startsAt)}`;
+  const subject = `New Session Booked — ${guestName} on ${formatDate(startsAt)}`;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://my.usekoala.com';
   const appointmentsUrl = `${appUrl}/s/${slug}/calendar`;
 
   const body = `
     ${detailBox([
-      { label: 'Guest', value: guestName },
+      { label: 'Client', value: guestName },
       { label: 'Email', value: guestEmail },
       { label: 'Phone', value: guestPhone ?? '' },
       { label: 'Date', value: `${formatDate(startsAt)} at ${formatTime(startsAt)}` },
@@ -174,11 +174,11 @@ export async function sendAgentNotification(agentEmail: string, data: Appointmen
     ])}
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px">
       <tr><td>
-        <a href="${appointmentsUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 22px;border-radius:8px">View appointments →</a>
+        <a href="${appointmentsUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 22px;border-radius:8px">View sessions →</a>
       </td></tr>
     </table>
   `;
 
-  const html = wrapHtml(businessName || 'Appointment', 'New appointment booking', body, `You're receiving this because a guest booked an appointment on your workspace.`);
+  const html = wrapHtml(businessName || 'Session', 'New session booked', body, `You're receiving this because a client booked a session on your workspace.`);
   await sendEmail(agentEmail, subject, html);
 }

@@ -79,7 +79,7 @@ export default async function ProviderPrivacyPolicyPage({
             <p className="text-xs text-muted-foreground">Privacy Policy</p>
           </div>
           <Link href={`/apply/${slug}`} className="text-xs text-primary underline">
-            Back to application
+            Back to inquiry form
           </Link>
         </div>
       </header>
@@ -95,7 +95,7 @@ export default async function ProviderPrivacyPolicyPage({
             <a href="https://usekoala.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">
               Koala
             </a>{' '}
-            to process applications. Koala&apos;s own{' '}
+            to manage service inquiries and bookings. Koala&apos;s own{' '}
             <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">
               Privacy Policy
             </a>{' '}

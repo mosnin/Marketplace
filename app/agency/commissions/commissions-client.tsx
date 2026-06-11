@@ -188,7 +188,7 @@ function EditRowDialog({ row, onClose, onSaved }: EditDialogProps) {
 
     const newAgent = parsePct(fields.agentRate);
     if (newAgent === null) {
-      toast.error('Agent rate must be between 0 and 100');
+      toast.error('Provider rate must be between 0 and 100');
       return;
     }
     if (Math.abs(newAgent - row.agentRate) > 1e-9) patch.agentRate = newAgent;
@@ -256,7 +256,7 @@ function EditRowDialog({ row, onClose, onSaved }: EditDialogProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="agent-rate">Agent %</Label>
+              <Label htmlFor="agent-rate">Provider %</Label>
               <Input
                 id="agent-rate"
                 type="number"
@@ -605,15 +605,15 @@ export function CommissionsClient({ ledger: initialLedger, defaultAgentRate, def
 
       {/* Per-agent summary */}
       <div className="space-y-3">
-        <p className={cn(SECTION_LABEL)}>Per-agent commissions</p>
+        <p className={cn(SECTION_LABEL)}>Per-provider revenue share</p>
         <div className="overflow-x-auto rounded-xl border border-border/60">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/40">
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Agent</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Provider</th>
                 <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Deals</th>
                 <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Total value</th>
-                <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Agent owed</th>
+                <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Provider owed</th>
                 <th className="text-right px-4 py-3 text-xs font-medium text-muted-foreground">Agency earned</th>
               </tr>
             </thead>
@@ -659,10 +659,10 @@ export function CommissionsClient({ ledger: initialLedger, defaultAgentRate, def
             <thead>
               <tr className="border-b border-border bg-muted/40">
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Deal</th>
-                <th className="text-left px-3 py-3 text-xs font-medium text-muted-foreground">Agent</th>
+                <th className="text-left px-3 py-3 text-xs font-medium text-muted-foreground">Provider</th>
                 <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Closed</th>
                 <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Value</th>
-                <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Agent %</th>
+                <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Provider %</th>
                 <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Agency %</th>
                 <th className="text-right px-3 py-3 text-xs font-medium text-muted-foreground">Agency $</th>
                 <th className="text-center px-3 py-3 text-xs font-medium text-muted-foreground">Status</th>

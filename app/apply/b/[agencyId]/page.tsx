@@ -17,11 +17,11 @@ export async function generateMetadata({ params }: { params: Promise<{ agencyId:
     .eq('id', agencyId)
     .maybeSingle();
 
-  const name = agency?.name || 'Application';
+  const name = agency?.name || 'Inquiry';
   return {
-    title: `${name} — Application`,
-    description: `Submit your application to ${name}.`,
-    openGraph: { title: `${name} — Application`, description: `Submit your application to ${name}.` },
+    title: `${name} — Inquiry`,
+    description: `Submit your service inquiry to ${name}.`,
+    openGraph: { title: `${name} — Inquiry`, description: `Submit your service inquiry to ${name}.` },
   };
 }
 
@@ -171,8 +171,8 @@ export default async function AgencyApplyPage({
   } | null;
 
   // Use agency name for title, fall back to space settings
-  const pageTitle = `${agency.name} Application`;
-  const pageIntro = settings?.intakePageIntro || "Share your preferences and we'll follow up with next steps.";
+  const pageTitle = `${agency.name}`;
+  const pageIntro = settings?.intakePageIntro || "Tell us what you're looking for and we'll follow up with next steps.";
   const businessName = agency.name;
   const agentName = agency.name;
   // For agency forms, only show the logo — no circular avatar photo

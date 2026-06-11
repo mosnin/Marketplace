@@ -3,7 +3,7 @@
  *
  * No auth (same pattern as /apply/[slug] and /book/[slug]): resolve the
  * Space by slug, read branding from SpaceSetting, the page config from
- * ProfilePage, and — when enabled — the space's active listings. The
+ * ProfilePage, and — when enabled — the space's active services. The
  * render lives in <PublicProfile/>.
  */
 
@@ -78,7 +78,7 @@ interface ProfileConfig {
   videos: Array<{ id: string; url: string; title?: string }>;
   coverPhotoUrl: string | null;
   profilePhotoUrl: string | null;
-  /** Provider-curated featured listings, in render order. Empty array falls
+  /** Provider-curated featured services, in render order. Empty array falls
    *  back to the legacy auto-top-6-recent logic. */
   featuredServiceIds: string[];
 }
@@ -140,7 +140,7 @@ export default async function PublicProviderPage({
     if (featuredIds.length > 0) {
       // Provider-curated set. Postgres `.in()` doesn't preserve order — fetch
       // the rows then reorder in JS to match the provider's chosen sequence.
-      // Stale ids (deleted listings, listings flipped off `active`) silently
+      // Stale ids (deleted services, services flipped off `active`) silently
       // drop out — same forgiving contract as the PATCH validator.
       const { data } = await supabase
         .from('Service')

@@ -3,8 +3,8 @@
  *
  * Layout: a single narrow column. A full-bleed header photo fades into the
  * page; identity and socials sit just below it. Then clearly separated,
- * labelled sections — the application (the conversion, in the provider's
- * accent colour), appointment booking, featured videos, listings, and links.
+ * labelled sections — the inquiry CTA (the conversion, in the provider's
+ * accent colour), appointment booking, featured videos, services, and links.
  *
  * On desktop the column becomes a centred card; on mobile it's full-bleed.
  * Branding (logo, accent colour, light/dark) is inherited from SpaceSetting
@@ -20,7 +20,6 @@ import {
   BadgeCheck,
   CalendarCheck,
   Globe,
-  Home,
   Link2,
   Play,
 } from 'lucide-react';
@@ -263,7 +262,7 @@ function ServiceCard({ service }: { service: PublicService }) {
           aria-hidden
           className="flex aspect-[16/9] w-full items-center justify-center bg-muted"
         >
-          <Home size={28} className="text-muted-foreground/60" />
+          <Globe size={28} className="text-muted-foreground/60" />
         </div>
       )}
       <div className="px-4 py-3">
@@ -504,7 +503,7 @@ export function PublicProfile({
                   className="group flex items-center gap-3 rounded-2xl px-5 py-4 transition-transform duration-150 active:scale-[0.99]"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold">Start your application</p>
+                    <p className="text-sm font-semibold">Get in touch</p>
                     <p className="truncate text-xs opacity-75">
                       A few quick questions about what you&apos;re looking for.
                     </p>
@@ -548,7 +547,7 @@ export function PublicProfile({
             </section>
           )}
 
-          {/* Listings — horizontal carousel.
+          {/* Services — horizontal carousel.
               The scroller breaks out of the page's px-6 with `-mx-6 px-6` so
               cards align with the page padding but can scroll past it; the
               trailing card sits flush with the edge instead of clipping at
@@ -558,7 +557,7 @@ export function PublicProfile({
               is the affordance, not chrome. */}
           {services.length > 0 && (
             <section className="mt-10 space-y-4">
-              <SectionHeader>Listings</SectionHeader>
+              <SectionHeader>Services</SectionHeader>
               <div
                 className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 no-scrollbar"
                 style={{ scrollPaddingLeft: '1.5rem', scrollPaddingRight: '1.5rem' }}
@@ -582,14 +581,14 @@ export function PublicProfile({
             </section>
           )}
 
-          {/* Already applied? A quiet way back into the client portal — never
+          {/* Already submitted an inquiry? A quiet way back into the client portal — never
               competes with the Apply / Book CTAs above. */}
           <div className="mt-12 text-center">
             <a
               href="/clients/login"
               className="text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
-              Already applied? Check your status.
+              Already submitted? Check your status.
             </a>
           </div>
 

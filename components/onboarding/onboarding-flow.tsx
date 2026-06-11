@@ -38,9 +38,9 @@ const AGENCY_READY_WORDS = ['Building.', 'Wiring.', 'Done.'] as const;
 type Role = 'provider' | 'agency' | 'agency_only';
 
 const ROLE_OPTIONS: TileOption<Role>[] = [
-  { value: 'provider',     label: 'Provider',           description: 'Solo agent with a pipeline.',      icon: Home },
-  { value: 'agency',      label: 'Agency + provider',  description: 'Run a team and sell.',             icon: Briefcase },
-  { value: 'agency_only', label: 'Agency only',       description: 'Team lead - no personal pipeline.', icon: Building2 },
+  { value: 'provider',     label: "I'm an independent professional", description: 'Solo provider with my own pipeline.',   icon: Home },
+  { value: 'agency',      label: 'I run a team + take clients',     description: 'Manage a team and serve my own clients.', icon: Briefcase },
+  { value: 'agency_only', label: 'I run a team only',              description: 'Team lead — no personal client pipeline.', icon: Building2 },
 ];
 
 // ── Shared option sets ─────────────────────────────────────────────────────
@@ -76,9 +76,12 @@ const AGENCY_TYPE: TileOption<string>[] = [
 ];
 
 const PRIMARY_MARKET: TileOption<string>[] = [
-  { value: 'residential_rental', label: 'Residential rental' },
-  { value: 'commercial',         label: 'Commercial' },
-  { value: 'mixed',              label: 'Mixed' },
+  { value: 'residential_rental', label: 'Hair & beauty' },
+  { value: 'commercial',         label: 'Fitness & coaching' },
+  { value: 'mixed',              label: 'Photography' },
+  { value: 'tutoring',           label: 'Tutoring & education' },
+  { value: 'consulting',         label: 'Consulting' },
+  { value: 'other',              label: 'Other' },
 ];
 
 const COMMISSION_STRUCTURE: TileOption<string>[] = [
@@ -324,8 +327,8 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         body: JSON.stringify({
           action: 'create_space',
           slug: values.slug.trim(),
-          intakePageTitle: 'Rental Application',
-          intakePageIntro: 'Share a few details so I can review your rental fit faster.',
+          intakePageTitle: 'New Client Intake',
+          intakePageIntro: 'Share a few details so I can get you set up quickly.',
           businessName: values.businessName.trim(),
           logoUrl: values.logoUrl ?? undefined,
           bio: values.providerBio.trim() || undefined,
@@ -426,7 +429,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
           title="What do you call your business?"
           subtitle="Goes on intake forms, emails, and your public page."
           label="Business or brand name"
-          placeholder="Sunset Realty"
+          placeholder="Sunrise Studio"
           value={values.businessName}
           onChange={(v) => set('businessName', v)}
           onNext={goNext}
@@ -463,7 +466,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
             {
               key: 'bio',
               label: 'Short bio',
-              placeholder: '15 years helping families find their next home.',
+              placeholder: '10 years helping clients look and feel their best.',
               value: values.providerBio,
               onChange: (v) => set('providerBio', v),
               maxLength: 500,
@@ -492,7 +495,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         <TextStep
           title="What's your agency called?"
           label="Agency name"
-          placeholder="Sunset Realty Group"
+          placeholder="Sunrise Studios Group"
           value={values.agencyName}
           onChange={(v) => set('agencyName', v)}
           onNext={goNext}
@@ -543,7 +546,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
 
       {stepId === 'agency-agent-count' && (
         <TilesStep
-          title="How many agents on the team?"
+          title="How many providers on the team?"
           options={AGENT_COUNT}
           value={values.agentCount || null}
           onSelect={(v) => set('agentCount', v)}
@@ -567,7 +570,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
 
       {stepId === 'agency-market' && (
         <TilesStep
-          title="Primary market?"
+          title="What's your team's primary category?"
           options={PRIMARY_MARKET}
           value={values.primaryMarket || null}
           onSelect={(v) => set('primaryMarket', v)}

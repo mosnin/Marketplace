@@ -74,7 +74,7 @@ export default async function PacketPage({ params }: Props) {
     <div className="min-h-screen bg-background text-foreground">
       <div className="max-w-3xl mx-auto p-6 space-y-6">
         <header className="space-y-1">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Listing packet</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Service packet</p>
           <h1 className="text-2xl font-semibold">{packet.name}</h1>
         </header>
 
@@ -110,7 +110,7 @@ export default async function PacketPage({ params }: Props) {
               {service.serviceType && <Row label="Type" value={service.serviceType.replace('_', ' ')} />}
               {service.yearBuilt != null && <Row label="Year built" value={String(service.yearBuilt)} />}
               {service.lotSizeSqft != null && <Row label="Lot" value={`${service.lotSizeSqft.toLocaleString()} sqft`} />}
-              {service.mlsNumber && <Row label="MLS #" value={service.mlsNumber} />}
+              {service.mlsNumber && <Row label="Ref #" value={service.mlsNumber} />}
             </dl>
 
             {service.notes && (
@@ -121,7 +121,7 @@ export default async function PacketPage({ params }: Props) {
 
             {service.listingUrl && (
               <a href={service.listingUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm font-medium text-foreground hover:underline">
-                View original listing <ExternalLink size={12} />
+                View full details <ExternalLink size={12} />
               </a>
             )}
           </div>

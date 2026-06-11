@@ -101,7 +101,7 @@ export function LeaderboardClient({ initialStats }: { initialStats: ProviderStat
       {sorted.length === 0 ? (
         <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 px-4 py-6 text-center">
           <p className={cn(BODY_MUTED, 'text-[13px]')}>
-            Nothing to rank yet — once providers close a deal I&apos;ll start the leaderboard.
+            Nothing to rank yet — once your team closes their first deal I&apos;ll start the leaderboard.
           </p>
         </div>
       ) : (

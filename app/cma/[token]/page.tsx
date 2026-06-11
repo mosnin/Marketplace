@@ -55,15 +55,15 @@ function facts(c: { beds: number | null; baths: number | null; squareFeet: numbe
 const STATUS_LABEL: Record<string, string> = {
   active: 'Active',
   pending: 'Pending',
-  sold: 'Sold',
-  off_market: 'Off market',
+  sold: 'Completed',
+  off_market: 'Unavailable',
   owned: 'Owned',
 };
 
 const BASIS_NOTE: Record<CmaPayload['stats']['basis'], string> = {
-  sold: 'Based on recent sold prices of comparable homes.',
-  list: 'Based on current list prices of comparable homes.',
-  mixed: 'Based on a mix of recent sold and current list prices.',
+  sold: 'Based on recent completed rates of comparable services.',
+  list: 'Based on current listed rates of comparable services.',
+  mixed: 'Based on a mix of recent completed and current listed rates.',
   none: 'Not enough priced comparables to compute a range yet.',
 };
 
@@ -108,13 +108,13 @@ export default async function CmaPublicPage({ params }: Props) {
         <div className="flex items-center gap-2 text-muted-foreground">
           {brand?.emoji && <span aria-hidden className="text-base leading-none">{brand.emoji}</span>}
           <span className="text-[11px] font-medium uppercase tracking-wider">
-            {brand?.name ?? 'Comparative market analysis'}
+            {brand?.name ?? 'Rate benchmark report'}
           </span>
         </div>
 
         {/* ── Header (the one focal block) ───────────────────────────────── */}
         <header className="space-y-1.5">
-          <p className="text-sm text-muted-foreground">Comparative market analysis.</p>
+          <p className="text-sm text-muted-foreground">Rate benchmark report.</p>
           <h1
             className="text-3xl tracking-tight text-foreground"
             style={{ fontFamily: 'var(--font-title)' }}
@@ -122,14 +122,14 @@ export default async function CmaPublicPage({ params }: Props) {
             {report.title?.trim() || subject.address}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {report.title?.trim() ? subject.address : subjectLocation || 'Prepared for the service owner.'}
+            {report.title?.trim() ? subject.address : subjectLocation || 'Prepared for the client.'}
           </p>
         </header>
 
         {/* ── Suggested range — the headline number ──────────────────────── */}
         <section className="rounded-xl border border-border/70 bg-card px-6 py-7 text-center space-y-2">
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            Suggested list-price range
+            Suggested rate range
           </p>
           {hasRange ? (
             <p
@@ -175,7 +175,7 @@ export default async function CmaPublicPage({ params }: Props) {
         <section className="space-y-3">
           <div className="flex items-baseline justify-between">
             <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              Comparable homes
+              Comparable services
             </p>
             {stats.avgPricePerSqft != null && (
               <p className="text-xs text-muted-foreground">
@@ -190,9 +190,9 @@ export default async function CmaPublicPage({ params }: Props) {
 
           {comps.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 px-5 py-10 text-center">
-              <p className="text-sm text-foreground">No comparable homes on file yet.</p>
+              <p className="text-sm text-foreground">No comparable services on file yet.</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Comparables drawn from this office&apos;s records will appear here.
+                Comparables added to this report will appear here.
               </p>
             </div>
           ) : (
@@ -220,8 +220,8 @@ export default async function CmaPublicPage({ params }: Props) {
         {/* ── Footer ─────────────────────────────────────────────────────── */}
         <footer className="border-t border-border/60 pt-6 space-y-2">
           <p className="text-xs text-muted-foreground">
-            Prepared {brand?.name ? `by ${brand.name} ` : ''}on {generated}. This analysis is an
-            estimate based on comparable services, not an appraisal.
+            Prepared {brand?.name ? `by ${brand.name} ` : ''}on {generated}. This report is an
+            estimate based on comparable services, not a formal valuation.
           </p>
           <p className="text-[11px] text-muted-foreground print:hidden">
             Tip: use your browser&apos;s print to save this report as a PDF.

@@ -33,8 +33,8 @@ type ParseError = {
 };
 
 const SYSTEM_PROMPT = [
-  'You are a CRM contact parser for a real-estate agent. Extract structured fields',
-  "from the provider's note. Return JSON only — no prose.",
+  'You are a CRM contact parser for a professional-services provider. Extract structured fields',
+  "from the provider's note about a potential client. Return JSON only — no prose.",
   '',
   'Schema:',
   '{',
@@ -44,8 +44,8 @@ const SYSTEM_PROMPT = [
   '  "type": "rental" | "buyer" | null,',
   '  "stage": "Qualifying" | "Appointment" | "Application" | null,',
   '  "monthlyBudget": number | null (in dollars, derived from "$4200/mo" or similar),',
-  '  "services": string[] (any addresses/listings mentioned),',
-  '  "preferences": string | null (free-text — neighborhood, bedroom count, pet-friendly, etc.),',
+  '  "services": string[] (any services, offerings, or specialties mentioned),',
+  '  "preferences": string | null (free-text — service type, schedule, requirements, goals, etc.),',
   '  "confidence": "high" | "medium" | "low"',
   '}',
   '',

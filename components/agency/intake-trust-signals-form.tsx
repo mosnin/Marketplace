@@ -22,7 +22,7 @@ interface IntakeTrustSignalsFormProps {
 }
 
 const FAIR_HOUSING_PLACEHOLDER =
-  'Equal Housing Opportunity. We do not discriminate on the basis of race, color, religion, national origin, sex, familial status, or disability.';
+  'We are committed to equal opportunity and do not discriminate on the basis of race, color, religion, national origin, sex, or disability.';
 
 /**
  * Agency-level intake trust signals — set once by the agency admin
@@ -89,7 +89,7 @@ export function AgencyIntakeTrustSignalsForm({
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="agencyFairHousingNotice">Fair Housing notice</Label>
+        <Label htmlFor="agencyFairHousingNotice">Compliance notice</Label>
         <Textarea
           id="agencyFairHousingNotice"
           value={fairHousingNotice}

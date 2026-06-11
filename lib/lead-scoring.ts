@@ -122,19 +122,19 @@ export async function scoreLeadApplication(input: {
 
 function deriveNextAction(result: ReturnType<typeof computeLeadScore>, leadType?: 'rental' | 'buyer'): string {
   if (leadType === 'buyer') {
-    if (result.priorityTier === 'hot') return 'Schedule showing or buyer consultation within 2 hours';
-    if (result.priorityTier === 'warm') return 'Send service listings and follow up within 24 hours';
-    if (result.missingInformation.length >= 3) return 'Request pre-approval and buyer preferences';
-    if (result.priorityTier === 'cold') return 'Add to nurture campaign with market updates';
-    return 'Review buyer profile for qualification';
+    if (result.priorityTier === 'hot') return 'Schedule a consultation or session within 2 hours';
+    if (result.priorityTier === 'warm') return 'Send service details and follow up within 24 hours';
+    if (result.missingInformation.length >= 3) return 'Request budget details and service preferences';
+    if (result.priorityTier === 'cold') return 'Add to nurture sequence with relevant offerings';
+    return 'Review inquiry for fit with your services';
   }
 
-  // Rental (default)
-  if (result.priorityTier === 'hot') return 'Schedule appointment or call within 2 hours';
+  // Service inquiry (default)
+  if (result.priorityTier === 'hot') return 'Schedule a session or call within 2 hours';
   if (result.priorityTier === 'warm') return 'Send follow-up within 24 hours';
-  if (result.missingInformation.length >= 3) return 'Request additional application details';
+  if (result.missingInformation.length >= 3) return 'Request additional inquiry details';
   if (result.priorityTier === 'cold') return 'Add to weekly follow-up queue';
-  return 'Review application for disqualifying factors';
+  return 'Review inquiry for fit with your offering';
 }
 
 function failedResult(): LeadScoringResult {

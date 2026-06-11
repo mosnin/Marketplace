@@ -217,7 +217,7 @@ export function AnalyticsClient({ agents }: Props) {
         <div className="flex items-end justify-between gap-4 pb-3 border-b border-border/60">
           <div className="space-y-0.5">
             <p className={SECTION_LABEL}>Team funnel</p>
-            <p className={BODY_MUTED}>Rental pipeline, all agents.</p>
+            <p className={BODY_MUTED}>Service pipeline, all providers.</p>
           </div>
           {/* Focal number for the section */}
           <div className="text-right flex-shrink-0">
@@ -303,9 +303,9 @@ export function AnalyticsClient({ agents }: Props) {
           </StaggerList>
         ) : (
           <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 px-5 py-10 text-center">
-            <p className="text-sm text-foreground">No agents with data yet.</p>
+            <p className="text-sm text-foreground">No providers with data yet.</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Lead activity will appear here once providers are active.
+              Lead activity will appear here once your team is active.
             </p>
           </div>
         )
@@ -317,7 +317,7 @@ export function AnalyticsClient({ agents }: Props) {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border/60">
-                <th className={cn(SECTION_LABEL, 'text-left px-3 py-2')}>Agent</th>
+                <th className={cn(SECTION_LABEL, 'text-left px-3 py-2')}>Provider</th>
                 <th className={cn(SECTION_LABEL, 'text-right px-3 py-2')}>Leads</th>
                 <th className={cn(SECTION_LABEL, 'text-right px-3 py-2')}>Appointments</th>
                 <th className={cn(SECTION_LABEL, 'text-right px-3 py-2 hidden md:table-cell')}>Apps</th>
@@ -334,7 +334,7 @@ export function AnalyticsClient({ agents }: Props) {
               {sorted.length === 0 && (
                 <tr>
                   <td colSpan={11} className="px-3 py-10 text-center">
-                    <span className={BODY_MUTED}>No agent data yet.</span>
+                    <span className={BODY_MUTED}>No provider data yet.</span>
                   </td>
                 </tr>
               )}

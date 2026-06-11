@@ -300,14 +300,14 @@ export function PipelineClient({ deals, stages, providers, summary }: Props) {
         </div>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="pipeline-agent" className={SECTION_LABEL}>Agent</label>
+          <label htmlFor="pipeline-agent" className={SECTION_LABEL}>Provider</label>
           <select
             id="pipeline-agent"
             value={providerFilter}
             onChange={(e) => setProviderFilter(e.target.value)}
             className="text-sm border border-border/70 rounded-md px-2 h-8 bg-background focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            <option value="all">All agents</option>
+            <option value="all">All providers</option>
             {providers.map((r) => (
               <option key={r.userId} value={r.userId}>
                 {r.name}
@@ -369,7 +369,7 @@ export function PipelineClient({ deals, stages, providers, summary }: Props) {
       {/* ── Per-agent breakdown — hairline-divided rows. */}
       <section className="space-y-4">
         <div className="flex items-center gap-3 pb-3 border-b border-border/60">
-          <h2 className={SECTION_LABEL}>By agent</h2>
+          <h2 className={SECTION_LABEL}>By provider</h2>
         </div>
 
         {agentGroups.length === 0 ? (
@@ -484,7 +484,7 @@ export function PipelineClient({ deals, stages, providers, summary }: Props) {
               <thead>
                 <tr className="border-b border-border/60">
                   <th className="text-left px-3 py-2 text-[11px] uppercase tracking-wider font-medium text-muted-foreground">Title</th>
-                  <th className="text-left px-3 py-2 text-[11px] uppercase tracking-wider font-medium text-muted-foreground">Agent</th>
+                  <th className="text-left px-3 py-2 text-[11px] uppercase tracking-wider font-medium text-muted-foreground">Provider</th>
                   <th className="text-left px-3 py-2 text-[11px] uppercase tracking-wider font-medium text-muted-foreground">Stage</th>
                   <th className="text-right px-3 py-2 text-[11px] uppercase tracking-wider font-medium text-muted-foreground">
                     <button

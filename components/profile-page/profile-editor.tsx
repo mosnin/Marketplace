@@ -866,7 +866,7 @@ export function ProfileEditor({ slug }: { slug: string }) {
                 id="showServices"
                 checked={showServices}
                 onChange={setShowServices}
-                label="Featured listings"
+                label="Featured services"
                 help="The services you've picked in Content. Hidden if none are selected."
               />
             </div>
@@ -932,7 +932,7 @@ export function ProfileEditor({ slug }: { slug: string }) {
             <header className="space-y-1">
               <h2 className="text-base font-semibold">Videos</h2>
               <p className={BODY_MUTED}>
-                Paste a YouTube link — a service appointment, a market update — and it
+                Paste a YouTube link — a walkthrough, a client story, a demo — and it
                 shows as a playable thumbnail in a &ldquo;Watch&rdquo; section.
                 Drag to reorder.
               </p>
@@ -984,8 +984,8 @@ export function ProfileEditor({ slug }: { slug: string }) {
             <header className="space-y-1">
               <h2 className="text-base font-semibold">Featured services</h2>
               <p className={BODY_MUTED}>
-                Pick which active listings show on your page, and the order
-                they show in. Up to {MAX_FEATURED}.
+                Pick which active services show on your page, and the order
+                they appear in. Up to {MAX_FEATURED}.
               </p>
             </header>
 
@@ -1456,9 +1456,9 @@ function FeaturedPicker({
   if (available.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 px-5 py-8 text-center">
-        <p className="text-sm text-foreground">No active listings yet.</p>
+        <p className="text-sm text-foreground">No active services yet.</p>
         <p className={cn(CAPTION, 'mt-1')}>
-          Add listings in your workspace and they&apos;ll show up here.
+          Add services in your workspace and they&apos;ll show up here.
         </p>
       </div>
     );

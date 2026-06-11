@@ -147,8 +147,8 @@ export default async function PublicBookingPage({
         agentPhoto={agentPhoto}
         pageTitle={pageTitle}
         pageIntro={pageIntro}
-        trustLine={`Your information is shared only with ${agentName} and used solely for scheduling.`}
-        agentPresenceLabel="Booking with"
+        trustLine={`Your information is shared only with ${businessName} and used solely for scheduling.`}
+        agentPresenceLabel="Scheduling with"
         hidePoweredBy={hidePoweredBy}
         customization={customization}
         coverPhotoUrl={coverPhotoUrl}

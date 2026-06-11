@@ -503,14 +503,14 @@ export default async function AgencyForecastPage() {
         <>
           {/* Focal projected number */}
           <section className="space-y-1">
-            <p className={SECTION_LABEL}>Projected GCI, {monthName}</p>
+            <p className={SECTION_LABEL}>Projected revenue, {monthName}</p>
             <p className={cn(STAT_NUMBER)} style={TITLE_FONT}>
               {formatCurrency(totalForecast)}
             </p>
             <p className={cn(CAPTION, 'tabular-nums')}>
               {activeCount} active deal{activeCount === 1 ? '' : 's'} in the model
               {defaultAgencyRate != null && (
-                <> &middot; default rate {Math.round(defaultAgencyRate * 100)}%</>
+                <> &middot; default rev-share {Math.round(defaultAgencyRate * 100)}%</>
               )}
             </p>
           </section>
@@ -766,10 +766,10 @@ export default async function AgencyForecastPage() {
 
           {/* Forecast model note */}
           <p className={cn(CAPTION, 'text-muted-foreground/70')}>
-            Projected GCI = realized won deals + weighted active deals. Active deal weight is set
+            Projected revenue = realized won deals + weighted active deals. Active deal weight is set
             by close date and health: 65% (closing this month, on track), 40% (at risk), 15%
             (stuck). Deals without a close date or closing in a future month carry 20%, 10%, or
-            5% by health. Commission source: per-deal rate when set, otherwise agency default
+            5% by health. Revenue share source: per-deal rate when set, otherwise agency default
             ({Math.round(defaultAgencyRate * 100)}%).
           </p>
         </>

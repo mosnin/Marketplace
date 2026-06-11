@@ -140,10 +140,10 @@ export function AgencyDealCard({
           </p>
         )}
 
-        {/* GCI — quiet meta */}
+        {/* Rev-share — quiet meta */}
         {gci != null && (
           <p className="text-[11px] text-muted-foreground tabular-nums mt-0.5">
-            GCI {formatCompact(gci)}
+            Rev-share {formatCompact(gci)}
           </p>
         )}
 

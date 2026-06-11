@@ -166,7 +166,7 @@ export default async function AgencyAnalyticsPage() {
     if (totalLeads === 0) return 'No lead activity recorded yet.';
     const parts: string[] = [];
     parts.push(
-      `${totalLeads.toLocaleString()} ${totalLeads === 1 ? 'lead' : 'leads'} across ${activeAgents} ${activeAgents === 1 ? 'agent' : 'agents'}`,
+      `${totalLeads.toLocaleString()} ${totalLeads === 1 ? 'lead' : 'leads'} across ${activeAgents} ${activeAgents === 1 ? 'provider' : 'providers'}`,
     );
     parts.push(`${teamConversion}% lead-to-win`);
     return parts.join(', ') + '.';
@@ -191,7 +191,7 @@ export default async function AgencyAnalyticsPage() {
         <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 px-5 py-10 text-center">
           <p className="text-sm text-foreground">No activity yet.</p>
           <p className="text-xs text-muted-foreground mt-1">
-            Lead and deal data across your member providers will appear here.
+            Lead and booking data across your team will appear here.
           </p>
         </div>
       ) : (

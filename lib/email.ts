@@ -117,10 +117,10 @@ export async function sendNewLeadNotification(params: NewLeadEmailParams): Promi
       row('Email', email),
       row('Budget', budget != null ? fmt(budget) : null),
       row('Service', app.serviceAddress),
-      row('Move-in date', app.targetMoveInDate),
-      row('Monthly rent', app.monthlyRent != null ? fmt(Number(app.monthlyRent)) : null),
+      row('Preferred date', app.targetMoveInDate),
+      row('Session budget', app.monthlyRent != null ? fmt(Number(app.monthlyRent)) : null),
       row('Employment', app.employmentStatus),
-      row('Gross income', app.monthlyGrossIncome != null ? `${fmt(Number(app.monthlyGrossIncome))}/mo` : null),
+      row('Monthly income', app.monthlyGrossIncome != null ? `${fmt(Number(app.monthlyGrossIncome))}/mo` : null),
       row('Occupants', app.numberOfOccupants),
       row('Pets', app.hasPets === true ? (app.petDetails ?? 'Yes') : app.hasPets === false ? 'No' : null),
       row('Prior evictions', app.priorEvictions),
@@ -137,7 +137,7 @@ export async function sendNewLeadNotification(params: NewLeadEmailParams): Promi
         <!-- Header -->
         <tr><td style="background:#0f172a;padding:20px 28px">
           <p style="margin:0;color:#94a3b8;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.05em">${esc(spaceName)}</p>
-          <p style="margin:4px 0 0;color:#ffffff;font-size:20px;font-weight:700">New lead application</p>
+          <p style="margin:4px 0 0;color:#ffffff;font-size:20px;font-weight:700">New booking inquiry</p>
         </td></tr>
         <!-- Body -->
         <tr><td style="padding:24px 28px">
@@ -154,7 +154,7 @@ export async function sendNewLeadNotification(params: NewLeadEmailParams): Promi
           <!-- CTA -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px">
             <tr><td>
-              <a href="${contactUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 22px;border-radius:8px">View full application →</a>
+              <a href="${contactUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 22px;border-radius:8px">View inquiry details →</a>
             </td></tr>
           </table>
         </td></tr>
@@ -177,7 +177,7 @@ export async function sendNewLeadNotification(params: NewLeadEmailParams): Promi
     const result = await resend.emails.send({
       from: FROM,
       to: toEmail,
-      subject: `New lead: ${safeSubjectName}${leadScore != null ? ` · ${Math.round(leadScore)} ${safeScoreLabel}` : ''}`,
+      subject: `New inquiry: ${safeSubjectName}${leadScore != null ? ` · ${Math.round(leadScore)} ${safeScoreLabel}` : ''}`,
       html,
     });
     if (result.error) {
@@ -402,7 +402,7 @@ export async function sendNewDealNotification(params: NewDealEmailParams): Promi
   const detailRows = [
     row('Title', dealTitle),
     row('Value', dealValue != null ? fmt(dealValue) : null),
-    row('Address', dealAddress),
+    row('Service', dealAddress),
     row('Priority', dealPriority),
     row('Contacts', contactNames?.length ? contactNames.join(', ') : null),
   ].filter(Boolean).join('');
@@ -561,11 +561,11 @@ export async function sendApplicationConfirmation(params: ApplicationConfirmatio
 
   const safeBusinessName = esc(businessName);
   const safeName = esc(applicantName);
-  const typeLabel = leadType === 'buyer' ? 'buyer' : 'rental';
+  const typeLabel = leadType === 'buyer' ? 'buyer' : 'service';
 
   const bodyParagraph = customMessage
     ? esc(customMessage)
-    : `We&#x27;ve received your ${typeLabel} application and will review it shortly. You don&#x27;t need to do anything else right now.`;
+    : `We&#x27;ve received your ${typeLabel} inquiry and will review it shortly. You don&#x27;t need to do anything else right now.`;
 
   const html = `
 <!DOCTYPE html>
@@ -580,12 +580,12 @@ export async function sendApplicationConfirmation(params: ApplicationConfirmatio
         </td></tr>
         <!-- Body -->
         <tr><td style="padding:24px 28px">
-          <p style="margin:0 0 16px;font-size:18px;font-weight:700;color:#111827">Thank you for your application, ${safeName}</p>
+          <p style="margin:0 0 16px;font-size:18px;font-weight:700;color:#111827">Thank you for your inquiry, ${safeName}</p>
           <p style="margin:0 0 20px;font-size:14px;color:#374151;line-height:1.6">${bodyParagraph}</p>
           <!-- CTA -->
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr><td>
-              <a href="${statusUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 22px;border-radius:8px">Track your application status &rarr;</a>
+              <a href="${statusUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 22px;border-radius:8px">Track your booking status &rarr;</a>
             </td></tr>
           </table>
         </td></tr>
@@ -605,7 +605,7 @@ export async function sendApplicationConfirmation(params: ApplicationConfirmatio
     const result = await resend.emails.send({
       from: `${businessName.replace(/[\r\n\t<>"]/g, ' ').slice(0, 100)} <${FROM}>`,
       to: toEmail,
-      subject: `Application received — ${safeSubjectBiz}`,
+      subject: `Booking request received — ${safeSubjectBiz}`,
       html,
     });
     if (result.error) {
@@ -652,7 +652,7 @@ export async function sendWelcomeEmail(params: {
       <tr>
         <td style="padding:8px 0;font-size:14px;color:#374151;line-height:1.5">
           <strong style="color:#111827">1. Share your intake link</strong><br/>
-          Send it to renters so their inquiries flow straight into your pipeline.
+          Send it to clients so their inquiries flow straight into your pipeline.
         </td>
       </tr>
       <tr>
@@ -725,7 +725,7 @@ export async function sendDraftResumeEmail(params: DraftResumeEmailParams): Prom
 <body style="margin:0;padding:0;background:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
   <!-- Preheader text (visible in inbox preview, hidden in body) -->
   <div style="display:none;max-height:0;overflow:hidden;mso-hide:all">
-    Your application progress has been saved. Click to pick up where you left off &#8199;&#65279;&#847;
+    Your booking request progress has been saved. Click to pick up where you left off &#8199;&#65279;&#847;
   </div>
   <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f9fafb;padding:32px 16px">
     <tr><td align="center">
@@ -736,16 +736,16 @@ export async function sendDraftResumeEmail(params: DraftResumeEmailParams): Prom
         </td></tr>
         <!-- Body -->
         <tr><td style="padding:28px 28px 24px">
-          <p style="margin:0 0 16px;font-size:18px;font-weight:700;color:#111827">Continue your application</p>
+          <p style="margin:0 0 16px;font-size:18px;font-weight:700;color:#111827">Continue your booking request</p>
           <p style="margin:0 0 24px;font-size:14px;color:#374151;line-height:1.6">
-            We saved your progress so you can pick up right where you left off. Click the button below to resume your application with ${safeBusinessName}.
+            We saved your progress so you can pick up right where you left off. Click the button below to resume your booking request with ${safeBusinessName}.
           </p>
           <!-- CTA -->
           <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
             <tr><td align="center">
               <a href="${resumeUrl}" style="display:inline-block;background:#111827;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:8px;mso-padding-alt:0;text-align:center">
                 <!--[if mso]><i style="mso-font-width:150%;mso-text-raise:30px" hidden>&emsp;</i><![endif]-->
-                <span style="mso-text-raise:15px">Resume Application &#8594;</span>
+                <span style="mso-text-raise:15px">Resume Booking Request &#8594;</span>
                 <!--[if mso]><i style="mso-font-width:150%" hidden>&emsp;&#8203;</i><![endif]-->
               </a>
             </td></tr>
@@ -761,7 +761,7 @@ export async function sendDraftResumeEmail(params: DraftResumeEmailParams): Prom
         </td></tr>
         <!-- Footer -->
         <tr><td style="padding:16px 28px;border-top:1px solid #f1f5f9">
-          <p style="margin:0;font-size:11px;color:#9ca3af;line-height:1.5">If you didn&rsquo;t start this application, you can safely ignore this email. Your data will be automatically deleted when the link expires.</p>
+          <p style="margin:0;font-size:11px;color:#9ca3af;line-height:1.5">If you didn&rsquo;t start this booking request, you can safely ignore this email. Your data will be automatically deleted when the link expires.</p>
         </td></tr>
       </table>
     </td></tr>
@@ -773,22 +773,22 @@ export async function sendDraftResumeEmail(params: DraftResumeEmailParams): Prom
 
   // Plain-text fallback for accessibility and text-only email clients
   const text = [
-    `Continue your application with ${businessName}`,
+    `Continue your booking request with ${businessName}`,
     '',
     'We saved your progress so you can pick up right where you left off.',
     '',
-    `Resume your application: ${resumeUrl}`,
+    `Resume your booking request: ${resumeUrl}`,
     '',
     'This link is valid for 7 days.',
     '',
-    "If you didn't start this application, you can safely ignore this email.",
+    "If you didn't start this booking request, you can safely ignore this email.",
   ].join('\n');
 
   try {
     const result = await resend.emails.send({
       from: `${businessName.replace(/[\r\n\t<>"]/g, ' ').slice(0, 100)} <${FROM}>`,
       to: toEmail,
-      subject: `Continue your application \u2014 ${safeSubjectBiz}`,
+      subject: `Continue your booking request \u2014 ${safeSubjectBiz}`,
       html,
       text,
     });
@@ -882,7 +882,7 @@ export async function sendMfaEnrollmentPrompt(params: MfaEnrollmentPromptParams)
 const STATUS_LABELS: Record<string, string> = {
   received: 'Received',
   under_review: 'Under Review',
-  appointment_scheduled: 'Appointment Scheduled',
+  appointment_scheduled: 'Session Scheduled',
   approved: 'Approved',
   declined: 'Declined',
   waitlisted: 'Waitlisted',
@@ -949,8 +949,8 @@ export async function sendStatusUpdateEmail(params: StatusUpdateEmailParams): Pr
         </td></tr>
         <!-- Body -->
         <tr><td style="padding:24px 28px">
-          <h2 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#111827">Application Update</h2>
-          <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.6">Hi ${safeName}, your application status has been updated:</p>
+          <h2 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#111827">Booking Update</h2>
+          <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.6">Hi ${safeName}, your booking status has been updated:</p>
           <!-- Status badge -->
           <div style="text-align:center;margin:20px 0">
             <span style="display:inline-block;background:${statusBgColor};color:${statusColor};font-size:16px;font-weight:700;padding:10px 24px;border-radius:9999px">${esc(statusLabel)}</span>
@@ -967,11 +967,11 @@ export async function sendStatusUpdateEmail(params: StatusUpdateEmailParams): Pr
               <!--[if mso]>
               <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${portalUrl}" style="height:44px;v-text-anchor:middle;width:240px;" arcsize="18%" strokecolor="#0f172a" fillcolor="#0f172a">
                 <w:anchorlock/>
-                <center style="color:#ffffff;font-family:sans-serif;font-size:14px;font-weight:600;">View your application &rarr;</center>
+                <center style="color:#ffffff;font-family:sans-serif;font-size:14px;font-weight:600;">View your booking &rarr;</center>
               </v:roundrect>
               <![endif]-->
               <!--[if !mso]><!-->
-              <a href="${portalUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:12px 28px;border-radius:8px;min-width:200px;text-align:center">View your application &rarr;</a>
+              <a href="${portalUrl}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:12px 28px;border-radius:8px;min-width:200px;text-align:center">View your booking &rarr;</a>
               <!--<![endif]-->
             </td></tr>
           </table>
@@ -995,7 +995,7 @@ export async function sendStatusUpdateEmail(params: StatusUpdateEmailParams): Pr
     const result = await resend.emails.send({
       from: `${businessName.replace(/[\r\n\t<>"]/g, ' ').slice(0, 100)} <${FROM}>`,
       to: toEmail,
-      subject: `Application Update — ${safeSubjectBiz}`,
+      subject: `Booking Update — ${safeSubjectBiz}`,
       html,
     });
     if (result.error) {
