@@ -378,7 +378,7 @@ async def chat_turn(item: dict):
     # gate is the single point that should ever produce them; missing
     # either is a wiring bug, not a recoverable state.
     if mode == "agency" and (not agency_id or agency_role not in ("agency_owner", "agency_admin")):
-        return {"error": "agency mode requires agency_id and a agency role"}
+        return {"error": "agency mode requires agency_id and an agency role"}
 
     from db import supabase
     db = await supabase()

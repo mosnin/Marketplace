@@ -9,7 +9,7 @@
  * STORAGE IS STRUCTURALLY SEPARATE. Agency conversations + messages live in
  * their OWN tables — "AgencyConversation" / "AgencyMessage" — keyed by
  * `agencyId`, NOT in the provider "Conversation"/"Message" tables. A provider
- * surface cannot read a agency row because the rows are not in the same table.
+ * surface cannot read an agency row because the rows are not in the same table.
  *
  * RUNTIME SPACE vs. STORAGE. The Modal runtime still needs a `space_id` for
  * AgentSettings/usage/the agent run — that stays the agency owner's personal
@@ -20,14 +20,14 @@
  * Defense layer 2 of three (per Koala-for-Agencies Phase 1 spec):
  *
  *   1. ROUTE GUARD   — `app/agency/koala/page.tsx` server component
- *                      redirects when the caller isn't a agency.
+ *                      redirects when the caller isn't an agency.
  *   2. API GATE      — THIS ROUTE. `resolveAgencyContext()` is the gate;
  *                      provider_member + non-agency + signed-out callers
  *                      all 403 here. The check fires BEFORE any DB writes,
  *                      Modal fetch, or rate-limit increment.
  *   3. TOOL-RUNTIME  — `agent/tools/agency/_guards.py:require_agency_role`
  *                      refuses tool execution unless AgentContext carries
- *                      a agency role (Phase 2/3 tools wrap every handler).
+ *                      an agency role (Phase 2/3 tools wrap every handler).
  *
  * Phase 1 ships zero agency tools, so this route exists to wire the pipe.
  * Phase 2/3 add tools by appending to `agent/tools/agency.AGENCY_TOOLS`;
@@ -405,7 +405,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Dunning gate — a agency's seats are funded by the AGENCY subscription, so
+  // Dunning gate — an agency's seats are funded by the AGENCY subscription, so
   // gate on the agency's status. The provider route (app/api/ai/task) gates
   // its funding account too; agency-task previously had NO dunning gate, so a
   // lapsed Team kept full premium AI for every seat. Only past_due / canceled /

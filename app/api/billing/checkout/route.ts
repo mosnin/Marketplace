@@ -185,7 +185,7 @@ async function handleAgencyCheckout(
   _req: NextRequest,
   body: { plan?: string; scope?: string },
 ): Promise<NextResponse> {
-  // Auth: must be a agency (owner or admin), then enforce agency_owner only
+  // Auth: must be an agency (owner or admin), then enforce agency_owner only
   const ctx = await getAgencyContext();
   if (!ctx) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

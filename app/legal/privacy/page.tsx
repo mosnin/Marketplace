@@ -46,7 +46,7 @@ export default function PrivacyPolicyPage() {
           <p>3.1. <strong className="text-foreground">Account Information.</strong> When you create an account, we collect your name, email address, phone number, agency or company name, and login credentials (managed via Clerk).</p>
           <p>3.2. <strong className="text-foreground">Billing Information.</strong> Payment details including credit card information, billing address, and transaction history are collected and processed by Stripe. Koala does not store full payment card numbers.</p>
           <p>3.3. <strong className="text-foreground">Usage Information.</strong> We collect data about how you interact with the Service, including pages visited, features used, session duration, device and browser information, IP address, and referral sources.</p>
-          <p>3.4. <strong className="text-foreground">Team Information.</strong> If you manage a agency team, we collect information about team members you invite, including their names and email addresses.</p>
+          <p>3.4. <strong className="text-foreground">Team Information.</strong> If you manage an agency team, we collect information about team members you invite, including their names and email addresses.</p>
         </div>
       </section>
 

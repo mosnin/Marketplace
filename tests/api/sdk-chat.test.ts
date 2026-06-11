@@ -175,7 +175,7 @@ describe('POST /api/ai/task — reserved-title conversationId is not reused (iso
   // agency/team conversations still live in the shared Conversation table with
   // a reserved title prefix. resolveConversation must reject a reserved-title
   // conversationId (same spaceId but [AGENCY_KOALA]/[AGENCY_CHAT] title) so
-  // provider turns never append to — or read history from — a agency conversation.
+  // provider turns never append to — or read history from — an agency conversation.
   it('mints a fresh conversation instead of reusing a [AGENCY_KOALA] one', async () => {
     delete process.env.KOALA_CHAT_RUNTIME;
     convLookup.row = { id: 'agency_conv_1', spaceId: 's_1', title: '[AGENCY_KOALA] private notes' };

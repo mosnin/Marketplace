@@ -19,7 +19,7 @@ export default async function AgencyBillingPage() {
   if (!ctx) redirect('/setup');
 
   // The agency's OWN Stripe identity — written by the agency-scoped
-  // checkout and kept current by the webhook. When a agency subscription
+  // checkout and kept current by the webhook. When an agency subscription
   // exists, it is the billing entity for this page; the owner's personal Space
   // is only a legacy fallback (agencies subscribed before agency billing).
   const { data: agencyStripe } = await supabase
@@ -80,7 +80,7 @@ export default async function AgencyBillingPage() {
 
   // Billing entity: the Agency's subscription when it has one, else the
   // legacy owner-space subscription. The previous version of this page ONLY
-  // read the owner's personal Space, so a agency-scoped subscription showed
+  // read the owner's personal Space, so an agency-scoped subscription showed
   // the wrong status/invoices/card here.
   const billingSubscriptionId = usingAgencyEntity
     ? (agencyStripe!.stripeSubscriptionId as string)
@@ -164,14 +164,14 @@ export default async function AgencyBillingPage() {
         invoices={invoices}
         // Manage/cancel must act on the agency's Stripe identity when the
         // agency holds the subscription — the default routes act on a Space
-        // the caller owns, which is the wrong entity for a agency sub.
+        // the caller owns, which is the wrong entity for an agency sub.
         endpoints={
           usingAgencyEntity
             ? { portal: '/api/agency/billing/portal', cancel: '/api/agency/billing/cancel' }
             : undefined
         }
       />
-      {/* Credits are keyed to the runtime space; a agency-entity agency
+      {/* Credits are keyed to the runtime space; an agency-entity agency
           with no personal Space simply has no per-space summary to show. */}
       {spaceRow && <CreditsSummary spaceId={spaceRow.id as string} slug={slug} />}
     </div>

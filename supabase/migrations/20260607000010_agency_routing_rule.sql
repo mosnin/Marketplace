@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Agency.leadRoutingRule — agency-wide default routing strategy
 -- ============================================================================
--- WHY: Today every new unassigned lead waits for a agency to pick a provider
+-- WHY: Today every new unassigned lead waits for an agency to pick a provider
 -- by hand at /agency/leads. As agencies grow that doesn't scale — the
 -- agency becomes the queue. This column captures the agency's preferred
 -- default for auto-routing: keep manual (today's behaviour), round-robin

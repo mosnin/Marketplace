@@ -36,7 +36,7 @@ const MIN_INTERVAL_MS = 3 * 60 * 60 * 1000; // 3 hours
 // provider isn't burning down what's already there; piling on doesn't help.
 const PENDING_DRAFT_BACKLOG_LIMIT = 10;
 
-// Cap on parallel Modal calls so a agency of 100 active providers doesn't
+// Cap on parallel Modal calls so an agency of 100 active providers doesn't
 // fire 100 simultaneous webhooks.
 const MAX_CONCURRENCY = 8;
 

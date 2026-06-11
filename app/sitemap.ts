@@ -23,8 +23,9 @@ const ROUTES: ReadonlyArray<{
   changeFrequency: ChangeFrequency;
   priority: number;
 }> = [
-  // Core marketing pages
+  // Core marketing and public pages
   { path: '/', changeFrequency: 'weekly', priority: 1.0 },
+  { path: '/marketplace', changeFrequency: 'daily', priority: 0.9 },
   { path: '/providers', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/agencies', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/integrations', changeFrequency: 'monthly', priority: 0.8 },

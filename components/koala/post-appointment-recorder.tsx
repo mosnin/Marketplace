@@ -72,7 +72,7 @@ interface Props {
   dealId?: string;
 }
 
-const MAX_RECORDING_MS = 5 * 60 * 1000; // 5 minutes — Whisper can take more, but a appointment debrief shouldn't.
+const MAX_RECORDING_MS = 5 * 60 * 1000; // 5 minutes — Whisper can take more, but an appointment debrief shouldn't.
 
 export function PostAppointmentRecorder({ slug, personId, dealId }: Props) {
   const [state, setState] = useState<State>('idle');

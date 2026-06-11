@@ -98,9 +98,9 @@ Commission reports and year-to-date earnings are under Services → Commissions 
 
 ('appointments', 'Scheduling and managing appointments',
 'Appointments are service viewings scheduled for a contact at a specific time.
-To book a appointment, tell Koala "book a appointment for [contact name] on [date] at [time]" — the contact must have an email address on file.
+To book an appointment, tell Koala "book an appointment for [contact name] on [date] at [time]" — the contact must have an email address on file.
 Appointments appear on the Calendar page. Each appointment record has a status: scheduled, completed, or cancelled.
-After a appointment completes, Koala can automatically follow up with the contact.
+After an appointment completes, Koala can automatically follow up with the contact.
 To view appointments, go to the Calendar page in the sidebar.'),
 
 ('calendar', 'Calendar and events',
@@ -113,7 +113,7 @@ To connect Google Calendar, go to Settings → Integrations in the sidebar.'),
 'Koala is your AI coworker. It can:
 - Create contacts: "add a buyer named John Smith, budget $500k, looking in Brickell"
 - Create deals: "create a deal for John Smith"
-- Book appointments: "book a appointment for John on May 15 at 2pm at 123 Main St"
+- Book appointments: "book an appointment for John on May 15 at 2pm at 123 Main St"
 - Draft messages: "draft a follow-up email for Jane"
 - Update contacts: "set Jane follow-up to next Friday", "tag John as hot"
 - Look up contacts and deals: "find all my rental leads", "show me stalled deals"
@@ -144,10 +144,10 @@ The Agents page lets you set Koala''s tone and focus areas.'),
 4. Make sure you are on the right page — contacts are under People, deals are under Deals.'),
 
 ('troubleshooting', 'Appointment booking fails',
-'Koala requires the contact to have an email address to book a appointment. If booking fails:
+'Koala requires the contact to have an email address to book an appointment. If booking fails:
 1. Make sure the contact has an email: ask Koala "what is [name]''s email?" or update it on their contact page.
 2. The appointment time must be in the future.
-3. Provide a specific time: "book a appointment for John on May 20 at 3pm" — vague times like "next week" will prompt Koala to ask for a specific time.'),
+3. Provide a specific time: "book an appointment for John on May 20 at 3pm" — vague times like "next week" will prompt Koala to ask for a specific time.'),
 
 ('troubleshooting', 'Koala is not responding or is slow',
 'If Koala stops responding mid-conversation or is very slow:

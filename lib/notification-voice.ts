@@ -238,12 +238,12 @@ export function notificationForFollowUpDue(
 export function notificationForWaitlist(count: number): NotificationCopy {
   if (count === 1) {
     return {
-      title: '1 person is still waiting for a appointment slot.',
+      title: '1 person is still waiting for an appointment slot.',
       description: 'Worth opening a window.',
     };
   }
   return {
-    title: `${count} people are still waiting for a appointment slot.`,
+    title: `${count} people are still waiting for an appointment slot.`,
     description: 'Worth opening a window.',
   };
 }

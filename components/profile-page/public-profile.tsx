@@ -522,7 +522,7 @@ export function PublicProfile({
                 >
                   <CalendarCheck size={18} className="shrink-0 text-muted-foreground" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-foreground">Book a appointment</p>
+                    <p className="text-sm font-medium text-foreground">Book an appointment</p>
                     <p className="truncate text-xs text-muted-foreground">
                       Pick a time that works for you.
                     </p>

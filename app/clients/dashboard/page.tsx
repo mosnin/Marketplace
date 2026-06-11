@@ -46,7 +46,7 @@ export default async function DashboardPage() {
       {total === 0 && (
         <PortalEmptyState
           headline="Nothing here yet."
-          whatsNext="Apply or book a appointment with a provider using this email and it shows up here."
+          whatsNext="Apply or book an appointment with a provider using this email and it shows up here."
         />
       )}
 
@@ -116,7 +116,7 @@ export default async function DashboardPage() {
             className="inline-flex h-9 items-center gap-1.5 rounded-full border border-border px-4 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
           >
             <CalendarCheck size={14} />
-            Book a appointment
+            Book an appointment
           </Link>
         </div>
       )}

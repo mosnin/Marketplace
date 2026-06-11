@@ -106,7 +106,7 @@ export default async function AgencyUsagePage() {
   }
 
   // ── Query ChatUsage for the current calendar month ────────────────────────
-  // "This month" is the natural window a agency thinks in (billing cycles,
+  // "This month" is the natural window an agency thinks in (billing cycles,
   // team reviews). Matches the status sentence copy below.
   const now = new Date();
   const monthStart = new Date(

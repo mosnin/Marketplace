@@ -8,7 +8,7 @@
  * /integrations/callback/agency-setup with the connected-account id.
  *
  * TIERED: gated via requireAgency() + canEditSettings(role) — owner/admin
- * only. A provider_member can't reach a agency context, so this 403s for them.
+ * only. A provider_member can't reach an agency context, so this 403s for them.
  *
  * Mirrors the provider connect route (app/api/integrations/connect/[toolkit]):
  * we persist the row HERE at initiate-time using Composio's `request.id`, so
@@ -17,7 +17,7 @@
  * plumbing (initiateConnection) is shared, not forked.
  *
  * Composio scopes connections per "entity". We use the agency-namespaced
- * entity id `agency:<agencyId>:<userId>` so a agency's agency-level
+ * entity id `agency:<agencyId>:<userId>` so an agency's agency-level
  * Gmail is a DISTINCT Composio connection from their personal provider Gmail
  * (which uses the bare Clerk userId as the entity).
  */

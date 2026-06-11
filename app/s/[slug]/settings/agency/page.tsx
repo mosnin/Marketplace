@@ -111,7 +111,7 @@ export default async function AgencyInvitesPage({
         <div className="rounded-md border border-border/70 bg-background px-5 py-12 text-center space-y-1">
           <p className={`${BODY} font-medium`}>Nothing here yet</p>
           <p className={CAPTION}>
-            When a agency invites you, it shows up here.
+            When an agency invites you, it shows up here.
           </p>
         </div>
       ) : (

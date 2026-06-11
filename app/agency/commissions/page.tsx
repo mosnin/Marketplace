@@ -35,7 +35,7 @@ type LedgerWithJoins = LedgerDbRow & {
 };
 
 /**
- * Fetch ledger rows for a agency. Tries the PostgREST embedded FK join first;
+ * Fetch ledger rows for an agency. Tries the PostgREST embedded FK join first;
  * on failure (e.g. unexpected FK name) falls back to two separate queries and
  * joins in memory.
  */

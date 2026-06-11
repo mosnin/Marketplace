@@ -50,7 +50,7 @@ These were left to engineering judgment. They're now decided so nothing is
 blocked; each can be revisited with real production data, but the build proceeds
 on these defaults.
 
-1. **Pooling boundary — DECIDED.** Solo/Pro = per-`Space` balance. Team/Team Plus = pooled per-`Agency`. One resolver `resolveBillingAccount(spaceId)` owns the space-vs-agency choice; a agency_owner's personal solo space keeps its own balance unless that space is on a Team plan.
+1. **Pooling boundary — DECIDED.** Solo/Pro = per-`Space` balance. Team/Team Plus = pooled per-`Agency`. One resolver `resolveBillingAccount(spaceId)` owns the space-vs-agency choice; an agency_owner's personal solo space keeps its own balance unless that space is on a Team plan.
 2. **Rollover — DECIDED.** Per-lot `expiresAt = issuedAt + 30d`; balance = Σ `remaining` over non-expired lots; debit FIFO, oldest-expiring first (so granted credits are consumed before they lapse). Free-tier's 100 credits have `expiresAt = NULL` (never expire, per spec).
 3. **Refund-on-failure — DECIDED.** Debit happens just before execution; if the workflow throws, a compensating positive `CreditTxn` restores the lot. Net effect: you're only charged for work that completed.
 4. **Free-tier abuse — DECIDED (accept + monitor).** 100 non-expiring credits, bounded by Clerk account + the existing one-space-per-user rule. No card wall. Add an alert if a single IP/device spins up many free accounts; revisit only if abuse shows up.

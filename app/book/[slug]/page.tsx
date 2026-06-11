@@ -86,7 +86,7 @@ export default async function PublicBookingPage({
     trackingPixels: TrackingPixelsType | null;
   } | null;
 
-  const pageTitle = settings?.appointmentBookingPageTitle || 'Book a Appointment';
+  const pageTitle = settings?.appointmentBookingPageTitle || 'Book an Appointment';
   const pageIntro = settings?.appointmentBookingPageIntro || 'Pick a time that works for you and we\'ll confirm your appointment.';
   const businessName = settings?.businessName || space.name;
   const duration = settings?.appointmentDuration || 30;

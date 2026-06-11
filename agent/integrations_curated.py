@@ -58,7 +58,7 @@ CURATED_ACTIONS: dict[str, list[str]] = {
     # ── Calendar ─────────────────────────────────────────────────────────
     # `EVENTS_LIST` is the canonical "list" slug on Composio's catalog
     # (NOT `LIST_EVENTS` — verified 2026-05-24). FIND_FREE_SLOTS is the
-    # availability-check the provider wants when booking a appointment outside
+    # availability-check the provider wants when booking an appointment outside
     # the native book_appointment flow.
     "googlecalendar": [
         "GOOGLECALENDAR_EVENTS_LIST",

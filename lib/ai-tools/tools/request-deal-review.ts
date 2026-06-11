@@ -76,7 +76,7 @@ export const requestDealReviewTool = defineTool<typeof parameters, RequestDealRe
     const agencyId = (space as { agencyId: string | null } | null)?.agencyId ?? null;
     if (!agencyId) {
       return {
-        summary: 'Review requests need a agency — this is a solo workspace.',
+        summary: 'Review requests need an agency — this is a solo workspace.',
         display: 'error',
       };
     }

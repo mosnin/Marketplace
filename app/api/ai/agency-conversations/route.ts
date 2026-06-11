@@ -7,7 +7,7 @@
  * STORAGE IS STRUCTURALLY SEPARATE. Agency conversations live in their OWN
  * "AgencyConversation" table, keyed by `agencyId` — NOT on a Space, NOT with
  * a title prefix. The agencyId column is the boundary, so a provider surface
- * can never enumerate a agency conversation: the rows are not in its table.
+ * can never enumerate an agency conversation: the rows are not in its table.
  *
  * Phase 1 scope: create + list conversations the agency has had with Koala.
  */

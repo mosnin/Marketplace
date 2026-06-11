@@ -121,7 +121,7 @@ export interface WriteThroughInput {
   endsAt: string;
   /** Attendees by email — passed to the provider AND stored on the mirror row. */
   attendees?: { email: string; name?: string | null }[];
-  /** When mirroring a appointment, point back to the Appointment row for joins later. */
+  /** When mirroring an appointment, point back to the Appointment row for joins later. */
   sourceAppointmentId?: string | null;
   /** Who initiated this. Providers who use the manual UI = 'provider'; the
    *  agent's tools = 'agent' (the default). */
@@ -201,7 +201,7 @@ export async function writeEventThrough(
   }
 
   // 2. Always log the mirror row, even when the external write failed.
-  //    Intent is the unit of forensics: if Koala tried to put a appointment on
+  //    Intent is the unit of forensics: if Koala tried to put an appointment on
   //    the calendar at 3pm and Google was down, we still want to know.
   const { data: mirrorRow, error: mirrorErr } = await supabase
     .from('CalendarEventMirror')

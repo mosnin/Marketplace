@@ -5,7 +5,7 @@
  * Clerk userId as the entity, which means a provider's personal Gmail and the
  * SAME person's agency-level Gmail would collide on one Composio entity if
  * we reused the userId. Namespacing the agency entity keeps the two
- * connections distinct, so a agency can connect one inbox personally and a
+ * connections distinct, so an agency can connect one inbox personally and a
  * different one at the agency level.
  *
  * The shape is `agency:<agencyId>:<userId>` — deterministic, so the

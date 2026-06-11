@@ -8,7 +8,7 @@
 4. Clerk creates user → webhook or first-visit creates User row in Supabase
 5. User is now authenticated and redirected back to `/`
 
-Branch: If visitor is a agency, clicks "Agency login" link → `/login/agency` for agency-specific sign-in.
+Branch: If visitor is an agency, clicks "Agency login" link → `/login/agency` for agency-specific sign-in.
 Branch: If user is already signed in, visiting `/sign-in` or `/sign-up` redirects to `/`.
 
 ## Flow: Signup To Onboarding

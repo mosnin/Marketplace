@@ -9,7 +9,7 @@
 -- something goes wrong at closing.
 --
 -- BP5 introduces a deal-scoped review flow: an agent clicks "Flag for agency
--- review" on a deal, a DealReviewRequest row lands here, a AgencyNotification
+-- review" on a deal, a DealReviewRequest row lands here, an AgencyNotification
 -- fires (handled by the API agent), and the agency works through the queue at
 -- /agency/reviews. DealReviewComment captures the back-and-forth so the
 -- approval/denial conversation is captured alongside the deal itself. A

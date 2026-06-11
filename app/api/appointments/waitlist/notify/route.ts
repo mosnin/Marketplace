@@ -5,7 +5,7 @@ import { requireSpaceOwner } from '@/lib/api-auth';
 /**
  * POST — notify a waitlisted guest that a slot opened up.
  * Sets status to 'notified' and gives them a 30-minute hold window.
- * Can also be called automatically when a appointment is cancelled.
+ * Can also be called automatically when an appointment is cancelled.
  */
 export async function POST(req: NextRequest) {
   const body = await req.json();

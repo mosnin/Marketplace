@@ -145,7 +145,7 @@ describe('scheduleAppointmentTool', () => {
     ).toThrow();
   });
 
-  it('creates a appointment for a walk-in guest', async () => {
+  it('creates an appointment for a walk-in guest', async () => {
     mockByTable = {
       Appointment: {
         single: {

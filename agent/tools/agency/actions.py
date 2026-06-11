@@ -2,7 +2,7 @@
 
 Six tools that let the agency actually ACT through Koala, not just see:
 
-  reassign_lead            — move a agency-routed lead from one provider to
+  reassign_lead            — move an agency-routed lead from one provider to
                              another, matching the assignLeadToProvider() flow
                              the Next.js /api/agency/assign-lead route uses.
   flag_deal_for_agency_review — open a DealReviewRequest on a provider's deal
@@ -11,7 +11,7 @@ Six tools that let the agency actually ACT through Koala, not just see:
   send_team_announcement   — post to the agency's announcement surface
                              (a [ANN]-prefixed Note in the agency's space,
                              matching /api/agency/announcements POST).
-  change_member_role       — promote/demote a AgencyMembership. Two-step
+  change_member_role       — promote/demote an AgencyMembership. Two-step
                              confirmation: the first call returns
                              requires_confirmation=true; the agent re-asks
                              the agency in chat, then re-calls confirmed=True.
@@ -109,7 +109,7 @@ async def _notify_agency_queue(
     body: str | None = None,
     metadata: dict[str, Any] | None = None,
 ) -> None:
-    """Insert a AgencyNotification row — best-effort, never raises.
+    """Insert an AgencyNotification row — best-effort, never raises.
 
     Mirrors `lib/agency-notify.ts:notifyAgency`. Used when the tool wants to
     surface something on the agency's in-app bell (e.g. flag_deal_for_agency_review).
@@ -215,8 +215,8 @@ async def reassign_lead(
     to_provider_id: str,
     reason: str | None = None,
 ) -> dict[str, Any]:
-    """Move a agency-intake lead to a different provider on the team."""
-    # lead_id: Contact.id of a agency-routed lead; must belong to this agency.
+    """Move an agency-intake lead to a different provider on the team."""
+    # lead_id: Contact.id of an agency-routed lead; must belong to this agency.
     # to_provider_id: User.id of a member of this agency with a workspace.
     # reason: optional note, logged to AuditLog + provider's ContactActivity.
     require_agency_role(ctx)
@@ -722,7 +722,7 @@ async def change_member_role(
     new_role: Literal["agency_admin", "provider_member"],
     confirmed: bool = False,
 ) -> dict[str, Any]:
-    """Change a agency member's role; two-step confirmed gate."""
+    """Change an agency member's role; two-step confirmed gate."""
     # member_id: AgencyMembership.id.
     # new_role: 'agency_admin' or 'provider_member' (owner cannot be set here).
     # confirmed: false first call returns requires_confirmation, true applies.

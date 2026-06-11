@@ -66,24 +66,24 @@ export async function POST(req: Request) {
 
   // Platform admins bypass the onboarding/account-type gates below. An admin is
   // usually a provider who was promoted, so their accountType is 'provider' — which
-  // was tripping the "upgrade to a agency account" 403 and blocking them from
+  // was tripping the "upgrade to an agency account" 403 and blocking them from
   // creating agencies at all. Admins are superusers; let them through.
   const isAdmin = user.platformRole === 'admin';
 
   // Agency-only users are marked onboard during setup even without a Space
   if (!user.onboard && !isAdmin) return NextResponse.json({ error: 'Complete onboarding first' }, { status: 403 });
-  // Only users who selected agency role during onboarding can create a agency
+  // Only users who selected agency role during onboarding can create an agency
   if (user.accountType === 'provider' && !isAdmin) {
-    return NextResponse.json({ error: 'Upgrade to a agency account to create a agency' }, { status: 403 });
+    return NextResponse.json({ error: 'Upgrade to an agency account to create an agency' }, { status: 403 });
   }
 
-  // Check: does this user already own a agency?
+  // Check: does this user already own an agency?
   const { data: existing } = await supabase
     .from('Agency')
     .select('id')
     .eq('ownerId', user.id)
     .maybeSingle();
-  if (existing) return NextResponse.json({ error: 'You already own a agency' }, { status: 409 });
+  if (existing) return NextResponse.json({ error: 'You already own an agency' }, { status: 409 });
 
   // Direct inserts instead of RPC — avoids ambiguous function overload issues
   // when multiple versions of create_agency_with_owner exist in the database.
@@ -109,10 +109,10 @@ export async function POST(req: Request) {
     .single();
 
   if (insertErr) {
-    // Check if user already owns a agency (race condition with unique index)
+    // Check if user already owns an agency (race condition with unique index)
     const errMsg = insertErr.message || '';
     if (errMsg.includes('duplicate key') || errMsg.includes('unique') || insertErr.code === '23505') {
-      return NextResponse.json({ error: 'You already own a agency' }, { status: 409 });
+      return NextResponse.json({ error: 'You already own an agency' }, { status: 409 });
     }
     console.error('[agency/create] Agency insert failed:', insertErr);
     return NextResponse.json({ error: 'Failed to create agency' }, { status: 500 });

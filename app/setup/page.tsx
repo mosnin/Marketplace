@@ -92,7 +92,7 @@ export default async function SetupPage({
 
   // Already has a workspace — check if agency first (agencies land on /agency)
   if (dbUser?.space?.slug) {
-    // Check if this user is a agency — redirect to agency dashboard instead
+    // Check if this user is an agency — redirect to agency dashboard instead
     if (dbUser?.id) {
       const { data: agencyMembership } = await supabase
         .from('AgencyMembership')
@@ -173,7 +173,7 @@ export default async function SetupPage({
     redirect(`/s/${resolvedUser.space.slug}/koala`);
   }
 
-  // If the user has a agency_admin membership (e.g. accepted an admin invitation),
+  // If the user has an agency_admin membership (e.g. accepted an admin invitation),
   // set them as agency_only and redirect to /agency — no workspace needed.
   if (resolvedUser?.id) {
     const { data: adminMembership } = await supabase

@@ -256,7 +256,7 @@ function Empower() {
           give every agent an extra teammate.
         </h2>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground/55">
-          a agency doesn&apos;t fail on features. it fails when the providers
+          an agency doesn&apos;t fail on features. it fails when the providers
           stop logging in. so Koala makes the floor faster first, and gives you
           the room as a byproduct.
         </p>

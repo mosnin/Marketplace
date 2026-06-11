@@ -5,7 +5,7 @@ import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 /**
  * POST /api/applications/portal/appointment/[appointmentId]/respond
  *
- * Public endpoint — applicant confirms or declines a appointment from the portal.
+ * Public endpoint — applicant confirms or declines an appointment from the portal.
  * Auth pattern matches /api/applications/portal/message and appointment-request:
  * applicationRef + statusPortalToken on the Contact, plus the appointment must be
  * linked to that same contact.

@@ -7,7 +7,7 @@ side). This tool gives the agent a way to:
   2. Commit the assignment by moving the Contact's spaceId to the
      destination provider's space.
 
-Only works inside a agency. Solo provider spaces get a no-op error.
+Only works inside an agency. Solo provider spaces get a no-op error.
 
 Defensive by default: commit=False unless the agent is explicit, so a
 mis-call previews instead of mutating.
@@ -36,7 +36,7 @@ async def route_lead(
     target_user_id: str | None = None,
     commit: bool = False,
 ) -> dict[str, Any]:
-    """Suggest or commit a agency routing decision for a contact."""
+    """Suggest or commit an agency routing decision for a contact."""
     # target_user_id: manual override (agency member); else evaluates DealRoutingRule by priority.
     # commit=False (default) previews; commit=True writes the move.
     space_id = ctx.context.space_id
@@ -63,7 +63,7 @@ async def route_lead(
         .execute()
     )
     if not space_row.data or not space_row.data.get("agencyId"):
-        return {"error": "Space is not part of a agency — routing only applies inside a agency"}
+        return {"error": "Space is not part of an agency — routing only applies inside an agency"}
     agency_id = space_row.data["agencyId"]
 
     # ── Manual override path ──

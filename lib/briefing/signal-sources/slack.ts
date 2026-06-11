@@ -9,7 +9,7 @@
  *   1. Unread @-mention of the provider in any channel, ≤18h old → reply
  *      urgency 1, confidence 0.88. A teammate explicitly tagged them;
  *      this is the only channel noise that earns a slot.
- *   2. Unread DM from a agency teammate, ≤18h old → reply urgency 2,
+ *   2. Unread DM from an agency teammate, ≤18h old → reply urgency 2,
  *      confidence 0.80. DMs from strangers are dropped (cold outreach).
  *
  * Polled, not webhook-cached. Composio's `slack` triggers fire on every

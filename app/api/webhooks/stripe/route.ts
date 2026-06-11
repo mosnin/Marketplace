@@ -109,7 +109,7 @@ function customerIdOf(
 }
 
 /**
- * Map a agency plan → seat limit, from the single source of truth in
+ * Map an agency plan → seat limit, from the single source of truth in
  * lib/plans.ts (team = 5, team_plus = 10). Unknown plans → null (no cap set).
  */
 function seatLimitForPlan(plan: string | undefined | null): number | null {
@@ -137,13 +137,13 @@ function extractInvoiceSubscriptionId(invoice: Stripe.Invoice): string | undefin
 /**
  * Apply a subscription state update to the matching Agency row.
  * Caller must have already determined that subscription.metadata.agencyId is set.
- * Returns true if a agency was updated (and thus Space path should be skipped),
+ * Returns true if an agency was updated (and thus Space path should be skipped),
  * false if the agency row no longer exists (idempotency: orphaned subscription).
  */
 /**
  * Guard against metadata poisoning. A subscription's `metadata.agencyId`
  * is untrusted — whoever created the sub could point it at any agency.
- * Before we write to a Agency row based on a webhook, confirm the
+ * Before we write to an Agency row based on a webhook, confirm the
  * subscription's Stripe customer matches the agency's stored customer
  * (or that the agency has no customer yet, which is the legitimate
  * first-subscribe case).

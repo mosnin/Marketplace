@@ -41,7 +41,7 @@ export function hardDeleteEnabled(): boolean {
  * null if deletion is safe to proceed.
  *
  * The one structural blocker: `Agency.ownerId REFERENCES "User"(id) ON
- * DELETE RESTRICT`. A agency who owns a agency cannot have their User row
+ * DELETE RESTRICT`. A agency who owns an agency cannot have their User row
  * deleted until the agency is transferred or removed — Postgres will reject
  * the delete. We surface that as a clear message rather than letting the DB
  * throw an opaque FK error at the user.
@@ -53,7 +53,7 @@ export async function checkDeletionBlockers(ownerId: string): Promise<string | n
     .eq('ownerId', ownerId);
 
   if (ownedAgencies && ownedAgencies.length > 0) {
-    return 'you own a agency. transfer or close it before deleting your account, or contact help@usekoala.com.';
+    return 'you own an agency. transfer or close it before deleting your account, or contact help@usekoala.com.';
   }
   return null;
 }

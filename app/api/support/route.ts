@@ -4,7 +4,7 @@
  *   GET  ?slug=<slug>  → { tickets: [...] }   the caller's own tickets, newest first
  *   POST { slug, category, subject, message }  → { ticket }   create a ticket
  *
- * Auth: requireSpaceOwner(slug) — the workspace owner (or a agency_owner/admin
+ * Auth: requireSpaceOwner(slug) — the workspace owner (or an agency_owner/admin
  * managing that space). The submitter's email/name come from Clerk, not the
  * request body, so a caller can't spoof identity.
  */

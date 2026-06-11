@@ -50,7 +50,7 @@ export function AuthPageLayout({ children, heading, subheading, variant: _varian
 
         <div className="relative z-10">
           <p className="font-brand text-xs uppercase tracking-[0.25em] text-brand">
-            The agentic OS for real estate
+            The agentic OS for professional services
           </p>
           <h2 className="font-brand mt-4 text-4xl leading-tight tracking-tight text-foreground">
             I keep your day moving, so you don&apos;t have to.
@@ -97,7 +97,7 @@ export function AuthPageLayout({ children, heading, subheading, variant: _varian
                   )}
                 >
                   <User size={16} className="shrink-0 sm:size-[14px]" />
-                  Provider
+                  I&apos;m a provider
                 </Link>
                 <Link
                   href="/login/agency"
@@ -111,7 +111,7 @@ export function AuthPageLayout({ children, heading, subheading, variant: _varian
                   )}
                 >
                   <Building2 size={16} className="shrink-0 sm:size-[14px]" />
-                  Agency
+                  I run a team
                 </Link>
               </div>
             )}

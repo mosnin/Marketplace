@@ -177,7 +177,7 @@ export function AgencySetupClient({
 }: AgencySetupClientProps) {
   const [mode, setMode] = useState<'choose' | 'create' | 'join'>('choose');
 
-  // Already part of a agency
+  // Already part of an agency
   if (existingAgencyName) {
     return (
       <div className="app-theme min-h-screen bg-background flex flex-col">
@@ -251,7 +251,7 @@ export function AgencySetupClient({
                 className="group text-left rounded-xl border border-border/70 bg-card p-6 hover:border-border hover:bg-muted/30 transition-colors duration-150"
               >
                 <IconSquare icon={Building2} />
-                <h2 className={cn(H3, 'mt-5 mb-2')}>Create a agency</h2>
+                <h2 className={cn(H3, 'mt-5 mb-2')}>Create an agency</h2>
                 <p className={cn(BODY_MUTED, 'leading-relaxed mb-5')}>
                   Start your own agency. Invite providers to join, manage their
                   leads, and get team-wide visibility from a central agency
@@ -274,7 +274,7 @@ export function AgencySetupClient({
                   ))}
                 </div>
                 <div className="flex items-center gap-1.5 text-sm font-medium text-foreground transition-all duration-150 group-hover:gap-2.5">
-                  Create a agency <ArrowRight size={14} strokeWidth={2} />
+                  Create an agency <ArrowRight size={14} strokeWidth={2} />
                 </div>
               </button>
 
@@ -284,7 +284,7 @@ export function AgencySetupClient({
                 className="group text-left rounded-xl border border-border/70 bg-card p-6 hover:border-border hover:bg-muted/30 transition-colors duration-150"
               >
                 <IconSquare icon={Hash} />
-                <h2 className={cn(H3, 'mt-5 mb-2')}>Join a agency</h2>
+                <h2 className={cn(H3, 'mt-5 mb-2')}>Join an agency</h2>
                 <p className={cn(BODY_MUTED, 'leading-relaxed mb-5')}>
                   Enter the invite code your agency shared with you. You&apos;ll keep
                   your own workspace, leads, and pipeline — this just connects you
@@ -323,7 +323,7 @@ export function AgencySetupClient({
               </button>
               <div className="rounded-xl border border-border/70 bg-card p-6">
                 <IconSquare icon={Building2} />
-                <h2 className={cn(H2, 'mt-5 mb-1')}>Create a agency</h2>
+                <h2 className={cn(H2, 'mt-5 mb-1')}>Create an agency</h2>
                 <p className={cn(BODY_MUTED, 'mb-6')}>
                   Give your agency a name. You can invite providers after it&apos;s
                   created.
@@ -343,7 +343,7 @@ export function AgencySetupClient({
               </button>
               <div className="rounded-xl border border-border/70 bg-card p-6">
                 <IconSquare icon={Hash} />
-                <h2 className={cn(H2, 'mt-5 mb-1')}>Join a agency</h2>
+                <h2 className={cn(H2, 'mt-5 mb-1')}>Join an agency</h2>
                 <p className={cn(BODY_MUTED, 'mb-6')}>
                   Enter the code from your agency&apos;s dashboard. It looks like{' '}
                   <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">

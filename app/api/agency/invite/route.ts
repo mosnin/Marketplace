@@ -9,7 +9,7 @@ import { checkSeatCapacity } from '@/lib/agency-seats';
 
 /**
  * POST /api/agency/invite
- * Send a agency invitation to an email address.
+ * Send an agency invitation to an email address.
  * Idempotent: if a pending invite for the same email already exists, returns it without
  * creating a duplicate or sending another email.
  */

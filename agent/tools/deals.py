@@ -566,7 +566,7 @@ async def request_deal_review(
         .execute()
     )
     if not space_check.data or not space_check.data.get("agencyId"):
-        agent_err = from_supabase_error({"message": "Space is not part of a agency — review requests need a agency", "code": None})
+        agent_err = from_supabase_error({"message": "Space is not part of an agency — review requests need an agency", "code": None})
         return {"error": agent_err.message, "code": agent_err.code, "retryable": agent_err.retryable}
 
     review_id = str(uuid.uuid4())

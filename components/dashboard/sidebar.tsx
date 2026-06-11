@@ -179,7 +179,7 @@ export const agencyAdminNavSections: AgencyNavSection[] = [
   },
 ];
 
-// Phase 7 — provider-members of a agency see their own work first.
+// Phase 7 — provider-members of an agency see their own work first.
 // Team-wide tools live one glance below in the More section; routes are
 // unchanged.
 export const agencyMemberNavSections: AgencyNavSection[] = [
@@ -1417,7 +1417,7 @@ export function Sidebar({
   // DB platformRole; we OR it with the Clerk publicMetadata.role so an admin
   // set via the Clerk Dashboard (before the DB role propagates) still sees the
   // link. Rendered in every shell — provider AND agency — because a platform
-  // admin is often also a agency/owner and would otherwise never see it.
+  // admin is often also an agency/owner and would otherwise never see it.
   const showAdminLink =
     isPlatformAdmin ||
     (user?.publicMetadata as { role?: string } | undefined)?.role === 'admin';

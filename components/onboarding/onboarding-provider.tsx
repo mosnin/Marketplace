@@ -258,7 +258,7 @@ export function OnboardingProvider({ defaultName }: Props) {
   // Agency owners take a different terminal step. The quick path had been
   // offering "agency_owner" as a role but then completing as `accountType:
   // 'provider'` and routing to /s/{slug}/koala — silently dropping the user
-  // who said they ran a agency onto the solo-provider dashboard, with no
+  // who said they ran an agency onto the solo-provider dashboard, with no
   // Agency row ever created. Now: when role is agency_owner, complete
   // as `accountType: 'both'`, call /api/agency/create with the workspace
   // business name, link the new Space to the new Agency, and route to
@@ -289,7 +289,7 @@ export function OnboardingProvider({ defaultName }: Props) {
         const newAgencyId = agencyData.agency?.id;
         if (newAgencyId) {
           // Best-effort link — failure here doesn't block the redirect; the
-          // agency exists and the user is a agency_owner either way.
+          // agency exists and the user is an agency_owner either way.
           await fetch('/api/spaces', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -617,7 +617,7 @@ function StageWhoYouServe(props: {
           onChange={(e) => props.onChangeVoiceGuidance(e.target.value)}
           rows={3}
           maxLength={500}
-          placeholder='e.g. "Never push for a appointment on the first message. Always sign off as Sarah from Coastal Realty."'
+          placeholder='e.g. "Never push for an appointment on the first message. Always sign off as Sarah from Coastal Realty."'
           className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </Section>

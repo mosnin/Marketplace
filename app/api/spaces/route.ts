@@ -200,7 +200,7 @@ export async function PATCH(req: NextRequest) {
   if (name !== undefined) updateFields.name = name;
   if (emoji !== undefined) updateFields.emoji = emoji;
   if (body.agencyId && typeof body.agencyId === 'string') {
-    // SECURITY: only allow associating with a agency the owner is actually a
+    // SECURITY: only allow associating with an agency the owner is actually a
     // member of. agencyId drives credit-pool routing (lib/billing/account.ts);
     // accepting an arbitrary value would let a user point their space at any
     // agency's billing pool.

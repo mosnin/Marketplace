@@ -32,7 +32,7 @@ export interface AgencyIntegrationConnectionRow {
   updatedAt: string;
 }
 
-/** All connections for a agency, regardless of status. UI filters as needed. */
+/** All connections for an agency, regardless of status. UI filters as needed. */
 export async function listAgencyConnections(
   agencyId: string,
 ): Promise<AgencyIntegrationConnectionRow[]> {

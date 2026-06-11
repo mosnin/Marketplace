@@ -5,7 +5,7 @@ An autonomous run is kicked off three ways, all landing in
   - the 4-hour cron sweep (`vercel.json` → `/api/cron/agent-sweep`),
   - the "Run now" button,
   - an event trigger drained from the Redis list (`/api/agent/trigger`
-    pushes a new lead, a appointment completed, a deal stage changed, etc.).
+    pushes a new lead, an appointment completed, a deal stage changed, etc.).
 
 When the trigger list is empty the prompt puts Koala in sweep mode — look
 for stale leads / stalled deals on its own.

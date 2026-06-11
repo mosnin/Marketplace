@@ -740,7 +740,7 @@ function EditorDialog({
               rows={8}
               placeholder={
                 'Hi {{name}},\n\nThanks for your interest in {{service}}. ' +
-                "I'd love to schedule a appointment at your convenience.\n\nBest"
+                "I'd love to schedule an appointment at your convenience.\n\nBest"
               }
               className="font-mono text-sm"
             />

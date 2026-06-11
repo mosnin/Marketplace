@@ -24,7 +24,7 @@ const AGENCY_PLANS = new Set<string>(['team', 'team_plus']);
 
 /**
  * Resolve the billing account funding a space's credit spend.
- * - If the space belongs to a agency on a pooled (team) plan → that
+ * - If the space belongs to an agency on a pooled (team) plan → that
  *   agency's pool.
  * - Otherwise → the space's own balance (free/solo/pro).
  */

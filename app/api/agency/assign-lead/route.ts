@@ -11,7 +11,7 @@ const assignLeadSchema = z.object({
 /**
  * POST /api/agency/assign-lead
  *
- * Assigns a agency lead (Contact) from the agency's space to a provider's
+ * Assigns an agency lead (Contact) from the agency's space to a provider's
  * space. Only agency_owner and agency_admin roles can perform this action.
  *
  * The assignment itself lives in assignLeadToProvider() (lib/agency-assign-lead)

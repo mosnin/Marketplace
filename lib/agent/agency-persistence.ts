@@ -5,11 +5,11 @@
  * and messages live in their OWN tables — "AgencyConversation" / "AgencyMessage"
  * — keyed by `agencyId`, NOT by `spaceId`. That keeps agency-private chat
  * structurally isolated from the provider "Conversation"/"Message" tables: a
- * provider surface cannot read a agency row because the rows are not even in the
+ * provider surface cannot read an agency row because the rows are not even in the
  * same table, never mind the same space.
  *
  * Same content-coalescing + content-derivation rules as the provider helpers so
- * a agency message row reads identically (blocks for the renderer, content as
+ * an agency message row reads identically (blocks for the renderer, content as
  * the joined text for legacy readers).
  */
 

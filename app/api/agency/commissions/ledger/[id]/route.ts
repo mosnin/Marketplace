@@ -218,7 +218,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   const effectiveReferralRate = referralRateVal ?? row.referralRate;
   const dealValue = row.dealValue;
 
-  // Audit found: individually-capped rates (0-100 each) still allow a agency
+  // Audit found: individually-capped rates (0-100 each) still allow an agency
   // to allocate >100% of dealValue. Cap the SUM at 100% so the ledger never
   // shows a payout that exceeds the deal.
   const rateSum =

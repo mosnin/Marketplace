@@ -10,7 +10,7 @@ import { notificationForMemberJoined } from '@/lib/notification-voice';
 
 /**
  * POST /api/agency/join
- * Join a agency using its invite code.
+ * Join an agency using its invite code.
  * Any authenticated, onboarded user can join. Assigns role: provider_member.
  *
  * Uses requireAuth (not raw Clerk auth()) so the offboarding gate fires —
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     .eq('clerkId', clerkId)
     .maybeSingle();
   if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
-  if (!user.onboard) return NextResponse.json({ error: 'Complete onboarding before joining a agency' }, { status: 403 });
+  if (!user.onboard) return NextResponse.json({ error: 'Complete onboarding before joining an agency' }, { status: 403 });
 
   // Find agency by code
   const { data: agency } = await supabase

@@ -39,7 +39,7 @@ export default function TermsPage() {
           <p>2.1. To use the Service as a Subscriber, you must create an account by providing accurate and complete information. You must be at least 18 years of age.</p>
           <p>2.2. You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p>
           <p>2.3. You agree to notify us immediately at <a href="mailto:help@usekoala.com" className="underline hover:text-foreground">help@usekoala.com</a> if you become aware of any unauthorized use of your account.</p>
-          <p>2.4. If you register on behalf of a agency or organization, you represent that you have authority to bind that entity to these Terms.</p>
+          <p>2.4. If you register on behalf of an agency or organization, you represent that you have authority to bind that entity to these Terms.</p>
           <p>2.5. You are responsible for all team members and agents you invite to your agency account. Their use of the Service is governed by these Terms, and you remain responsible for their compliance.</p>
         </div>
       </section>

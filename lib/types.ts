@@ -412,7 +412,7 @@ export interface Service {
   listingUrl: string | null;
   photos: string[];
   notes: string | null;
-  /** Agency pool: set when this service belongs to a agency's central
+  /** Agency pool: set when this service belongs to an agency's central
    *  pool (created by the agency). Null for a provider's own service. */
   agencyId?: string | null;
   /** Agency pool: the member provider's Space this pool service is assigned

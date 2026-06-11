@@ -1,5 +1,5 @@
 /**
- * GET /api/ai/agency-messages?conversationId= — messages for a agency Koala
+ * GET /api/ai/agency-messages?conversationId= — messages for an agency Koala
  * conversation.
  *
  * The agency analogue of `app/api/ai/messages/route.ts`. Gated on agency

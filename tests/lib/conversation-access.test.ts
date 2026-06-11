@@ -76,7 +76,7 @@ describe('isProviderConversation', () => {
     ).toBe(false);
   });
 
-  it('fails a agency-prefixed conversation even when the space matches', () => {
+  it('fails an agency-prefixed conversation even when the space matches', () => {
     // The agency_owner owns this provider space too, so spaceId matches.
     // The prefix is the only thing standing between the provider and the
     // agency's private Koala history.
@@ -91,7 +91,7 @@ describe('isProviderConversation', () => {
     ).toBe(false);
   });
 
-  it('fails a agency-prefixed conversation in a foreign space (both gates trip)', () => {
+  it('fails an agency-prefixed conversation in a foreign space (both gates trip)', () => {
     expect(
       isProviderConversation({ spaceId: OTHER_SPACE, title: '[AGENCY_KOALA] x' }, SPACE),
     ).toBe(false);

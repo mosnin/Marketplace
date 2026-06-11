@@ -132,7 +132,7 @@ export default async function DealDetailPage({
       linkedService = (propData as Service | null) ?? null;
     }
     // Lookup whether this deal already has an open agency review request.
-    // Only meaningful when the space is in a agency; we still issue the
+    // Only meaningful when the space is in an agency; we still issue the
     // query unconditionally (it's a single indexed lookup) so the UI below
     // stays simple, and we swallow errors so an as-yet-unapplied migration
     // on another branch doesn't break the page.
@@ -283,7 +283,7 @@ export default async function DealDetailPage({
           )}
         </div>
 
-        {/* Action row — Log a appointment + Flag for review are peers. Delete moves
+        {/* Action row — Log an appointment + Flag for review are peers. Delete moves
             into the overflow menu. Destructive actions should never be a
             peer chip on a primary surface. */}
         <div className="flex flex-wrap items-center gap-2">
@@ -296,7 +296,7 @@ export default async function DealDetailPage({
             title="Record a quick post-appointment debrief"
           >
             <Mic size={13} />
-            Log a appointment
+            Log an appointment
           </Link>
           <FlagForReviewButton
             dealId={id}

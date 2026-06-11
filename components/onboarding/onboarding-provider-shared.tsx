@@ -177,7 +177,7 @@ export function StageWhoYouServe({
           onChange={(e) => onChangeVoiceGuidance(e.target.value)}
           rows={3}
           maxLength={500}
-          placeholder='e.g. "Never push for a appointment on the first message. Always sign off as Sarah from Coastal Realty."'
+          placeholder='e.g. "Never push for an appointment on the first message. Always sign off as Sarah from Coastal Realty."'
           className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </Section>

@@ -1,7 +1,7 @@
 /**
  * `summarize_provider` — agency-only rollup of one provider's recent activity.
  *
- * Read-only. Gated on the caller having a agency_owner / agency_admin
+ * Read-only. Gated on the caller having an agency_owner / agency_admin
  * AgencyMembership for the provider's agency. The check mirrors the
  * existing pattern in `lib/permissions.ts` (AgencyMembership row with
  * role IN ('agency_owner','agency_admin')) but operates on `ctx.userId`
@@ -66,7 +66,7 @@ export const summarizeProviderTool = defineTool<typeof parameters, SummarizeProv
       .eq('userId', args.providerUserId)
       .maybeSingle();
     if (!providerMembership) {
-      return { summary: 'That user is not a agency member.', display: 'error' };
+      return { summary: 'That user is not an agency member.', display: 'error' };
     }
     if (!callerAgencyIds.has((providerMembership as { agencyId: string }).agencyId)) {
       return { summary: 'Agency access required for that provider.', display: 'error' };

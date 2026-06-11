@@ -44,7 +44,7 @@ const ACTION_META: Record<string, { verb: string; icon: LucideIcon }> = {
   update_deal_probability: { verb: 'updated the probability on', icon: Activity },
   create_follow_up_reminder: { verb: 'set a reminder for', icon: Bell },
   // Lifecycle actions added with the agency rollup work
-  appointment_booked: { verb: 'booked a appointment for', icon: CalendarCheck },
+  appointment_booked: { verb: 'booked an appointment for', icon: CalendarCheck },
   deal_stage_advanced: { verb: 'moved a deal forward:', icon: ArrowUpRight },
   review_requested: { verb: 'flagged a deal for your agency:', icon: Flag },
   lead_routed_out: { verb: 'routed a contact to a teammate:', icon: ArrowRightLeft },

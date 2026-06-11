@@ -24,7 +24,7 @@ export const metadata: Metadata = { title: 'Integrations — Teams' };
  * Each admin/owner connects their OWN accounts at the agency level via the
  * /api/agency/integrations routes (scoped to agencyId + their userId).
  * These are DISTINCT from their personal provider connections — Composio uses
- * a agency-namespaced entity id, so a agency can connect one inbox
+ * an agency-namespaced entity id, so an agency can connect one inbox
  * personally and a different one for the agency.
  */
 export default async function AgencyIntegrationsPage({

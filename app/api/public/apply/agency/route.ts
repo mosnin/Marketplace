@@ -62,7 +62,7 @@ const agencyApplicationSchema = publicApplicationSchema
 // ── Dynamic form config helpers (mirrors main apply route) ──────────────
 
 /**
- * Resolve the correct form config for a agency submission.
+ * Resolve the correct form config for an agency submission.
  *
  * Fallback chain:
  *   1. Agency dual config: [agencyRentalFormConfig | agencyBuyerFormConfig]

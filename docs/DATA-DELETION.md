@@ -119,8 +119,8 @@ the User row:
 | Stripe customer, invoices, charges | retained at Stripe | financial-records retention; we don't control Stripe's store. The `stripeCustomerId`/`stripeSubscriptionId` on the Space row are deleted with the Space, but the Stripe-side objects persist per their retention. |
 | `CommissionLedger` | retained | `agencyId`/`agentUserId`/`dealId`-scoped financial record owned by the **agency**, not the space. Erasing one agent's account should not destroy the agency's commission books. `agentUserId → User ON DELETE CASCADE` would normally remove rows, so deleting a User that has ledger rows needs a decision — see open questions. |
 | `SupportTicket` | `spaceId` set to NULL (`ON DELETE SET NULL`) | support history is retained for dispute resolution; the link to the space is severed. |
-| `Service.assignedSpaceId` (agency pool) | set to NULL (`ON DELETE SET NULL`) | a agency-pool service returns to the pool rather than being destroyed. |
-| `Agency` (`ownerId → User ON DELETE RESTRICT`) | **blocks deletion** | a agency who owns a agency cannot delete their User row until the agency is transferred or removed. The route detects this (`checkDeletionBlockers`) and returns a clear 409 rather than letting Postgres throw. |
+| `Service.assignedSpaceId` (agency pool) | set to NULL (`ON DELETE SET NULL`) | an agency-pool service returns to the pool rather than being destroyed. |
+| `Agency` (`ownerId → User ON DELETE RESTRICT`) | **blocks deletion** | an agency who owns an agency cannot delete their User row until the agency is transferred or removed. The route detects this (`checkDeletionBlockers`) and returns a clear 409 rather than letting Postgres throw. |
 
 ---
 

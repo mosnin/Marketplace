@@ -1,5 +1,5 @@
 /**
- * /integrations/callback/agency-setup — where Composio redirects a agency after
+ * /integrations/callback/agency-setup — where Composio redirects an agency after
  * a successful agency-level OAuth flow.
  *
  * Mirrors the provider callback (/integrations/callback) but persists into
@@ -48,7 +48,7 @@ export default async function AgencyIntegrationsCallback({
   try {
     ctx = await requireAgency();
   } catch {
-    logger.warn('[agency.integrations.callback] caller is not a agency — bouncing');
+    logger.warn('[agency.integrations.callback] caller is not an agency — bouncing');
     redirect('/agency');
   }
 

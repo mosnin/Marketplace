@@ -64,7 +64,7 @@ export async function DELETE(_req: Request, { params }: Params) {
   return NextResponse.json({ message: 'Agency deleted' });
 }
 
-/** PATCH /api/admin/agencies/[id] — suspend or reactivate a agency */
+/** PATCH /api/admin/agencies/[id] — suspend or reactivate an agency */
 export async function PATCH(req: Request, { params }: Params) {
   let admin: Awaited<ReturnType<typeof requirePlatformAdmin>>;
   try {

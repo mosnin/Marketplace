@@ -82,7 +82,7 @@ export function AvailabilityPickerCard({
         <CalendarDays size={13} className="text-muted-foreground flex-shrink-0" aria-hidden />
         <div className="flex-1 min-w-0">
           <p className="text-[12px] font-medium text-foreground truncate">
-            {serviceAddress ? `Appointment · ${serviceAddress}` : 'Pick a appointment time'}
+            {serviceAddress ? `Appointment · ${serviceAddress}` : 'Pick an appointment time'}
           </p>
           <p className="text-[11px] text-muted-foreground">{durationMinutes}-minute slots · tap to schedule</p>
         </div>

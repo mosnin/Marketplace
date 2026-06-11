@@ -5,10 +5,10 @@
  * Falls back to console logging in dev when no key is configured.
  *
  * Four email types:
- *   1. Confirmation — sent immediately when a appointment is booked (to guest)
+ *   1. Confirmation — sent immediately when an appointment is booked (to guest)
  *   2. Reminder — sent ~24h before the appointment starts (to guest, via cron)
- *   3. Follow-up — sent after a appointment is completed (to guest)
- *   4. Agent notification — sent to space owner when a appointment is booked
+ *   3. Follow-up — sent after an appointment is completed (to guest)
+ *   4. Agent notification — sent to space owner when an appointment is booked
  */
 
 export interface AppointmentEmailData {
@@ -126,7 +126,7 @@ export async function sendAppointmentReminder(data: AppointmentEmailData) {
 
   const body = `
     <p style="margin:0 0 12px;font-size:15px;color:#111827;line-height:1.6">Hi ${esc(guestName)},</p>
-    <p style="margin:0 0 4px;font-size:15px;color:#111827;line-height:1.6">Friendly reminder — you have a appointment scheduled tomorrow with <strong>${esc(businessName)}</strong>:</p>
+    <p style="margin:0 0 4px;font-size:15px;color:#111827;line-height:1.6">Friendly reminder — you have an appointment scheduled tomorrow with <strong>${esc(businessName)}</strong>:</p>
     ${detailBox([
       { label: 'Date', value: formatDate(startsAt) },
       { label: 'Time', value: `${formatTime(startsAt)} – ${formatTime(endsAt)}` },
@@ -179,6 +179,6 @@ export async function sendAgentNotification(agentEmail: string, data: Appointmen
     </table>
   `;
 
-  const html = wrapHtml(businessName || 'Appointment', 'New appointment booking', body, `You're receiving this because a guest booked a appointment on your workspace.`);
+  const html = wrapHtml(businessName || 'Appointment', 'New appointment booking', body, `You're receiving this because a guest booked an appointment on your workspace.`);
   await sendEmail(agentEmail, subject, html);
 }

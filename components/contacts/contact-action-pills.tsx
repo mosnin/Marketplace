@@ -13,7 +13,7 @@
  * Compose intents (`check-in`, `log-call`, `welcome`, `reach-out`) go
  * through the existing `<MorningActionSheet />` — same draft pipeline as
  * the morning home. `schedule-appointment` is a navigate-style verb; the API
- * doesn't compose a appointment message, so it drops the provider into the chat
+ * doesn't compose an appointment message, so it drops the provider into the chat
  * with a prefill that names the contact and the intent.
  */
 
@@ -72,7 +72,7 @@ export function ContactActionPills({
     if (action.intent === 'schedule-appointment') {
       router.push(
         `/s/${slug}/koala?prefill=${encodeURIComponent(
-          `Schedule a appointment with ${contactName}.`,
+          `Schedule an appointment with ${contactName}.`,
         )}`,
       );
     }
@@ -98,7 +98,7 @@ export function ContactActionPills({
             {a.label}
           </button>
         ))}
-        {/* "Log a appointment" stays a Link — the /koala/log surface is a short
+        {/* "Log an appointment" stays a Link — the /koala/log surface is a short
             recording flow, not a draft. Outline-shape to read as a peer to
             the secondary pills. */}
         <Link
@@ -109,7 +109,7 @@ export function ContactActionPills({
           )}
         >
           <Mic size={13} />
-          Log a appointment
+          Log an appointment
         </Link>
       </div>
 

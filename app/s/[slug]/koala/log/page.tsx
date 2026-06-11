@@ -1,7 +1,7 @@
 /**
  * /s/[slug]/koala/log — the post-appointment recorder.
  *
- * The provider finishes a appointment, walks to the car, hits record, dictates a
+ * The provider finishes an appointment, walks to the car, hits record, dictates a
  * 30-second debrief. Koala transcribes, proposes 2-5 actions, the provider
  * approves the batch in one tap. That's the moment.
  *
@@ -14,7 +14,7 @@ import { getSpaceFromSlug } from '@/lib/space';
 import { supabase } from '@/lib/supabase';
 import { PostAppointmentRecorder } from '@/components/koala/post-appointment-recorder';
 
-export const metadata = { title: 'Log a appointment — Koala' };
+export const metadata = { title: 'Log an appointment — Koala' };
 
 export default async function PostAppointmentPage({
   params,

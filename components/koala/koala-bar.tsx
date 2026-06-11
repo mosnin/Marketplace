@@ -105,7 +105,7 @@ export function KoalaBar({ slug }: Props) {
       return 'Ask about a deal or find what\'s stuck…';
     }
     if (pathname.includes('/calendar')) {
-      return 'Schedule a appointment or check availability…';
+      return 'Schedule an appointment or check availability…';
     }
     if (pathname.includes('/leads')) {
       return 'Ask about a lead or set a follow-up…';

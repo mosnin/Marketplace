@@ -174,7 +174,7 @@ export function ShareLinksMenu({ slug }: ShareLinksMenuProps) {
         <LinkRow
           icon={CalendarDays}
           label="Appointment booking"
-          description="Where prospects book a appointment"
+          description="Where prospects book an appointment"
           url={bookingUrl}
           previewHref={bookingPath}
         />

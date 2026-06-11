@@ -15,7 +15,7 @@
 -- independent. Note that Space.stripe* columns are intentionally retained —
 -- solo providers (non-agency accounts with no Agency) still bill through
 -- their Space, and the Stripe webhook will route incoming events by metadata
--- to either a Agency or a Space depending on which flow created the sub.
+-- to either an Agency or a Space depending on which flow created the sub.
 -- ============================================================================
 
 -- 1. Extend Agency with billing + plan columns
@@ -64,7 +64,7 @@ WHERE s."ownerId" = b."ownerId"
 
 -- 4. Indexes for webhook + invite lookups.
 --    Partial indexes keep them small (most rows on free/inactive plans have
---    no Stripe ids). Stripe-webhook agent: use these to resolve a Agency
+--    no Stripe ids). Stripe-webhook agent: use these to resolve an Agency
 --    by subscription id or customer id in O(log n).
 CREATE INDEX IF NOT EXISTS idx_agency_stripe_sub
   ON "Agency"("stripeSubscriptionId")

@@ -9,7 +9,7 @@
 -- DB tells a contradictory story: AIUserProfile.role = 'agency_owner'
 -- but User.accountType = 'provider'.
 --
--- This migration corrects the User row. It does NOT create a Agency —
+-- This migration corrects the User row. It does NOT create an Agency —
 -- those users still need to visit /agency and create their agency
 -- (which the agency/create endpoint now supports for accountType='both'
 -- provider-upgraders).
@@ -49,7 +49,7 @@ BEGIN
   END IF;
 END $$;
 
--- Also catch the inverse: users who ALREADY own a Agency but whose
+-- Also catch the inverse: users who ALREADY own an Agency but whose
 -- User row never had accountType updated (covers race conditions or
 -- manual data inserts). agency_only and 'both' are both correct for
 -- agency_owners depending on whether they have a personal workspace —

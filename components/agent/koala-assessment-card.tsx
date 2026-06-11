@@ -30,7 +30,7 @@ interface KoalaAssessmentCardProps {
 
 const GOAL_LABELS: Record<string, string> = {
   follow_up_sequence: 'Follow-up sequence',
-  appointment_booking: 'Book a appointment',
+  appointment_booking: 'Book an appointment',
   offer_progress: 'Offer progress',
   deal_close: 'Close deal',
   reengagement: 'Re-engage',

@@ -5,7 +5,7 @@ import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 /**
  * POST /api/applications/portal/appointment-request
  *
- * Public endpoint — applicant requests a appointment from the status portal.
+ * Public endpoint — applicant requests an appointment from the status portal.
  * Auth: applicationRef + statusPortalToken (same pattern as portal/message).
  *
  * Side effects:
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
       spaceId: contact.spaceId,
       runId: 'applicant-portal',
       agentType: 'applicant_portal',
-      question: `${contact.name} requested a appointment${safeAddress ? ` of ${safeAddress}` : ''}.`,
+      question: `${contact.name} requested an appointment${safeAddress ? ` of ${safeAddress}` : ''}.`,
       context: [
         `Available: ${safeTimes}`,
         safeNotes ? `Notes from ${contact.name}: ${safeNotes}` : null,
@@ -237,7 +237,7 @@ async function notifyProviderOfAppointmentRequest(
           <p style="margin:4px 0 0;color:#ffffff;font-size:20px;font-weight:700">Appointment requested</p>
         </td></tr>
         <tr><td style="padding:24px 28px">
-          <p style="margin:0 0 12px;font-size:14px;color:#111827"><strong>${safeName}</strong> just requested a appointment through their applicant portal.</p>
+          <p style="margin:0 0 12px;font-size:14px;color:#111827"><strong>${safeName}</strong> just requested an appointment through their applicant portal.</p>
           <div style="background:#f3f4f6;border-radius:8px;padding:16px;margin:12px 0">
             ${serviceAddress ? `<p style="margin:0 0 6px;font-size:13px;color:#374151"><strong>Service:</strong> ${escape(serviceAddress)}</p>` : ''}
             <p style="margin:0 0 6px;font-size:13px;color:#374151"><strong>Available:</strong> ${escape(preferredTimes)}</p>

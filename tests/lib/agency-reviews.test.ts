@@ -96,7 +96,7 @@ vi.mock('@/lib/api-auth', () => ({
 vi.mock('@/lib/permissions', () => ({
   requireAgency: vi.fn(async () => {
     if (!auth.agencyRole || auth.agencyRole === 'provider_member') {
-      throw new Error('not a agency');
+      throw new Error('not an agency');
     }
     return {
       membership: { id: 'm_1', role: auth.agencyRole, userId: auth.dbUserId },
@@ -292,7 +292,7 @@ describe('POST /api/agency/reviews/[id]/comments', () => {
     expect(res.status).toBe(400);
   });
 
-  it('403 when caller is neither a agency member nor the requesting agent', async () => {
+  it('403 when caller is neither an agency member nor the requesting agent', async () => {
     auth.agencyRole = null; // not in agency at all
     mockByTable.DealReviewRequest = {
       single: { id: 'r_1', agencyId: 'b_1', requestingUserId: 'someone_else', status: 'open' },

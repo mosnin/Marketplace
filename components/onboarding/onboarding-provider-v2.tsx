@@ -712,7 +712,7 @@ function ServeAffordance({
           onChange={(e) => onChangeGuidance(e.target.value)}
           rows={3}
           maxLength={500}
-          placeholder='e.g. "Never push for a appointment on the first message. Always sign off as Sarah from Coastal Realty."'
+          placeholder='e.g. "Never push for an appointment on the first message. Always sign off as Sarah from Coastal Realty."'
           className={cn(INPUT_CLS, 'resize-none text-sm')}
         />
       </div>

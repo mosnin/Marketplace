@@ -3,7 +3,7 @@
 Three layers gate every agency-side action; this file is the last one:
 
   1. ROUTE GUARD     — `app/agency/koala/page.tsx` server component
-                       redirects when the caller isn't a agency.
+                       redirects when the caller isn't an agency.
   2. API GATE        — `app/api/ai/agency-task/route.ts` re-runs
                        `resolveAgencyContext()` before posting to Modal.
   3. TOOL-RUNTIME    — this guard. Every agency tool MUST call it before
@@ -45,7 +45,7 @@ _AGENCY_ROLES: frozenset[str] = frozenset({"agency_owner", "agency_admin"})
 
 
 class AgencyPermissionError(RuntimeError):
-    """Raised when a agency tool runs without a agency-role caller.
+    """Raised when an agency tool runs without an agency-role caller.
 
     Distinct exception type so the agent runtime can log this category
     separately from generic tool errors — a permission-error spike means
@@ -55,7 +55,7 @@ class AgencyPermissionError(RuntimeError):
 
 
 def require_agency_role(ctx: "RunContextWrapper[AgentContext]") -> None:
-    """Refuse the call unless the AgentContext carries a agency role.
+    """Refuse the call unless the AgentContext carries an agency role.
 
     Reads `ctx.context.agency_role` — populated by the Next.js agency-task
     route from `resolveAgencyContext()` and forwarded to Modal as part of

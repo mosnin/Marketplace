@@ -143,7 +143,7 @@ async function resolveConversation(
     // Reject reserved agency/team titles. A agency_owner's personal spaceId
     // equals their provider space, and the pre-migration agency/team rows still
     // live in this shared table — so the spaceId check alone is NOT isolation.
-    // Without this, a agency/team conversationId would be accepted on the
+    // Without this, an agency/team conversationId would be accepted on the
     // provider surface, its history fed to the model, and new provider turns
     // persisted into that agency conversation. Fall through to a fresh one.
     if (data && data.spaceId === spaceId && !isReservedConversationTitle(data.title)) {

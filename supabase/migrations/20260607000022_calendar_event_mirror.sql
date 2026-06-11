@@ -15,7 +15,7 @@
 --     provider swaps providers later we know what we put there.
 --
 -- One row per event Koala writes through to an external calendar.
--- Appointment rows still live in Appointment; a appointment booking will land here AND on
+-- Appointment rows still live in Appointment; an appointment booking will land here AND on
 -- Google Calendar AND in Appointment. Three places, same event, by design:
 -- Appointment is the booking primitive (manage tokens, conflict checks),
 -- external calendar is the provider's truth, this row is the audit.
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS "CalendarEventMirror" (
   "end"              TIMESTAMPTZ NOT NULL,
   "attendees"        JSONB NOT NULL DEFAULT '[]'::jsonb,
   "sourceAppointmentId"     TEXT REFERENCES "Appointment"(id) ON DELETE SET NULL,
-                                                    -- when this row mirrors a appointment booking
+                                                    -- when this row mirrors an appointment booking
   "createdAt"        TIMESTAMPTZ NOT NULL DEFAULT now(),
   "createdBy"        TEXT NOT NULL DEFAULT 'agent'
                        CHECK ("createdBy" IN ('agent', 'provider'))

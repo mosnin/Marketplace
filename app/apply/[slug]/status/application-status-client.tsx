@@ -869,7 +869,7 @@ function YourAppointmentsPanel({
 
 /**
  * Appointment-request panel — collapsed by default to keep the portal calm.
- * Click "Request a appointment" → inline form opens. Submit hits
+ * Click "Request an appointment" → inline form opens. Submit hits
  * /api/applications/portal/appointment-request, which logs an ApplicationMessage
  * (visible immediately in the thread below) and creates an AgentQuestion
  * scoped to the provider (visible in their Koala focus card).
@@ -973,7 +973,7 @@ function AppointmentRequestPanel({
           <CalendarCheck size={14} className="text-muted-foreground group-hover:text-foreground transition-colors" strokeWidth={1.75} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground">Request a appointment</p>
+          <p className="text-sm font-medium text-foreground">Request an appointment</p>
           <p className="text-xs text-muted-foreground">Tell your provider when you&apos;re free; they&apos;ll set it up.</p>
         </div>
       </button>
@@ -984,11 +984,11 @@ function AppointmentRequestPanel({
     <form
       onSubmit={handleSubmit}
       className="rounded-xl bg-card border border-border/60 shadow-sm p-5 space-y-4"
-      aria-label="Request a appointment"
+      aria-label="Request an appointment"
     >
       <div className="flex items-center gap-2">
         <CalendarCheck size={14} className="text-muted-foreground" aria-hidden="true" />
-        <h2 className="text-sm font-semibold text-foreground">Request a appointment</h2>
+        <h2 className="text-sm font-semibold text-foreground">Request an appointment</h2>
       </div>
 
       <div className="space-y-1.5">
@@ -1077,7 +1077,7 @@ function NextStepsText({ status, businessName }: { status: string; businessName:
     case 'received':
       return (
         <p className="text-sm text-muted-foreground">
-          {businessName} will review your application and may reach out with questions. This
+          {businessName} will review your inquiry and may reach out with questions. This
           typically takes 1-3 business days.
         </p>
       );

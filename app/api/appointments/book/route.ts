@@ -6,7 +6,7 @@ import { notifyNewAppointment } from '@/lib/notify';
 import { sendSMS, appointmentConfirmationSMS } from '@/lib/sms';
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
-/** Public endpoint — guests book a appointment without authentication. */
+/** Public endpoint — guests book an appointment without authentication. */
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   // Per-IP cap — tightened from 10 to 3/hour. The booking endpoint sends a

@@ -205,7 +205,7 @@ beforeEach(() => {
 // ── Tests ───────────────────────────────────────────────────────────────────
 describe('POST /api/agency/members/[id]/offboard', () => {
   describe('authorization', () => {
-    it('returns 403 when the caller is not a agency at all', async () => {
+    it('returns 403 when the caller is not an agency at all', async () => {
       requireAgencyImpl = async () => {
         throw new Error('Forbidden: agency access required');
       };

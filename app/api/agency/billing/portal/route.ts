@@ -8,7 +8,7 @@ import { checkRateLimit } from '@/lib/rate-limit';
  * Agency-scoped Stripe Billing Portal session.
  *
  * The provider portal route (/api/billing/portal) is keyed to a Space the caller
- * OWNS — a agency managing the agency subscription needs the AGENCY's
+ * OWNS — an agency managing the agency subscription needs the AGENCY's
  * Stripe customer instead. Auth mirrors the agency checkout branch:
  * getAgencyContext() + agency_owner only.
  */

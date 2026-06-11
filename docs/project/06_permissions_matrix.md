@@ -3,9 +3,9 @@
 ## Roles
 
 - **Platform Admin** (User.platformRole = 'admin'): System-level access. Can view all users, agencies, and invitations. One or more per platform.
-- **Agency Owner** (AgencyMembership.role = 'agency_owner'): Owns a agency. Full access to agency portal. One per agency.
-- **Agency Manager** (AgencyMembership.role = 'agency_admin'): Manages a agency. Same as owner except cannot delete agency.
-- **Provider Member** (AgencyMembership.role = 'provider_member'): Member of a agency. Has own workspace. Sees agency name in sidebar.
+- **Agency Owner** (AgencyMembership.role = 'agency_owner'): Owns an agency. Full access to agency portal. One per agency.
+- **Agency Manager** (AgencyMembership.role = 'agency_admin'): Manages an agency. Same as owner except cannot delete agency.
+- **Provider Member** (AgencyMembership.role = 'provider_member'): Member of an agency. Has own workspace. Sees agency name in sidebar.
 - **Solo Provider** (default, no agency membership): Owns their workspace. Full access to their space.
 
 ## Route Access Matrix
@@ -58,6 +58,6 @@
 
 - Platform Admin is assigned via User.platformRole in DB or Clerk publicMetadata.role (backwards compat).
 - Agency roles are derived from AgencyMembership records, not User fields.
-- A user can be both a provider (own space) and a agency (accountType='both').
+- A user can be both a provider (own space) and an agency (accountType='both').
 - Space ownership is 1:1 — one user, one space. Space.ownerId is UNIQUE.
 - Authenticated users visiting sign-in/sign-up pages are redirected to `/`.

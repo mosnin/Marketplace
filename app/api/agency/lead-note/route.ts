@@ -11,7 +11,7 @@ const addNoteSchema = z.object({
 /**
  * POST /api/agency/lead-note
  *
- * Appends a agency note to a contact's notes field.
+ * Appends an agency note to a contact's notes field.
  * The note is prefixed with "[Agency: Name - Date]" so providers can see who wrote it.
  * Works on contacts in both the agency's space (unassigned) and provider spaces (assigned).
  */
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     if (contact.spaceId === agencySpaceId) {
       authorized = true;
     } else {
-      // Check if the contact's space belongs to a agency member
+      // Check if the contact's space belongs to an agency member
       const { data: spaceOwner } = await supabase
         .from('Space')
         .select('ownerId')
@@ -199,7 +199,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Contact not found' }, { status: 404 });
     }
 
-    // Verify the contact belongs to the agency's space or a agency member's space
+    // Verify the contact belongs to the agency's space or an agency member's space
     const { data: ownerSpace } = await supabase
       .from('Space')
       .select('id')
@@ -212,7 +212,7 @@ export async function GET(req: NextRequest) {
     if (contact.spaceId === agencySpaceId) {
       authorized = true;
     } else {
-      // Check if the contact's space belongs to a agency member
+      // Check if the contact's space belongs to an agency member
       const { data: spaceOwner } = await supabase
         .from('Space')
         .select('ownerId')

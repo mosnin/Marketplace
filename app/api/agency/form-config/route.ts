@@ -49,7 +49,7 @@ export async function GET() {
 
 /**
  * PUT /api/agency/form-config
- * Validate and save a agency-level form config.
+ * Validate and save an agency-level form config.
  * Accepts { leadType: 'rental' | 'buyer', formConfig }
  */
 export async function PUT(req: NextRequest) {

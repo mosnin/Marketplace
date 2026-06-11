@@ -76,9 +76,9 @@ Multi-step inline onboarding flow triggered on first sign-in at `/`. Steps inclu
 ## Roles And Permissions
 
 - **Platform Admin** (User.platformRole = 'admin'): Full access to `/admin` panel — user management, agency management, invitations, system overview.
-- **Agency Owner** (AgencyMembership.role = 'agency_owner'): Owns a agency. Access to `/agency` portal — view providers, manage members, send invitations, agency settings.
+- **Agency Owner** (AgencyMembership.role = 'agency_owner'): Owns an agency. Access to `/agency` portal — view providers, manage members, send invitations, agency settings.
 - **Agency Manager** (AgencyMembership.role = 'agency_admin'): Same as agency owner but cannot delete agency.
-- **Provider Member** (AgencyMembership.role = 'provider_member'): Member of a agency. Has their own workspace. Agency name shown in sidebar.
+- **Provider Member** (AgencyMembership.role = 'provider_member'): Member of an agency. Has their own workspace. Agency name shown in sidebar.
 - **Provider (solo)** (default): Own workspace at `/s/[slug]`. Full access to their space — leads, contacts, deals, appointments, AI, analytics, settings, billing, profile.
 
 ## Integrations Or External Config

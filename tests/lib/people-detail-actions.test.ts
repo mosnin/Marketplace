@@ -26,7 +26,7 @@ describe('buildPeopleDetailActions', () => {
     expect(actions).toEqual([]);
   });
 
-  it('hot + quiet 9 days → check-in + schedule a appointment', () => {
+  it('hot + quiet 9 days → check-in + schedule an appointment', () => {
     const actions = buildPeopleDetailActions({
       ...base,
       scoreLabel: 'hot',

@@ -5,7 +5,7 @@
  * TIERED + self-scoped: gated via requireAgency() (owner/admin only). A
  * agency can only ever read/write THEIR OWN AgencyMembership row — the
  * update is keyed on (agencyId, userId=dbUserId from the resolved context),
- * never on a client-supplied id. A provider_member can't reach a agency
+ * never on a client-supplied id. A provider_member can't reach an agency
  * context, so this 403s for them; an admin can't edit another member's
  * profile because there's no path to address another row.
  *

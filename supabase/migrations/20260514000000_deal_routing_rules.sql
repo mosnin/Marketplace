@@ -6,7 +6,7 @@
 -- works for homogeneous teams, but agencies with territorial or
 -- specialty agents (rental vs buyer specialist, luxury vs starter, named
 -- accounts) need to express preferences like "route every rental under
--- $3k to Sam" BEFORE the round-robin kicks in. This table lets a agency
+-- $3k to Sam" BEFORE the round-robin kicks in. This table lets an agency
 -- describe those preferences as an ordered list of rules.
 --
 -- Evaluation order at routing time:

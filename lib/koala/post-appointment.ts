@@ -34,7 +34,7 @@ export const MAX_PROPOSALS = 5;
 /** Subset of tools the orchestrator is allowed to propose post-appointment. The
  *  full 42-tool registry is too noisy for a 30-second debrief — most of
  *  these are administrative or aggregate queries the provider would never
- *  trigger from a appointment recap. The seven below cover the actual moments:
+ *  trigger from an appointment recap. The seven below cover the actual moments:
  *  log it, mark it, schedule the next thing, draft the message. */
 export const POST_APPOINTMENT_TOOL_ALLOWLIST = [
   'log_call',

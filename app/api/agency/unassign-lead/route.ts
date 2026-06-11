@@ -16,7 +16,7 @@ const unassignLeadSchema = z.object({
  * Only agency_owner and agency_admin roles can perform this action.
  *
  * Flow:
- * 1. Verify caller is a agency (owner or admin)
+ * 1. Verify caller is an agency (owner or admin)
  * 2. Verify the contact exists in the agency's space and has 'assigned' tag
  * 3. Parse assignment metadata to find the cloned contact
  * 4. Delete cloned contact + related deals/deal-contacts from provider's space
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
 
     const { assignedContactId, assignedSpaceId, assignedTo, assignedToName } = meta;
 
-    // ── Validate the assigned contact's space belongs to a agency member ──
+    // ── Validate the assigned contact's space belongs to an agency member ──
     // Prevents corrupted/tampered metadata from deleting arbitrary contacts.
     if (assignedSpaceId) {
       const { data: assignedSpace } = await supabase

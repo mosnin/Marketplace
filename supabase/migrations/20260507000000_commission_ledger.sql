@@ -17,7 +17,7 @@
 --                                                        FROM NEW.status
 --                                                    AND NEW.status = 'won'
 --   Both fire the same plpgsql function, which resolves the deal's Space to
---   a agencyId + ownerId, snapshots the agency's current default rates,
+--   an agencyId + ownerId, snapshots the agency's current default rates,
 --   and inserts one ledger row. Deals in non-agency workspaces
 --   (Space.agencyId IS NULL) are silently skipped — solo agents don't
 --   need a ledger.

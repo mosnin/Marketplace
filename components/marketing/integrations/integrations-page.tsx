@@ -164,7 +164,7 @@ const STEPS: { n: string; title: string; body: string }[] = [
   {
     n: '02',
     title: 'Koala uses them as tools',
-    body: 'Once connected, each app becomes a tool Koala can call mid-task. Ask it to chase a lead or book a appointment and it reaches for the right one on its own.',
+    body: 'Once connected, each app becomes a tool Koala can call mid-task. Ask it to chase a lead or book an appointment and it reaches for the right one on its own.',
   },
   {
     n: '03',

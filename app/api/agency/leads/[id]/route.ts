@@ -11,7 +11,7 @@ import { logger } from '@/lib/logger';
  *
  * Deletes an unassigned agency-intake lead. Unlike /api/contacts/[id]
  * (which scopes the delete to the CALLER'S OWN space), agency intake leads
- * live in the agency OWNER's space — so a agency_admin (a different user with a
+ * live in the agency OWNER's space — so an agency_admin (a different user with a
  * different personal space) can never match that scope and gets a spurious 404.
  *
  * This endpoint authorizes against the AGENCY (any in-agency owner/admin),

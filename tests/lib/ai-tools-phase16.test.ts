@@ -199,7 +199,7 @@ describe('checkAvailabilityTool', () => {
     expect(result.summary).toMatch(/free/);
   });
 
-  it('reports a Appointment conflict in the conflicts array', async () => {
+  it('reports an Appointment conflict in the conflicts array', async () => {
     mockByTable = {
       Appointment: {
         rows: [
@@ -366,7 +366,7 @@ describe('assignLeadToProviderTool', () => {
     expect(assignLeadToProviderTool.requiresApproval).toBe(true);
   });
 
-  it('refuses when caller is not a agency', async () => {
+  it('refuses when caller is not an agency', async () => {
     mockByTable = {
       User: { single: { id: 'u_caller' } },
       AgencyMembership: { rows: [] },

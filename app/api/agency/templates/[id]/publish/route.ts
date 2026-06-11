@@ -42,7 +42,7 @@ const TEMPLATE_COLUMNS =
 /**
  * POST /api/agency/templates/[id]/publish
  *
- * Push the current version of a AgencyTemplate out to every provider
+ * Push the current version of an AgencyTemplate out to every provider
  * member's personal MessageTemplate table. Per the BP6a contract:
  *
  *   - If an agent already has a MessageTemplate pointing at this source

@@ -123,7 +123,7 @@ export const assignLeadToProviderTool = defineTool<typeof parameters, AssignResu
 
     // Scope the UPDATE by the specific ownership leg we just proved at
     // L98 — either the contact lives in the agency's own space, or it's
-    // linked to a agency the caller administers. The read-then-write
+    // linked to an agency the caller administers. The read-then-write
     // pattern is safe only if the write carries the same scope; a
     // concurrent agency-merge or reassign-elsewhere could otherwise let
     // the UPDATE land on a row that has since moved out of scope.

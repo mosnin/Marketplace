@@ -786,7 +786,7 @@ export default async function AgencyBriefPage() {
               const name = member.User?.name ?? 'Unnamed provider';
               const initial = name.charAt(0).toUpperCase();
               // A teammate row opens the agency-scoped provider detail page.
-              // /s/<slug>/* requires owning that space, so a agency can't open a
+              // /s/<slug>/* requires owning that space, so an agency can't open a
               // teammate's own dashboard — it 404s. /agency/providers/<userId> is
               // the agency's view of that provider (the same link the Providers
               // list uses). The agency's own chief of staff lives at /agency/koala.

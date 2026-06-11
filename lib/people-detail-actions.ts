@@ -7,7 +7,7 @@
  * person decides.
  *
  * Cap: three actions. Two is normal; three only when there's a clear
- * second axis (e.g. hot person — "send a check-in" AND "schedule a appointment").
+ * second axis (e.g. hot person — "send a check-in" AND "schedule an appointment").
  *
  * Archived people get nothing — there's nothing useful to do here.
  */
@@ -47,7 +47,7 @@ export interface PeopleDetailAction {
  *    "Clear follow-up". The provider came here to deal with the overdue.
  *  - New (created in last 14 days) and never contacted → "Welcome them" +
  *    "Log a call".
- *  - Hot → "Send a check-in" + "Schedule a appointment". Two axes, not one.
+ *  - Hot → "Send a check-in" + "Schedule an appointment". Two axes, not one.
  *  - Cold and quiet 7+ days → "Send a check-in" + "Log a call".
  *  - Warm or anyone else with daysQuiet → "Reach out" + "Log a call".
  *  - No daysQuiet at all (uncontacted, not new) → "Reach out".
@@ -78,7 +78,7 @@ export function buildPeopleDetailActions(
   if (state.scoreLabel === 'hot') {
     return [
       { id: 'check-in', label: 'Send a check-in', intent: 'check-in' },
-      { id: 'schedule-appointment', label: 'Schedule a appointment', intent: 'schedule-appointment' },
+      { id: 'schedule-appointment', label: 'Schedule an appointment', intent: 'schedule-appointment' },
     ];
   }
 

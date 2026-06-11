@@ -3,7 +3,7 @@
  *
  * Three account levels:
  *   1. Provider (default) — solo workspace owner
- *   2. Agency — has a AgencyMembership with role agency_owner or agency_admin
+ *   2. Agency — has an AgencyMembership with role agency_owner or agency_admin
  *   3. Platform Admin — User.platformRole = 'admin' (or Clerk metadata fallback)
  *
  * Always use these helpers in API routes, server actions, and layouts.
@@ -60,7 +60,7 @@ type AgencyContext = {
 };
 
 /**
- * Returns the agency + membership for the current user if they are a agency
+ * Returns the agency + membership for the current user if they are an agency
  * (role = agency_owner or agency_admin), or null if they are not.
  */
 export async function getAgencyContext(): Promise<AgencyContext | null> {
@@ -92,7 +92,7 @@ export async function getAgencyContext(): Promise<AgencyContext | null> {
     .order('createdAt', { ascending: true });
   if (!memberships?.length) return null;
 
-  // Deterministic pick for a user who is a agency at more than one agency:
+  // Deterministic pick for a user who is an agency at more than one agency:
   // agency_owner first, then agency_admin, oldest within a tier (query ordered
   // by createdAt). The old `?? memberships[0]` fell back to PostgREST insertion
   // order, so the same user could resolve to a different agency run-to-run
@@ -117,7 +117,7 @@ export async function getAgencyContext(): Promise<AgencyContext | null> {
 }
 
 /**
- * Require agency access. Throws if the current user is not a agency.
+ * Require agency access. Throws if the current user is not an agency.
  */
 export async function requireAgency(): Promise<AgencyContext> {
   const ctx = await getAgencyContext();
@@ -186,7 +186,7 @@ const SETTINGS_EDIT_ROLES = ['agency_owner', 'agency_admin'] as const;
 const ROLE_MANAGEMENT_ROLES = ['agency_owner', 'agency_admin'] as const;
 
 /**
- * Check if a agency membership role can manage leads (assign, reassign).
+ * Check if an agency membership role can manage leads (assign, reassign).
  * Only agency_owner and agency_admin can assign leads.
  * provider_member can only view leads assigned to them.
  */
@@ -195,14 +195,14 @@ export function canManageLeads(role: string): boolean {
 }
 
 /**
- * Check if a agency membership role can edit agency settings.
+ * Check if an agency membership role can edit agency settings.
  */
 export function canEditSettings(role: string): boolean {
   return (SETTINGS_EDIT_ROLES as readonly string[]).includes(role);
 }
 
 /**
- * Check if a agency membership role can change other members' roles.
+ * Check if an agency membership role can change other members' roles.
  */
 export function canManageRoles(role: string): boolean {
   return (ROLE_MANAGEMENT_ROLES as readonly string[]).includes(role);

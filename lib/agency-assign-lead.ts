@@ -7,11 +7,11 @@ export type AssignLeadResult =
   | { ok: false; error: string; status: number };
 
 /**
- * Assign a agency lead (Contact) from the agency's space into a provider's
+ * Assign an agency lead (Contact) from the agency's space into a provider's
  * space: clone the contact, mark the original as assigned, notify the provider.
  *
  * Shared by POST /api/agency/assign-lead and the /assign team-chat command so
- * the two can never drift. Callers MUST verify the caller is a agency who can
+ * the two can never drift. Callers MUST verify the caller is an agency who can
  * manage leads before calling this — it performs no auth of its own.
  */
 export async function assignLeadToProvider(params: {

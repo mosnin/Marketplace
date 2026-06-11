@@ -62,7 +62,7 @@ const METHOD_OPTIONS: Array<{
   {
     value: 'manual',
     label: 'Manual only',
-    helper: 'Leads stay unassigned until a agency admin picks an owner.',
+    helper: 'Leads stay unassigned until an agency admin picks an owner.',
   },
 ];
 

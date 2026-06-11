@@ -5,7 +5,7 @@ import { checkRateLimit } from '@/lib/rate-limit';
 
 /**
  * POST — Submit appointment feedback (from guest, token-based).
- * GET  — Get feedback for a appointment (agent, authenticated).
+ * GET  — Get feedback for an appointment (agent, authenticated).
  */
 export async function POST(req: NextRequest) {
   const { token, rating, comment } = await req.json();

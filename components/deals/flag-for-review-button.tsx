@@ -29,7 +29,7 @@ export interface FlagForReviewButtonProps {
   /** Called after a successful flag so the parent can refetch or update
    *  the deal's UI (e.g. re-enable this button when the review resolves). */
   onFlagged?: () => void;
-  /** When the deal is NOT in a agency workspace, pass false to hide
+  /** When the deal is NOT in an agency workspace, pass false to hide
    *  the affordance entirely. Parent knows (Space.agencyId). */
   visible?: boolean;
 }

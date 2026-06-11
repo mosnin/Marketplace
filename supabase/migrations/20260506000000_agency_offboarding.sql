@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Agency Offboarding: atomic member transfer
 -- ============================================================================
--- When a agency offboards a member (provider leaves the firm, manager is
+-- When an agency offboards a member (provider leaves the firm, manager is
 -- removed, etc.), the agency-scoped records owned by that member — the
 -- contacts the agency considers its own, plus the deals / activities /
 -- checklist items / appointments that hang off those contacts — must be re-homed to

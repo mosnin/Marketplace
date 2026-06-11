@@ -196,7 +196,7 @@ export default async function ClientDetailPage({
       {/* Action pills — same vocabulary as the morning home's compose
           actions. State picks them; the provider doesn't. Tap a verb pill
           and the inline draft surface opens beneath; the provider reviews,
-          edits, sends without leaving the page. "Log a appointment" stays a Link
+          edits, sends without leaving the page. "Log an appointment" stays a Link
           to the dedicated recording flow. */}
       <ContactActionPills
         slug={slug}

@@ -119,7 +119,7 @@ export async function GET() {
       id: `appointment-${appointment.id}`,
       type: 'appointment',
       actor: actorForSpace(appointment.spaceId),
-      action: 'scheduled a appointment',
+      action: 'scheduled an appointment',
       entity: appointment.guestName ?? 'Unknown guest',
       timestamp: appointment.createdAt,
     });

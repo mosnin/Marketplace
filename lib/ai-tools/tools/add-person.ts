@@ -129,7 +129,7 @@ export const addPersonTool = defineTool<typeof parameters, AddPersonResult>({
         id,
         spaceId: ctx.space.id,
         // agencyId stays null — this is a workspace-owned contact, not
-        // a agency lead. Matches POST /api/contacts which never sets it.
+        // an agency lead. Matches POST /api/contacts which never sets it.
         agencyId: null,
         name,
         email: args.email?.trim() || null,

@@ -53,7 +53,7 @@ export async function PATCH(
   if (body.status !== undefined && body.status !== ctx.appointment.status) {
     const current = ctx.appointment.status as string;
     const next = body.status as string;
-    // Once a appointment is completed or no_show, it cannot be moved back to active states
+    // Once an appointment is completed or no_show, it cannot be moved back to active states
     if ((current === 'completed' || current === 'no_show') && (next === 'scheduled' || next === 'confirmed')) {
       return NextResponse.json({ error: `Cannot transition from '${current}' to '${next}'` }, { status: 400 });
     }

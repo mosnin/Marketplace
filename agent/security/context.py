@@ -41,7 +41,7 @@ class AgentContext:
     current_agent_type: str = field(default="koala", compare=False)
 
     # ── Agency-mode fields (Koala-for-Agencies) ──────────────────────────
-    # Populated ONLY when the chat turn was initiated by a agency via
+    # Populated ONLY when the chat turn was initiated by an agency via
     # /api/ai/agency-task. Empty for every provider chat or autonomous run.
     # Read by `tools/agency/_guards.py:require_agency_role` (defense layer
     # 3) before any agency tool executes. Carrying these on AgentContext
@@ -50,7 +50,7 @@ class AgentContext:
     agency_id: str = field(default="", compare=False)
     # agency_role is the calling user's AgencyMembership.role at the
     # moment the API gate fired. Expected values: 'agency_owner',
-    # 'agency_admin', or '' (not a agency). require_agency_role refuses
+    # 'agency_admin', or '' (not an agency). require_agency_role refuses
     # anything not in the first two.
     agency_role: str = field(default="", compare=False)
 

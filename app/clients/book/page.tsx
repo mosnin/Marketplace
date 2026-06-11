@@ -39,7 +39,7 @@ export default async function BookAppointmentPage() {
           Back to your portal
         </Link>
         <div className="space-y-1.5">
-          <p className="text-sm text-muted-foreground">Book a appointment.</p>
+          <p className="text-sm text-muted-foreground">Book an appointment.</p>
           <h1 className="text-3xl tracking-tight text-foreground" style={TITLE_FONT}>
             Pick a time to see a place.
           </h1>

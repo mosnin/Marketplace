@@ -278,7 +278,7 @@ export function OnboardingQuick({ defaultName }: Props) {
             href="/setup?type=agency"
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            Setting up a agency instead?
+            Setting up an agency instead?
           </a>
         </div>
       </div>

@@ -38,7 +38,7 @@ export async function GET(req: NextRequest, { params }: Params) {
   if (authResult instanceof NextResponse) return authResult;
   const { userId: clerkId, space } = authResult;
 
-  // Space must belong to a agency for reviews to be meaningful.
+  // Space must belong to an agency for reviews to be meaningful.
   if (!space.agencyId) {
     return NextResponse.json([]);
   }

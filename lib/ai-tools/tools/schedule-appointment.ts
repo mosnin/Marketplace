@@ -1,5 +1,5 @@
 /**
- * `schedule_appointment` — create a Appointment row + mirror to the provider's external
+ * `schedule_appointment` — create an Appointment row + mirror to the provider's external
  * calendar.
  *
  * Approval-gated: the appointment lands on the provider's actual calendar (Google,

@@ -1,5 +1,5 @@
 /**
- * `reschedule_appointment` — move a Appointment to a new start (and optional end) time.
+ * `reschedule_appointment` — move an Appointment to a new start (and optional end) time.
  *
  * Approval-gated: appointments are on calendars and inboxes; the provider sees
  * the new time before we commit. Google Calendar sync runs server-side
@@ -24,7 +24,7 @@ const parameters = z
       .describe('Optional new ISO end. Defaults to preserving the original duration.'),
     why: z.string().max(500).optional(),
   })
-  .describe('Move a appointment to a new time.');
+  .describe('Move an appointment to a new time.');
 
 interface RescheduleAppointmentResult {
   appointmentId: string;
@@ -46,7 +46,7 @@ export const rescheduleAppointmentTool = defineTool<typeof parameters, Reschedul
   name: 'reschedule_appointment',
   riskLevel: 'low',
   description:
-    'Move a appointment to a new time. Preserves the original duration unless newEndsAt is given. Prompts for approval first.',
+    'Move an appointment to a new time. Preserves the original duration unless newEndsAt is given. Prompts for approval first.',
   parameters,
   requiresApproval: true,
   rateLimit: { max: 60, windowSeconds: 3600 },

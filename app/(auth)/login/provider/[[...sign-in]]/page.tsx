@@ -28,7 +28,7 @@ export default async function ProviderSignInPage({
   return (
     <AuthPageLayout
       variant="provider"
-      heading="Welcome back, provider."
+      heading="Welcome back."
     >
       <div className="w-full space-y-4">
         <ThemedSignIn

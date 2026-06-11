@@ -1,1 +1,1 @@
-Prepare for a appointment. $ARGUMENTS. Look up the guest's contact info, budget, preferences, and score. Suggest talking points and questions to ask.
+Prepare for an appointment. $ARGUMENTS. Look up the guest's contact info, budget, preferences, and score. Suggest talking points and questions to ask.

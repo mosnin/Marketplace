@@ -23,7 +23,7 @@ interface Props {
 /**
  * Shared service create/edit form. Field set is intentionally small — a
  * provider adding a service in the middle of their day shouldn't have to
- * fill twenty boxes. Everything except address is optional.
+ * fill twenty boxes. Everything except the service name is optional.
  *
  * All inputs are the canonical <Input> / <Textarea> primitives so the form
  * inherits the product's paper-flat polish (no shadow, 2px focus ring,
@@ -31,10 +31,10 @@ interface Props {
  * still native <select> for keyboard-first speed; they're styled with the
  * same chain as Input so the row visually aligns.
  *
- * Photos live at the top — a service is what it looks like, not what its
- * MLS number is. The featured photo is `photos[0]` (convention reused from
- * the list + detail pages); the editor lets the provider tap any tile to
- * promote it. The first uploaded photo is featured by default.
+ * Photos live at the top — a service is what it looks like. The featured
+ * photo is `photos[0]` (convention reused from the list + detail pages);
+ * the editor lets the provider tap any tile to promote it. The first
+ * uploaded photo is featured by default.
  */
 export function ServiceForm({ initial = {}, onCancel, onSubmit, submitting, submitLabel = 'Save' }: Props) {
   const [v, setV] = useState<FormValues>({
@@ -49,10 +49,10 @@ export function ServiceForm({ initial = {}, onCancel, onSubmit, submitting, subm
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    const address = (v.address ?? '').trim();
-    if (!address) return;
+    const name = (v.address ?? '').trim();
+    if (!name) return;
     onSubmit({
-      address,
+      address: name,
       unitNumber: v.unitNumber?.toString().trim() || null,
       city: v.city?.toString().trim() || null,
       stateRegion: v.stateRegion?.toString().trim() || null,
@@ -84,9 +84,9 @@ export function ServiceForm({ initial = {}, onCancel, onSubmit, submitting, subm
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      {/* Photos first — the provider is showing a house, not filing an MLS
-          form. The featured tile sets what the list, the deal card, and
-          the listing detail show. */}
+      {/* Photos first — the provider is showcasing their service, not filing
+          paperwork. The featured tile sets what the list, the deal card,
+          and the service detail show. */}
       <Field label="Photos">
         <ServicePhotoEditor
           value={v.photos ?? []}
@@ -94,49 +94,49 @@ export function ServiceForm({ initial = {}, onCancel, onSubmit, submitting, subm
         />
       </Field>
 
-      {/* Address row */}
+      {/* Service name row — the primary identifier */}
       <div className="grid grid-cols-[1fr_120px] gap-2">
-        <Field label="Address" required>
+        <Field label="Service name" required>
           <Input
             type="text"
             required
             value={v.address ?? ''}
             onChange={(e) => set('address', e.target.value)}
-            placeholder="123 Main St"
+            placeholder="e.g. 60-min Deep Tissue Massage"
           />
         </Field>
-        <Field label="Unit">
+        <Field label="Short code">
           <Input
             type="text"
             value={v.unitNumber ?? ''}
             onChange={(e) => set('unitNumber', e.target.value)}
-            placeholder="4B"
+            placeholder="SKU-01"
           />
         </Field>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
-        <Field label="City">
-          <Input type="text" value={v.city ?? ''} onChange={(e) => set('city', e.target.value)} />
+        <Field label="City / Area">
+          <Input type="text" value={v.city ?? ''} onChange={(e) => set('city', e.target.value)} placeholder="e.g. Brooklyn" />
         </Field>
-        <Field label="State">
+        <Field label="State / Region">
           <Input type="text" value={v.stateRegion ?? ''} onChange={(e) => set('stateRegion', e.target.value)} />
         </Field>
-        <Field label="ZIP">
+        <Field label="Postal code">
           <Input type="text" value={v.postalCode ?? ''} onChange={(e) => set('postalCode', e.target.value)} />
         </Field>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <Field label="MLS #">
+        <Field label="Internal reference #">
           <Input
             type="text"
             value={v.mlsNumber ?? ''}
             onChange={(e) => set('mlsNumber', e.target.value)}
-            placeholder="Unique per space"
+            placeholder="Optional ID or code"
           />
         </Field>
-        <Field label="Listing URL">
+        <Field label="Booking / info URL">
           <Input
             type="url"
             value={v.listingUrl ?? ''}
@@ -146,8 +146,8 @@ export function ServiceForm({ initial = {}, onCancel, onSubmit, submitting, subm
         </Field>
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
-        <Field label="Type">
+      <div className="grid grid-cols-2 gap-2">
+        <Field label="Category">
           <select
             value={v.serviceType ?? ''}
             onChange={(e) => set('serviceType', (e.target.value || null) as ServiceType | null)}
@@ -170,59 +170,37 @@ export function ServiceForm({ initial = {}, onCancel, onSubmit, submitting, subm
             ))}
           </select>
         </Field>
-        <Field label="Beds">
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        <Field label="Duration (min)">
           <Input
             type="number"
-            step="0.5"
+            step="5"
             min="0"
             value={v.beds ?? ''}
             onChange={(e) => set('beds', e.target.value === '' ? null : Number(e.target.value))}
+            placeholder="60"
           />
         </Field>
-        <Field label="Baths">
+        <Field label="Max group size">
           <Input
             type="number"
-            step="0.5"
+            step="1"
             min="0"
             value={v.baths ?? ''}
             onChange={(e) => set('baths', e.target.value === '' ? null : Number(e.target.value))}
+            placeholder="1"
           />
         </Field>
-      </div>
-
-      <div className="grid grid-cols-4 gap-2">
-        <Field label="Sq ft">
+        <Field label="Price ($)">
           <Input
             type="number"
             min="0"
-            value={v.squareFeet ?? ''}
-            onChange={(e) => set('squareFeet', e.target.value === '' ? null : Number(e.target.value))}
-          />
-        </Field>
-        <Field label="Lot (sqft)">
-          <Input
-            type="number"
-            min="0"
-            value={v.lotSizeSqft ?? ''}
-            onChange={(e) => set('lotSizeSqft', e.target.value === '' ? null : Number(e.target.value))}
-          />
-        </Field>
-        <Field label="Year built">
-          <Input
-            type="number"
-            min="1600"
-            max="2200"
-            value={v.yearBuilt ?? ''}
-            onChange={(e) => set('yearBuilt', e.target.value === '' ? null : Number(e.target.value))}
-          />
-        </Field>
-        <Field label="List price">
-          <Input
-            type="number"
-            min="0"
-            step="1000"
+            step="1"
             value={v.listPrice ?? ''}
             onChange={(e) => set('listPrice', e.target.value === '' ? null : Number(e.target.value))}
+            placeholder="0"
           />
         </Field>
       </div>
@@ -232,7 +210,7 @@ export function ServiceForm({ initial = {}, onCancel, onSubmit, submitting, subm
           value={v.notes ?? ''}
           onChange={(e) => set('notes', e.target.value)}
           rows={3}
-          placeholder="Anything buyers or co-agents should know."
+          placeholder="What clients should know before booking."
         />
       </Field>
 

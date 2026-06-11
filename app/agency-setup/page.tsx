@@ -8,7 +8,7 @@ export const metadata = { title: 'Agency — Koala' };
 
 /**
  * /agency-setup setup page.
- * - If already a agency: redirect to /agency
+ * - If already an agency: redirect to /agency
  * - If not onboarded: redirect to /setup
  * - Otherwise: show create/join options
  */
@@ -33,7 +33,7 @@ export default async function AgencyPage() {
 
   if (!space) redirect('/setup');
 
-  // Already a agency? Go straight to the agency dashboard
+  // Already an agency? Go straight to the agency dashboard
   let existingAgencyName: string | null = null;
   let existingAgencyId: string | null = null;
   try {

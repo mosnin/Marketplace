@@ -232,7 +232,7 @@ at submit. The role picker in onboarding offers two choices, not a free
 text field. The AlertDialog forces a Cancel-or-Confirm choice — there's no
 ambiguous third path. The composer can't submit an empty message. The
 agency permission helpers (`requireAgency`, etc.) prevent a non-agency
-from reaching a agency-only action *before* the surface renders, not
+from reaching an agency-only action *before* the surface renders, not
 after.
 
 **Fails when.** A surface accepts garbage input, validates on submit, and

@@ -16,10 +16,10 @@
  * No em dashes below this point are in code — the prose above is comment.
  */
 
-/** Title prefix on a agency's personal Koala conversation. */
+/** Title prefix on an agency's personal Koala conversation. */
 export const AGENCY_TITLE_PREFIX = '[AGENCY_KOALA]';
 
-/** Title prefix on a agency-wide team chat conversation. */
+/** Title prefix on an agency-wide team chat conversation. */
 export const TEAM_TITLE_PREFIX = '[AGENCY_CHAT]';
 
 /**
@@ -39,7 +39,7 @@ export const RESERVED_TITLE_LIKE_PATTERNS = RESERVED_TITLE_PREFIXES.map(
 ) as readonly string[];
 
 /**
- * True when a title belongs to a agency-side surface (agency Koala or team
+ * True when a title belongs to an agency-side surface (agency Koala or team
  * chat) and must therefore be hidden from the provider. Used by the list
  * filters and the per-conversation guards.
  */

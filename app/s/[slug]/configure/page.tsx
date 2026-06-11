@@ -146,8 +146,8 @@ export default async function ConfigurePage({
                     <Building2 size={15} className="text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">Set up a agency</p>
-                    <p className="text-xs text-muted-foreground">Create a agency or join with a code</p>
+                    <p className="text-sm font-semibold">Set up an agency</p>
+                    <p className="text-xs text-muted-foreground">Create an agency or join with a code</p>
                   </div>
                 </div>
                 <ArrowRight size={15} className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />

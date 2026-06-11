@@ -2,7 +2,7 @@
 -- Purge an account's credit ledger when its Space/Agency is deleted.
 --
 -- CreditLot / CreditTxn are keyed by a POLYMORPHIC (accountType, accountId) —
--- accountId points at either a Space or a Agency — so there is no real
+-- accountId points at either a Space or an Agency — so there is no real
 -- foreign key and no ON DELETE CASCADE. When a Space or Agency is deleted
 -- (e.g. a user offboards and their Space cascades away), its credit lots and
 -- transactions are left behind as orphans that nothing ever reads but that

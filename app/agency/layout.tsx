@@ -22,7 +22,7 @@ export default async function AgencyLayout({ children }: { children: React.React
 
   const ctx = await getAgencyMemberContext();
 
-  // Not a agency — redirect to the setup page
+  // Not an agency — redirect to the setup page
   if (!ctx) {
     redirect('/setup');
   }
@@ -34,7 +34,7 @@ export default async function AgencyLayout({ children }: { children: React.React
     .eq('ownerId', ctx.dbUserId)
     .maybeSingle();
 
-  // Check if this is a agency-only account (no personal workspace)
+  // Check if this is an agency-only account (no personal workspace)
   const { data: userRow } = await supabase
     .from('User')
     .select('accountType, platformRole')
@@ -226,7 +226,7 @@ export default async function AgencyLayout({ children }: { children: React.React
 
   return (
     <div className="app-theme flex h-screen overflow-hidden bg-background text-foreground">
-      {/* First-paint splash — greets the agency by name, shows a agency-wide
+      {/* First-paint splash — greets the agency by name, shows an agency-wide
           snapshot of what's happening across member spaces, then dissolves. */}
       <KoalaSplash
         greeting={pickGreeting(agencyFirstName)}

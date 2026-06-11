@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Building2, ExternalLink } from 'lucide-react';
 
 interface CreateAgencyCardProps {
-  /** If the user is already a agency, link to their dashboard instead. */
+  /** If the user is already an agency, link to their dashboard instead. */
   existingAgencyName?: string | null;
 }
 
@@ -15,7 +15,7 @@ export function CreateAgencyCard({ existingAgencyName }: CreateAgencyCardProps) 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Already a agency — show link
+  // Already an agency — show link
   if (existingAgencyName) {
     return (
       <Card>
@@ -75,7 +75,7 @@ export function CreateAgencyCard({ existingAgencyName }: CreateAgencyCardProps) 
             <Building2 size={15} className="text-foreground/70" />
           </div>
           <div>
-            <p className="text-sm font-semibold">Create a agency</p>
+            <p className="text-sm font-semibold">Create an agency</p>
             <p className="text-xs text-muted-foreground">Invite providers and get team visibility</p>
           </div>
         </div>

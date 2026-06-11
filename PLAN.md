@@ -33,7 +33,7 @@ Add three account levels to Koala:
 
 - **platform_role** on User: `user` (default) or `admin`
 - **AgencyMembership.role**: `agency_owner`, `agency_admin`, `provider_member`
-- "Is a agency" = has any AgencyMembership where role ∈ {agency_owner, agency_admin}
+- "Is an agency" = has any AgencyMembership where role ∈ {agency_owner, agency_admin}
 
 ### Permissions (central helpers in `lib/permissions.ts`)
 
@@ -216,11 +216,11 @@ requireAgency()                → Promise<{ agency, membership, dbUserId }>
 ### `PATCH /api/admin/agencies/[id]`
 - Auth: requirePlatformAdmin()
 - Body: `{ status: 'active' | 'suspended' }`
-- Suspends or reactivates a agency
+- Suspends or reactivates an agency
 
 ### `DELETE /api/admin/memberships/[id]`
 - Auth: requirePlatformAdmin()
-- Removes a AgencyMembership (and unlinks Space.agencyId)
+- Removes an AgencyMembership (and unlinks Space.agencyId)
 
 ---
 

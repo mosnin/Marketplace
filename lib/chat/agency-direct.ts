@@ -10,7 +10,7 @@
  * AGENCY_TOOLS catalog lives.
  *
  * Mirrors `lib/chat/direct-stream.ts` (the provider direct path): same SSE
- * shape, same persistence + usage recording, just a agency-scoped context
+ * shape, same persistence + usage recording, just an agency-scoped context
  * block instead of per-space vector retrieval.
  */
 
@@ -103,7 +103,7 @@ interface SseEvent {
 }
 
 /**
- * Stream a agency Q&A turn in-process. Same SSE protocol as the provider direct
+ * Stream an agency Q&A turn in-process. Same SSE protocol as the provider direct
  * path, so the agency chat client needs no changes.
  */
 export function streamAgencyDirectTurn(input: AgencyDirectInput): Response {

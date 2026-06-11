@@ -42,7 +42,7 @@ type SettingsResponse = {
 };
 
 /**
- * Resolve the auto-assignment metadata for a agency. Resilient to the
+ * Resolve the auto-assignment metadata for an agency. Resilient to the
  * underlying columns not existing yet (pre-BP7a migration) — in that case we
  * fall back to disabled/manual with no cursor.
  */

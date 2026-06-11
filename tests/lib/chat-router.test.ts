@@ -36,7 +36,7 @@ describe('decideRoute', () => {
   it('routes action verbs to agent', () => {
     expect(decideRoute('Add Preston as a contact')).toBe('agent');
     expect(decideRoute('Send Preston the follow-up email')).toBe('agent');
-    expect(decideRoute('Schedule a appointment for tomorrow at 3pm')).toBe('agent');
+    expect(decideRoute('Schedule an appointment for tomorrow at 3pm')).toBe('agent');
     expect(decideRoute('Mark this deal as won.')).toBe('agent');
     expect(decideRoute('Draft a check-in message for Sarah')).toBe('agent');
     expect(decideRoute('Create a new deal for 123 Oak Ave')).toBe('agent');

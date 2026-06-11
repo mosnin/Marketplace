@@ -2,13 +2,13 @@
  * Google Calendar helpers — token refresh + event mutation primitives.
  *
  * Lives outside the gcal/ route handler so the appointment PATCH path can call
- * `deleteEvent` directly when a appointment is cancelled, instead of inlining a
+ * `deleteEvent` directly when an appointment is cancelled, instead of inlining a
  * second copy of the access-token-refresh dance. The route still owns
  * the OAuth flow (`?action=...`); this module owns the API verbs.
  *
  * Every function is best-effort from the caller's perspective: GCal
  * failures should never block the provider's primary action (cancelling
- * a appointment). The route's job is to update the DB; this module's job is to
+ * an appointment). The route's job is to update the DB; this module's job is to
  * make a respectable attempt at keeping GCal in sync, and to log
  * loudly enough that ops can chase orphans manually if needed.
  */

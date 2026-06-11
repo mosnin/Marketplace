@@ -88,7 +88,7 @@ export function ServiceDetailClient({ slug, initial, linkedDeals, linkedAppointm
   return (
     <div className="space-y-8">
       {/* ── Hero ────────────────────────────────────────────────────────
-          Full-width 16:9 photo. Real estate leads with the photo — the
+          Full-width 16:9 photo. Leads with the visual — the
           old 360px sidebar treatment hid it behind chrome. When no photo
           is on file: same aspect ratio, hairline border, calm muted copy
           (not a coloured block). */}

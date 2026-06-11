@@ -366,7 +366,7 @@ const TEMPLATES: Record<string, (p: Record<string, unknown>) => string | null> =
         ['New status', pickString(p, 'responseStatus', 'response', 'status')],
       ],
       action:
-        'If this is a appointment or client meeting, draft a warm confirm (if accepted) or a reschedule offer (if declined). Internal events can pass.',
+        'If this is an appointment or client meeting, draft a warm confirm (if accepted) or a reschedule offer (if declined). Internal events can pass.',
     }),
 
   GOOGLECALENDAR_EVENT_CANCELED_DELETED_TRIGGER: (p) =>
@@ -377,7 +377,7 @@ const TEMPLATES: Record<string, (p: Record<string, unknown>) => string | null> =
         ['Was', pickString(p, 'startTime', 'start', 'startDateTime')],
       ],
       action:
-        'If this was a appointment or client meeting, draft a follow-up acknowledging and offering to reschedule.',
+        'If this was an appointment or client meeting, draft a follow-up acknowledging and offering to reschedule.',
     }),
 
   GOOGLECALENDAR_EVENT_STARTING_SOON_TRIGGER: (p) => {

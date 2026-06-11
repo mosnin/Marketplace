@@ -1,4 +1,4 @@
-"""Appointment booking tool — agent creates a Appointment row + mirrors to the provider's
+"""Appointment booking tool — agent creates an Appointment row + mirrors to the provider's
 external calendar.
 
 The provider lives in Google Calendar (or Outlook); Koala doesn't own a
@@ -54,7 +54,7 @@ async def book_appointment(
     service_address: str | None = None,
     notes: str | None = None,
 ) -> dict[str, Any]:
-    """Book a appointment for a contact + mirror to the connected external calendar."""
+    """Book an appointment for a contact + mirror to the connected external calendar."""
     # starts_at: ISO 8601 (include tz; naive = UTC). duration_minutes: 5-240 (default 30).
     # Contact must have email on file. Through-writes to Google Calendar if connected.
     space_id = ctx.context.space_id

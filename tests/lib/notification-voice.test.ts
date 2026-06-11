@@ -36,7 +36,7 @@ describe('notification-voice — new lead', () => {
     });
   });
 
-  it('names a agency-intake lead with the source', () => {
+  it('names an agency-intake lead with the source', () => {
     expect(
       notificationForNewAgencyLead('Maya Rivera', { phone: '555-0100', email: null }),
     ).toEqual({
@@ -152,11 +152,11 @@ describe('notification-voice — follow-ups', () => {
 describe('notification-voice — waitlist + deals', () => {
   it('states the waitlist as a fact, not a complaint', () => {
     expect(notificationForWaitlist(1)).toEqual({
-      title: '1 person is still waiting for a appointment slot.',
+      title: '1 person is still waiting for an appointment slot.',
       description: 'Worth opening a window.',
     });
     expect(notificationForWaitlist(3)).toEqual({
-      title: '3 people are still waiting for a appointment slot.',
+      title: '3 people are still waiting for an appointment slot.',
       description: 'Worth opening a window.',
     });
   });
@@ -214,7 +214,7 @@ describe('notification-voice — agency events', () => {
     });
   });
 
-  it('frames a agency-side new deal as agent-named pipeline movement', () => {
+  it('frames an agency-side new deal as agent-named pipeline movement', () => {
     expect(notificationForAgencyDealCreated('41 Sunset', 'Alice')).toEqual({
       title: 'Alice added 41 Sunset to the pipeline.',
       description: '',

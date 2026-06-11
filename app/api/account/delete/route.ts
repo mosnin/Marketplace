@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'account not found.' }, { status: 404 });
   }
 
-  // Structural blockers (e.g. owning a agency → User delete is RESTRICTed).
+  // Structural blockers (e.g. owning an agency → User delete is RESTRICTed).
   const blocker = await checkDeletionBlockers(userRow.id);
   if (blocker) {
     return NextResponse.json({ error: blocker }, { status: 409 });

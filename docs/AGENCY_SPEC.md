@@ -7,7 +7,7 @@
 > under `/app/agency/*`, `/app/api/agency/*`, or the agency-scoped
 > migrations.
 
-A agency owner signs up; creates their Agency; invites providers; each
+An agency owner signs up; creates their Agency; invites providers; each
 provider gets a workspace ("Space") linked back to the agency. Leads route
 in via public application forms or manual agency-side entry and land in the
 right agent's workspace. Deals close, commissions land in a persistent
@@ -34,7 +34,7 @@ subsequent writers in separate commits. Search the file for `# Feature map`,
 - **AgencyMembership** — user ↔ agency join row carrying a `role`
   (schema.sql:239). Unique `(agencyId, userId)` so a given user holds at
   most one role per agency (schema.sql:246).
-- **Space** — the per-agent workspace. Linked back to a agency via the
+- **Space** — the per-agent workspace. Linked back to an agency via the
   nullable `Space.agencyId` column (schema.sql:54), `ON DELETE SET NULL`
   so un-agencying never cascades.
 - **Invitation** — token-based invite row with a 7-day default TTL
@@ -66,7 +66,7 @@ follow-up, 4e3fc5e) because they use `auth()` directly instead of going
 through `requireAuth`.
 
 **Dual-auth pattern.** `POST /api/agency/reviews/[id]/comments` accepts
-EITHER a agency member OR the requesting agent (`review.requestingUserId
+EITHER an agency member OR the requesting agent (`review.requestingUserId
 === dbUser.id`). That's the path that lets the provider post comments on
 their own flagged-for-review deal.
 
@@ -464,7 +464,7 @@ the BP1 audit flagged exactly that pattern.
 **Metadata hygiene.** Treat `metadata` as user-visible. The
 `/agency/activity` UI expands the full JSON on row-click (see
 `activity-client.tsx`). Do NOT log tokens, password-reset values, raw
-email bodies, Stripe secrets, or anything else a agency reading the
+email bodies, Stripe secrets, or anything else an agency reading the
 log shouldn't see. A grep-based CI guard would catch most leaks; it
 doesn't exist yet (§7).
 

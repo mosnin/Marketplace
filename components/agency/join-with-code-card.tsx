@@ -58,7 +58,7 @@ export function JoinWithCodeCard() {
             <Hash size={15} className="text-foreground/70" />
           </div>
           <div>
-            <p className="text-sm font-semibold">Join a agency</p>
+            <p className="text-sm font-semibold">Join an agency</p>
             <p className="text-xs text-muted-foreground">Enter an invite code from your agency</p>
           </div>
         </div>

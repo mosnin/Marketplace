@@ -1,5 +1,5 @@
 /**
- * DELETE /api/agency/integrations/[id] — disconnect (revoke) a agency-level
+ * DELETE /api/agency/integrations/[id] — disconnect (revoke) an agency-level
  * connection.
  *
  * TIERED: gated via requireAgency() (owner/admin only) AND ownership-scoped —

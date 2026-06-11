@@ -165,7 +165,7 @@ function buildColumns(
     });
   }
 
-  // Drop empty columns — a agency pipeline with all-empty columns is noise.
+  // Drop empty columns — an agency pipeline with all-empty columns is noise.
   return result.filter((c) => c.deals.length > 0);
 }
 

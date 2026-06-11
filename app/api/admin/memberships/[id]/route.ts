@@ -9,7 +9,7 @@ type Params = { params: Promise<{ id: string }> };
 
 /**
  * DELETE /api/admin/memberships/[id]
- * Remove a agency membership and unlink the user's space from the agency.
+ * Remove an agency membership and unlink the user's space from the agency.
  */
 export async function DELETE(_req: Request, { params }: Params) {
   let admin: Awaited<ReturnType<typeof requirePlatformAdmin>>;

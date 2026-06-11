@@ -859,7 +859,7 @@ export function ProfileEditor({ slug }: { slug: string }) {
                 id="showAppointments"
                 checked={showAppointments}
                 onChange={setShowAppointments}
-                label="Book a appointment"
+                label="Book an appointment"
                 help="A link to your appointment-booking page."
               />
               <ToggleRow

@@ -106,7 +106,7 @@ export const analyzeProviderTool = defineTool<typeof parameters, AnalyzeProvider
       .eq('userId', args.providerUserId)
       .maybeSingle();
     if (!providerMembership) {
-      return { summary: 'That user is not a agency member.', display: 'error' };
+      return { summary: 'That user is not an agency member.', display: 'error' };
     }
     if (!callerAgencyIds.has((providerMembership as { agencyId: string }).agencyId)) {
       return { summary: 'Agency access required for that provider.', display: 'error' };

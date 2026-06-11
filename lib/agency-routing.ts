@@ -1,7 +1,7 @@
 /**
  * Agency lead-routing engine (BP7b + BP7d rules layer).
  *
- * Given a agencyId (and optionally the inbound lead's leadType /
+ * Given an agencyId (and optionally the inbound lead's leadType /
  * budget / tags) decide which provider_member should receive the next
  * inbound lead. Routing is configured on the Agency row:
  *
@@ -15,7 +15,7 @@
  * the matched rule's destination is ineligible, fall through to the
  * next rule / eventually the assignmentMethod fallback.
  *
- * An "eligible agent" is a AgencyMembership with role='provider_member'
+ * An "eligible agent" is an AgencyMembership with role='provider_member'
  * whose User.status is NOT 'offboarded' (treated as active) AND whose
  * Space row (ownerId = user.id, agencyId = this agency) exists.
  *
@@ -209,7 +209,7 @@ function ruleMatches(rule: DealRoutingRuleRow, lead: RoutingLeadInput): boolean 
 }
 
 /**
- * Enumerate eligible provider_member agents for a agency. An agent is
+ * Enumerate eligible provider_member agents for an agency. An agent is
  * eligible when:
  *   - role === 'provider_member'
  *   - User exists AND User.status !== 'offboarded' (missing status column

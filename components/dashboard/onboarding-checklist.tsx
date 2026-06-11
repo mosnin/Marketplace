@@ -79,7 +79,7 @@ export function OnboardingChecklist({ slug, hasLeads, hasContacts, hasAppointmen
     },
     {
       id: 'first-appointment',
-      label: 'Schedule a appointment',
+      label: 'Schedule an appointment',
       description: 'Book a service showing with a prospect',
       href: `${base}/calendar`,
       icon: CalendarDays,

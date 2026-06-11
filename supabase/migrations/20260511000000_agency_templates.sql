@@ -9,7 +9,7 @@
 -- space for the same owner would silently share the same blob), no way to
 -- track template versions, and no way to record that a template has been
 -- published out to agents' personal MessageTemplate rows. It also couldn't
--- survive renaming the Note or a agency accidentally editing the JSON by hand.
+-- survive renaming the Note or an agency accidentally editing the JSON by hand.
 --
 -- This migration introduces a proper `AgencyTemplate` table keyed on
 -- Agency(id), adds provenance columns (sourceTemplateId, sourceVersion) to
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS "AgencyTemplate" (
 
 -- 2. Provenance on MessageTemplate -----------------------------------------
 --    sourceTemplateId: which AgencyTemplate this agent-local row came from
---                      (NULL = agent-authored, never pushed from a agency).
+--                      (NULL = agent-authored, never pushed from an agency).
 --    sourceVersion:    the AgencyTemplate.version at the time of the last
 --                      push to this agent. NULL means the agent has edited
 --                      locally since the last push (or it was never pushed).
@@ -102,7 +102,7 @@ BEGIN
     JOIN "Space" s ON s.id = n."spaceId"
     WHERE n.title = '[AGENCY_TEMPLATES]'
   LOOP
-    -- Skip notes whose owning space isn't attached to a agency.
+    -- Skip notes whose owning space isn't attached to an agency.
     IF note_rec.agency_id IS NULL THEN
       RAISE NOTICE 'Skipping legacy [AGENCY_TEMPLATES] note % (space % has no agencyId)',
         note_rec.note_id, note_rec."spaceId";

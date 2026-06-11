@@ -207,7 +207,7 @@ describe('GET /api/integrations', () => {
   });
 
   it('reads connections scoped to the caller\'s space, not the userId', async () => {
-    // Privilege boundary: a provider on a agency seat has a space.id;
+    // Privilege boundary: a provider on an agency seat has a space.id;
     // the listConnections helper filters by spaceId. If the route
     // accidentally passed userId or "all rows", the agency would
     // see another agent's connections.

@@ -200,7 +200,7 @@
     },
     {
       "id": "calendar-schedule",
-      "prompt": "Schedule a appointment for Jane at 412 Elm Friday at 2pm",
+      "prompt": "Schedule an appointment for Jane at 412 Elm Friday at 2pm",
       "context": {"connected_toolkits": []},
       "expected": {
         "tool_calls_must_include": ["book_appointment"],

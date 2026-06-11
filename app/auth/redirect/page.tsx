@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
  *
  * Called after Clerk sign-in from either login page.
  *
- * - intent=agency  → if the user is a agency_owner or agency_admin, go to /agency
+ * - intent=agency  → if the user is an agency_owner or agency_admin, go to /agency
  *                    otherwise fall back to the provider flow
  * - intent=provider → go to the user's workspace, or /setup if none yet
  * - no intent      → same as provider
@@ -32,7 +32,7 @@ export default async function AuthRedirectPage({
   if (!user) {
     // New user — check if they have a pending invitation before sending to setup.
     // This handles the case where Clerk's forceRedirectUrl didn't work and the
-    // user ended up here after signing up for a agency invitation.
+    // user ended up here after signing up for an agency invitation.
     try {
       const clerkUser = await currentUser();
       const email = clerkUser?.emailAddresses?.[0]?.emailAddress?.trim().toLowerCase();

@@ -6,7 +6,7 @@
  * Phase 1 spec):
  *
  *   1. ROUTE GUARD   — `app/agency/koala/page.tsx` server component
- *                      redirects when the caller isn't a agency.
+ *                      redirects when the caller isn't an agency.
  *   2. API GATE      — this module. `app/api/ai/agency-task/route.ts` calls
  *                      `resolveAgencyContext()` before forwarding to Modal.
  *                      A provider_member trying to hit the agency chat —
@@ -14,7 +14,7 @@
  *                      receives a 403 right here.
  *   3. TOOL-RUNTIME  — `agent/tools/agency/_guards.py:require_agency_role`
  *                      refuses tool execution unless AgentContext carries
- *                      a agency role. Phase 2/3 tools wrap every handler
+ *                      an agency role. Phase 2/3 tools wrap every handler
  *                      body with that check.
  *
  * Layer 2 lives in its own module (not as ad-hoc code inside the route) so
@@ -29,7 +29,7 @@ import type { Agency, AgencyMembership } from '@/lib/types';
 /**
  * Roles allowed to use the agency chat surface.
  *
- * `provider_member` is excluded by design — a provider inside a agency
+ * `provider_member` is excluded by design — a provider inside an agency
  * already has their own Koala at `/s/<slug>/koala`. The agency chat is
  * the chief-of-staff variant, scoped to agency-wide operations, and
  * provider_members do not run those operations.
@@ -49,13 +49,13 @@ export interface AgencyAgentContext {
 }
 
 /**
- * Resolve the calling Clerk user to a agency-admin-or-owner context, or
- * `null` if they are not a agency.
+ * Resolve the calling Clerk user to an agency-admin-or-owner context, or
+ * `null` if they are not an agency.
  *
  * Returns `null` when:
  *   - The user is not signed in (no Clerk session).
  *   - The user has no `AgencyMembership` of any kind.
- *   - The user IS a agency member but only as `provider_member` — the
+ *   - The user IS an agency member but only as `provider_member` — the
  *     agency chat surface is not theirs.
  *   - The user's `User.status` is `offboarded` (handled inside
  *     `getAgencyMemberContext` already, propagated through the null).

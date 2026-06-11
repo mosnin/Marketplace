@@ -1,5 +1,5 @@
 /**
- * `cancel_appointment` — flip a Appointment to status='cancelled'.
+ * `cancel_appointment` — flip an Appointment to status='cancelled'.
  *
  * Approval-gated: a cancelled appointment drops off the calendar feed and
  * triggers (via cron) the cancel email — worth the provider confirming.
@@ -17,7 +17,7 @@ const parameters = z
     appointmentId: z.string().min(1).describe('The Appointment.id to cancel.'),
     reason: z.string().min(1).max(500).describe('Why the appointment is being cancelled (logged on the contact activity feed).'),
   })
-  .describe('Cancel a appointment and log the reason.');
+  .describe('Cancel an appointment and log the reason.');
 
 interface CancelAppointmentResult {
   appointmentId: string;
@@ -28,7 +28,7 @@ export const cancelAppointmentTool = defineTool<typeof parameters, CancelAppoint
   name: 'cancel_appointment',
   riskLevel: 'destructive',
   description:
-    'Cancel a appointment. Records the reason on the linked contact. Prompts for approval first.',
+    'Cancel an appointment. Records the reason on the linked contact. Prompts for approval first.',
   parameters,
   requiresApproval: true,
   rateLimit: { max: 60, windowSeconds: 3600 },

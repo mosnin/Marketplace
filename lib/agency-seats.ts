@@ -1,7 +1,7 @@
 /**
  * Agency seat-limit helpers (BP3b).
  *
- * "Seats in use" for a agency is defined as:
+ * "Seats in use" for an agency is defined as:
  *   members (rows in AgencyMembership)
  *   + pending, non-expired invitations (Invitation.status='pending' AND expiresAt > now())
  *
@@ -44,7 +44,7 @@ function isValidPlan(value: unknown): value is AgencyPlan {
 }
 
 /**
- * Load plan + seatLimit for a agency with pre-migration resilience.
+ * Load plan + seatLimit for an agency with pre-migration resilience.
  * If the columns don't exist yet (BP3a hasn't run), fall back to starter/5 —
  * never fall back to "unlimited" because that would silently disable the cap.
  */
@@ -85,7 +85,7 @@ async function loadPlan(
 }
 
 /**
- * Count AgencyMembership rows for a agency.
+ * Count AgencyMembership rows for an agency.
  * Returns null on error so the caller can decide to fail-open.
  */
 async function countMembers(agencyId: string): Promise<number | null> {
@@ -102,7 +102,7 @@ async function countMembers(agencyId: string): Promise<number | null> {
 }
 
 /**
- * Count pending, non-expired invitations for a agency.
+ * Count pending, non-expired invitations for an agency.
  * Returns null on error so the caller can decide to fail-open.
  */
 async function countPendingInvites(agencyId: string): Promise<number | null> {
@@ -121,7 +121,7 @@ async function countPendingInvites(agencyId: string): Promise<number | null> {
 }
 
 /**
- * Resolve current seat usage (plan + members + pending invites) for a agency.
+ * Resolve current seat usage (plan + members + pending invites) for an agency.
  * On infra error, counts fall back to 0 so the caller sees a "clean slate"
  * rather than a phantom overage — checkSeatCapacity() is the surface that
  * enforces fail-open semantics.
@@ -146,7 +146,7 @@ export async function getSeatUsage(agencyId: string): Promise<SeatUsage> {
 }
 
 /**
- * Check whether `additional` new seats can be added to a agency.
+ * Check whether `additional` new seats can be added to an agency.
  *
  * Rules:
  *  - seatLimit === null → always ok (enterprise / unlimited).

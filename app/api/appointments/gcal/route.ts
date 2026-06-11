@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ connected: true });
   }
 
-  // Handle syncing a appointment to Google Calendar
+  // Handle syncing an appointment to Google Calendar
   if (action === 'sync_appointment') {
     const { appointmentId } = body;
     if (!appointmentId) return NextResponse.json({ error: 'appointmentId required' }, { status: 400 });

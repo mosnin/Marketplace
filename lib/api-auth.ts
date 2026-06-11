@@ -18,7 +18,7 @@ import type { Space } from '@/lib/types';
  *
  * Agency offboarding status gate: after Clerk auth succeeds we look up the
  * User row and reject with 403 if `status === 'offboarded'`. Offboarding is a
- * hard-stop initiated by a agency_owner/agency_admin when an agent leaves the
+ * hard-stop initiated by an agency_owner/agency_admin when an agent leaves the
  * agency; their book of business has been reassigned and they must lose API
  * access immediately, even though their Clerk session may still be valid. This
  * is the single choke-point for API auth, so enforcing it here blocks every
@@ -124,7 +124,7 @@ export async function requireSpaceOwner(
     .maybeSingle();
 
   if (dbUser) {
-    // Check if the space belongs to a agency the user is admin/owner of.
+    // Check if the space belongs to an agency the user is admin/owner of.
     // Fetch ALL agency-level memberships rather than .maybeSingle() — a user
     // who owns/admins more than one agency would otherwise make
     // .maybeSingle() throw (PostgREST errors on >1 row), 500ing a legitimate
@@ -140,7 +140,7 @@ export async function requireSpaceOwner(
     // The caller may agency-own/admin MORE THAN ONE agency. Grant access
     // when the space's owner belongs to ANY of them. The previous code collapsed
     // the memberships to a single one (agency_owner-first) and checked only that
-    // agency, so e.g. a agency_owner of A who is also agency_admin of B was
+    // agency, so e.g. an agency_owner of A who is also agency_admin of B was
     // wrongly 403'd when opening a space owned by a B member.
     const agencyAgencyIds = (memberships ?? []).map((m) => m.agencyId);
 
