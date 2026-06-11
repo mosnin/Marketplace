@@ -10,8 +10,8 @@ export const runtime = 'nodejs';
 const MAX_BODY = 2000;
 
 /**
- * GET /api/contacts/[id]/client-messages — realtor reads the client-portal
- * thread for one of their contacts. Marks client → realtor messages read.
+ * GET /api/contacts/[id]/client-messages — provider reads the client-portal
+ * thread for one of their contacts. Marks client → provider messages read.
  */
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: contactId } = await params;
@@ -35,8 +35,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 }
 
 /**
- * POST /api/contacts/[id]/client-messages — realtor replies (senderType
- * 'realtor'). Notifies the client by their contact email (best-effort).
+ * POST /api/contacts/[id]/client-messages — provider replies (senderType
+ * 'provider'). Notifies the client by their contact email (best-effort).
  */
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: contactId } = await params;
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   const { data: inserted, error } = await supabase
     .from('ClientMessage')
-    .insert({ contactId, spaceId: space.id, senderType: 'realtor', body: text })
+    .insert({ contactId, spaceId: space.id, senderType: 'provider', body: text })
     .select('id, senderType, body, createdAt')
     .single();
   if (error) {

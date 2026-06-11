@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const q = (req.nextUrl.searchParams.get('q') ?? '').trim();
 
   if (!slug) return NextResponse.json({ error: 'slug required' }, { status: 400 });
-  if (!q || q.length < 2) return NextResponse.json({ contacts: [], deals: [], tours: [] });
+  if (!q || q.length < 2) return NextResponse.json({ contacts: [], deals: [], appointments: [] });
 
   try {
     const auth = await requireSpaceOwner(slug);
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const escaped = q.slice(0, 100).replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
     // Strip characters that break PostgREST filter syntax (commas, parens, colons, dots as operators)
     const sanitized = escaped.replace(/[,()\.:;'"]/g, '');
-    if (!sanitized.trim()) return NextResponse.json({ contacts: [], deals: [], tours: [] });
+    if (!sanitized.trim()) return NextResponse.json({ contacts: [], deals: [], appointments: [] });
     const term = `%${sanitized}%`;
 
     // Run each query independently so one failure doesn't block the others
@@ -40,22 +40,22 @@ export async function GET(req: NextRequest) {
       .or(`title.ilike.${term},address.ilike.${term}`)
       .limit(8));
 
-    const toursPromise = safeQuery('tours', supabase
-      .from('Tour')
-      .select('id, guestName, guestEmail, propertyAddress, startsAt, status')
+    const appointmentsPromise = safeQuery('appointments', supabase
+      .from('Appointment')
+      .select('id, guestName, guestEmail, serviceAddress, startsAt, status')
       .eq('spaceId', space.id)
-      .or(`guestName.ilike.${term},guestEmail.ilike.${term},propertyAddress.ilike.${term}`)
+      .or(`guestName.ilike.${term},guestEmail.ilike.${term},serviceAddress.ilike.${term}`)
       .limit(8));
 
-    const [contactsResult, dealsResult, toursResult] = await Promise.all([
+    const [contactsResult, dealsResult, appointmentsResult] = await Promise.all([
       contactsPromise,
       dealsPromise,
-      toursPromise,
+      appointmentsPromise,
     ]);
 
     if (contactsResult.error) console.error('[search] contacts error:', contactsResult.error);
     if (dealsResult.error) console.error('[search] deals error:', dealsResult.error);
-    if (toursResult.error) console.error('[search] tours error:', toursResult.error);
+    if (appointmentsResult.error) console.error('[search] appointments error:', appointmentsResult.error);
 
     const contacts = (contactsResult.data ?? []).map((c: any) => ({
       id: c.id,
@@ -90,18 +90,18 @@ export async function GET(req: NextRequest) {
       stage: stageMap[d.stageId] ?? null,
     }));
 
-    const tours = (toursResult.data ?? []).map((t: any) => ({
+    const appointments = (appointmentsResult.data ?? []).map((t: any) => ({
       id: t.id,
       guestName: t.guestName,
       guestEmail: t.guestEmail ?? null,
-      propertyAddress: t.propertyAddress ?? null,
+      serviceAddress: t.serviceAddress ?? null,
       startsAt: t.startsAt,
       status: t.status ?? 'scheduled',
     }));
 
-    return NextResponse.json({ contacts, deals, tours });
+    return NextResponse.json({ contacts, deals, appointments });
   } catch (err) {
     console.error('[search] unexpected error:', err);
-    return NextResponse.json({ contacts: [], deals: [], tours: [], error: 'Search failed' }, { status: 500 });
+    return NextResponse.json({ contacts: [], deals: [], appointments: [], error: 'Search failed' }, { status: 500 });
   }
 }

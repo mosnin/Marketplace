@@ -2,13 +2,13 @@ import { describe, it, expect } from 'vitest';
 import {
   notificationForNewLead,
   notificationForNewLeadsCount,
-  notificationForNewBrokerageLead,
+  notificationForNewAgencyLead,
   notificationForLeadScoredHot,
   notificationForLeadScored,
-  notificationForNewTour,
-  notificationForUpcomingTour,
-  notificationForTourStatus,
-  notificationForToursNeedingFollowUp,
+  notificationForNewAppointment,
+  notificationForUpcomingAppointment,
+  notificationForAppointmentStatus,
+  notificationForAppointmentsNeedingFollowUp,
   notificationForFollowUpDue,
   notificationForWaitlist,
   notificationForNewDeal,
@@ -17,7 +17,7 @@ import {
   notificationForMemberRemoved,
   notificationForReviewRequested,
   notificationForDealWon,
-  notificationForBrokerageDealCreated,
+  notificationForAgencyDealCreated,
 } from '@/lib/notification-voice';
 
 describe('notification-voice — new lead', () => {
@@ -36,11 +36,11 @@ describe('notification-voice — new lead', () => {
     });
   });
 
-  it('names a brokerage-intake lead with the source', () => {
+  it('names an agency-intake lead with the source', () => {
     expect(
-      notificationForNewBrokerageLead('Maya Rivera', { phone: '555-0100', email: null }),
+      notificationForNewAgencyLead('Maya Rivera', { phone: '555-0100', email: null }),
     ).toEqual({
-      title: 'Maya Rivera just applied through brokerage intake.',
+      title: 'Maya Rivera just applied through agency intake.',
       description: '555-0100',
     });
   });
@@ -61,63 +61,63 @@ describe('notification-voice — lead scoring', () => {
   });
 });
 
-describe('notification-voice — tours', () => {
-  it('puts a new tour on the calendar with the property', () => {
-    expect(notificationForNewTour('Sam Chen', '412 Elm')).toBe(
-      'On the calendar — tour with Sam Chen at 412 Elm.',
+describe('notification-voice — appointments', () => {
+  it('puts a new appointment on the calendar with the service', () => {
+    expect(notificationForNewAppointment('Sam Chen', '412 Elm')).toBe(
+      'On the calendar — appointment with Sam Chen at 412 Elm.',
     );
   });
 
-  it('drops the property gracefully when none is provided', () => {
-    expect(notificationForNewTour('Sam Chen', null)).toBe(
-      'On the calendar — tour with Sam Chen.',
+  it('drops the service gracefully when none is provided', () => {
+    expect(notificationForNewAppointment('Sam Chen', null)).toBe(
+      'On the calendar — appointment with Sam Chen.',
     );
   });
 
-  it('names upcoming tours with day + time + property', () => {
+  it('names upcoming appointments with day + time + service', () => {
     const now = new Date('2026-05-01T08:00:00');
     const tomorrowAt2 = new Date('2026-05-02T14:00:00');
-    expect(notificationForUpcomingTour('Jane Chen', tomorrowAt2, '412 Elm', now)).toEqual({
-      title: 'Tour with Jane Chen tomorrow at 2pm.',
+    expect(notificationForUpcomingAppointment('Jane Chen', tomorrowAt2, '412 Elm', now)).toEqual({
+      title: 'Appointment with Jane Chen tomorrow at 2pm.',
       description: '412 Elm',
     });
   });
 
-  it('drops the description filler when the property is missing', () => {
+  it('drops the description filler when the service is missing', () => {
     const now = new Date('2026-05-01T08:00:00');
     const tomorrowAt2 = new Date('2026-05-02T14:00:00');
-    expect(notificationForUpcomingTour('Jane Chen', tomorrowAt2, null, now)).toEqual({
-      title: 'Tour with Jane Chen tomorrow at 2pm.',
+    expect(notificationForUpcomingAppointment('Jane Chen', tomorrowAt2, null, now)).toEqual({
+      title: 'Appointment with Jane Chen tomorrow at 2pm.',
       description: '',
     });
   });
 
-  it('past-tenses tour status changes with the right verb per status', () => {
-    expect(notificationForTourStatus('Sam Chen', 'confirmed', '412 Elm')).toEqual({
-      title: "Sam Chen's tour is confirmed.",
+  it('past-tenses appointment status changes with the right verb per status', () => {
+    expect(notificationForAppointmentStatus('Sam Chen', 'confirmed', '412 Elm')).toEqual({
+      title: "Sam Chen's appointment is confirmed.",
       description: '412 Elm',
     });
-    expect(notificationForTourStatus('Sam Chen', 'completed', null)).toEqual({
-      title: "Sam Chen's tour wrapped.",
+    expect(notificationForAppointmentStatus('Sam Chen', 'completed', null)).toEqual({
+      title: "Sam Chen's appointment wrapped.",
       description: '',
     });
-    expect(notificationForTourStatus('Sam Chen', 'cancelled', null)).toEqual({
-      title: "Sam Chen's tour fell through.",
+    expect(notificationForAppointmentStatus('Sam Chen', 'cancelled', null)).toEqual({
+      title: "Sam Chen's appointment fell through.",
       description: '',
     });
-    expect(notificationForTourStatus('Sam Chen', 'no_show', null)).toEqual({
-      title: "Sam Chen's tour was a no-show.",
+    expect(notificationForAppointmentStatus('Sam Chen', 'no_show', null)).toEqual({
+      title: "Sam Chen's appointment was a no-show.",
       description: '',
     });
   });
 
-  it('flags wrapped-but-no-deal tours as worth a check', () => {
-    expect(notificationForToursNeedingFollowUp(1)).toEqual({
-      title: '1 tour wrapped without a deal.',
+  it('flags wrapped-but-no-deal appointments as worth a check', () => {
+    expect(notificationForAppointmentsNeedingFollowUp(1)).toEqual({
+      title: '1 appointment wrapped without a deal.',
       description: 'Worth a check.',
     });
-    expect(notificationForToursNeedingFollowUp(3)).toEqual({
-      title: '3 tours wrapped without a deal.',
+    expect(notificationForAppointmentsNeedingFollowUp(3)).toEqual({
+      title: '3 appointments wrapped without a deal.',
       description: 'Worth a check.',
     });
   });
@@ -152,11 +152,11 @@ describe('notification-voice — follow-ups', () => {
 describe('notification-voice — waitlist + deals', () => {
   it('states the waitlist as a fact, not a complaint', () => {
     expect(notificationForWaitlist(1)).toEqual({
-      title: '1 person is still waiting for a tour slot.',
+      title: '1 person is still waiting for an appointment slot.',
       description: 'Worth opening a window.',
     });
     expect(notificationForWaitlist(3)).toEqual({
-      title: '3 people are still waiting for a tour slot.',
+      title: '3 people are still waiting for an appointment slot.',
       description: 'Worth opening a window.',
     });
   });
@@ -175,14 +175,14 @@ describe('notification-voice — waitlist + deals', () => {
   });
 });
 
-describe('notification-voice — brokerage events', () => {
+describe('notification-voice — agency events', () => {
   it('uses "joined" for join-code, "accepted the invitation" for email', () => {
-    expect(notificationForMemberJoined('alice@x.com', 'realtor_member', 'join_code')).toEqual({
-      title: 'alice@x.com joined the brokerage.',
-      description: 'Realtor',
+    expect(notificationForMemberJoined('alice@x.com', 'provider_member', 'join_code')).toEqual({
+      title: 'alice@x.com joined the agency.',
+      description: 'Provider',
     });
     expect(
-      notificationForMemberJoined('alice@x.com', 'broker_admin', 'email_invitation'),
+      notificationForMemberJoined('alice@x.com', 'agency_admin', 'email_invitation'),
     ).toEqual({
       title: 'alice@x.com accepted the invitation.',
       description: 'Admin',
@@ -214,12 +214,12 @@ describe('notification-voice — brokerage events', () => {
     });
   });
 
-  it('frames a brokerage-side new deal as agent-named pipeline movement', () => {
-    expect(notificationForBrokerageDealCreated('41 Sunset', 'Alice')).toEqual({
+  it('frames an agency-side new deal as agent-named pipeline movement', () => {
+    expect(notificationForAgencyDealCreated('41 Sunset', 'Alice')).toEqual({
       title: 'Alice added 41 Sunset to the pipeline.',
       description: '',
     });
-    expect(notificationForBrokerageDealCreated('41 Sunset', null)).toEqual({
+    expect(notificationForAgencyDealCreated('41 Sunset', null)).toEqual({
       title: '41 Sunset hit the pipeline.',
       description: '',
     });
@@ -234,22 +234,22 @@ describe('notification-voice — voice constraints (regression suite)', () => {
     notificationForNewLeadsCount(1).title,
     notificationForNewLeadsCount(1).description,
     notificationForNewLeadsCount(4).title,
-    notificationForNewBrokerageLead('Maya', { phone: '555', email: null }).title,
+    notificationForNewAgencyLead('Maya', { phone: '555', email: null }).title,
     notificationForLeadScoredHot('Sam'),
     notificationForLeadScored('Sam', 'WARM', 62).title,
-    notificationForNewTour('Sam', '412 Elm'),
-    notificationForNewTour('Sam', null),
-    notificationForUpcomingTour(
+    notificationForNewAppointment('Sam', '412 Elm'),
+    notificationForNewAppointment('Sam', null),
+    notificationForUpcomingAppointment(
       'Jane',
       new Date('2026-05-02T14:00:00'),
       '412 Elm',
       new Date('2026-05-01T08:00:00'),
     ).title,
-    notificationForTourStatus('Sam', 'confirmed', null).title,
-    notificationForTourStatus('Sam', 'completed', null).title,
-    notificationForTourStatus('Sam', 'cancelled', null).title,
-    notificationForTourStatus('Sam', 'no_show', null).title,
-    notificationForToursNeedingFollowUp(1).title,
+    notificationForAppointmentStatus('Sam', 'confirmed', null).title,
+    notificationForAppointmentStatus('Sam', 'completed', null).title,
+    notificationForAppointmentStatus('Sam', 'cancelled', null).title,
+    notificationForAppointmentStatus('Sam', 'no_show', null).title,
+    notificationForAppointmentsNeedingFollowUp(1).title,
     notificationForFollowUpDue(
       'Maya',
       new Date('2026-05-01T09:00:00'),
@@ -258,11 +258,11 @@ describe('notification-voice — voice constraints (regression suite)', () => {
     notificationForWaitlist(3).title,
     notificationForNewDeal('41 Sunset', null),
     notificationForDealStageMove('41 Sunset', 'Closing'),
-    notificationForMemberJoined('a@x.com', 'realtor_member', 'join_code').title,
+    notificationForMemberJoined('a@x.com', 'provider_member', 'join_code').title,
     notificationForMemberRemoved('a@x.com').title,
     notificationForReviewRequested('Alice', 'Smith', 'reason').title,
     notificationForDealWon('41 Sunset', 'Alice').title,
-    notificationForBrokerageDealCreated('41 Sunset', 'Alice').title,
+    notificationForAgencyDealCreated('41 Sunset', 'Alice').title,
   ];
 
   it('has no exclamation marks anywhere', () => {

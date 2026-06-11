@@ -1,8 +1,8 @@
 /**
- * `/pricing` — Chippi V2 three-layer pricing.
+ * `/pricing` — Koala V2 three-layer pricing.
  *
  * Layer 1: platform tiers for individuals (Free / Solo / Pro Performer) and
- * teams (Team / Team Plus). Layer 2: brokerage expansion (auto-expanding
+ * teams (Team / Team Plus). Layer 2: agency expansion (auto-expanding
  * per-agent pricing). Premium AI workflows draw from a monthly credit balance.
  *
  * Numbers come from `lib/plans` so the marketing page can't drift from the
@@ -16,9 +16,9 @@ import { MarketingCTA } from '@/components/marketing/marketing-cta';
 import { TITLE_FONT, PRIMARY_PILL } from '@/lib/typography';
 import { PLANS, WORKFLOW_CREDIT_COST, TOPUPS } from '@/lib/plans';
 
-export const metadata = { title: 'Pricing · Chippi' };
+export const metadata = { title: 'Pricing · Koala' };
 
-const SIGNUP = '/login/realtor?intent=signup';
+const SIGNUP = '/login/provider?intent=signup';
 
 type Card = {
   id: keyof typeof PLANS;
@@ -31,20 +31,20 @@ type Card = {
 // plans start with a 7-day Stripe trial (card collected at checkout, charged
 // when the trial ends). PLANS.free remains an internal fallback state only.
 const INDIVIDUAL: Card[] = [
-  { id: 'solo', blurb: 'Organize your pipeline and start using AI workflows.', cta: { label: 'Start Solo', href: SIGNUP } },
-  { id: 'pro', blurb: 'Full daily AI workflow for serious lead volume.', cta: { label: 'Start Pro', href: SIGNUP }, featured: true },
+  { id: 'solo', blurb: 'Organize your bookings and start using AI workflows.', cta: { label: 'Start Solo', href: SIGNUP } },
+  { id: 'pro', blurb: 'Full daily AI workflow for serious client volume.', cta: { label: 'Start Pro', href: SIGNUP }, featured: true },
 ];
 
 const TEAM: Card[] = [
   { id: 'team', blurb: 'Shared command center for scoring, routing, accountability.', cta: { label: 'Start a team', href: '/demo' } },
-  { id: 'team_plus', blurb: 'Brokerage-level workflow without enterprise complexity.', cta: { label: 'Talk to sales', href: '/demo' } },
+  { id: 'team_plus', blurb: 'Agency-level workflow without enterprise complexity.', cta: { label: 'Talk to sales', href: '/demo' } },
 ];
 
 const EXPANSION: { range: string; mo: number; yr: number }[] = [
-  { range: '10–24 agents', mo: 69, yr: 56 },
-  { range: '25–49 agents', mo: 59, yr: 48 },
-  { range: '50–99 agents', mo: 49, yr: 40 },
-  { range: '100–199 agents', mo: 39, yr: 32 },
+  { range: '10–24 providers', mo: 69, yr: 56 },
+  { range: '25–49 providers', mo: 59, yr: 48 },
+  { range: '50–99 providers', mo: 49, yr: 40 },
+  { range: '100–199 providers', mo: 39, yr: 32 },
 ];
 
 // Premium workflows shown on the pricing table. `chat_turn` is intentionally
@@ -54,7 +54,7 @@ const WORKFLOW_LABELS: Partial<Record<keyof typeof WORKFLOW_CREDIT_COST, string>
   pipeline_audit: 'Full pipeline audit',
   followup_sequence: 'Follow-up sequence',
   lead_qualification: 'Lead qualification run',
-  tour_booking: 'Tour booking workflow',
+  appointment_booking: 'Appointment booking workflow',
   daily_briefing: 'Daily AI briefing',
   call_prep: 'Call prep',
   lead_score: 'Lead score update',
@@ -70,8 +70,8 @@ const FAQ: { q: string; a: string }[] = [
     a: 'Buy a one-time top-up anytime, or upgrade your plan for a larger monthly allocation and a better rate. Your workspace never locks — only the premium AI workflows pause.',
   },
   {
-    q: 'How does brokerage pricing work?',
-    a: 'Add an agent and billing updates automatically — the per-agent price drops as the team grows. No tier jumping, no calls to sales until you want them.',
+    q: 'How does agency pricing work?',
+    a: 'Add a provider and billing updates automatically — the per-provider price drops as the team grows. No tier jumping, no calls to sales until you want them.',
   },
 ];
 
@@ -120,7 +120,7 @@ export default function PricingPage() {
       <MarketingHero
         eyebrow="PRICING"
         title="Pricing that scales with your team."
-        sub="Every plan starts with a 7-day free trial — card collected at checkout. Premium AI workflows draw from a monthly credit balance, and brokerage pricing expands automatically as you add agents."
+        sub="Every plan starts with a 7-day free trial — card collected at checkout. Premium AI workflows draw from a monthly credit balance, and agency pricing expands automatically as you add agents."
         primaryCta={{ label: 'Start free trial', href: SIGNUP }}
         secondaryCta={{ label: 'Talk to sales for teams', href: '/demo' }}
       />
@@ -129,7 +129,7 @@ export default function PricingPage() {
       <section className="relative pb-16 md:pb-24">
         <div className="mx-auto max-w-4xl px-6 md:px-8">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            For individual agents
+            For individual providers
           </p>
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             {INDIVIDUAL.map((c) => (
@@ -153,22 +153,22 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Brokerage expansion */}
+      {/* Agency expansion */}
       <section className="relative pb-16 md:pb-24">
         <div className="mx-auto max-w-3xl px-6 md:px-8">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            Brokerage expansion
+            Agency expansion
           </p>
           <h2 style={TITLE_FONT} className="mt-3 text-[28px] md:text-[36px] tracking-[-0.02em] text-foreground">
-            Add an agent. Billing updates automatically.
+            Add a provider. Billing updates automatically.
           </h2>
           <div className="mt-8 overflow-hidden rounded-2xl border border-border/70">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border/60 text-left text-muted-foreground">
-                  <th className="px-5 py-3 font-medium">Agents</th>
-                  <th className="px-5 py-3 font-medium tabular-nums">Monthly / agent</th>
-                  <th className="px-5 py-3 font-medium tabular-nums">Annual / agent</th>
+                  <th className="px-5 py-3 font-medium">Providers</th>
+                  <th className="px-5 py-3 font-medium tabular-nums">Monthly / provider</th>
+                  <th className="px-5 py-3 font-medium tabular-nums">Annual / provider</th>
                 </tr>
               </thead>
               <tbody>
@@ -180,7 +180,7 @@ export default function PricingPage() {
                   </tr>
                 ))}
                 <tr>
-                  <td className="px-5 py-3 text-foreground">200+ agents</td>
+                  <td className="px-5 py-3 text-foreground">200+ providers</td>
                   <td className="px-5 py-3 text-muted-foreground" colSpan={2}>
                     Custom — performance pricing available.{' '}
                     <Link href="/demo" className="text-brand hover:underline">Talk to sales</Link>
@@ -199,7 +199,7 @@ export default function PricingPage() {
             Premium AI workflows
           </p>
           <h2 style={TITLE_FONT} className="mt-3 text-[28px] md:text-[36px] tracking-[-0.02em] text-foreground">
-            Credits are spent when Chippi does real work.
+            Credits are spent when Koala does real work.
           </h2>
           <p className="mt-3 text-sm text-muted-foreground">
             Every paid plan includes a monthly credit balance. High-value actions cost more; routine ones cost little. Unused credits roll over for 30 days.
@@ -260,7 +260,7 @@ export default function PricingPage() {
 
       <MarketingCTA
         title="Start your free trial. Grow when you’re ready."
-        sub="Seven days free, cancel anytime. Bring your inbox and let Chippi do the work."
+        sub="Seven days free, cancel anytime. Bring your inbox and let Koala do the work."
         primaryCta={{ label: 'Start free trial', href: SIGNUP }}
         secondaryCta={{ label: 'Talk to sales', href: '/demo' }}
       />

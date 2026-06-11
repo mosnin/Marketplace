@@ -1,7 +1,7 @@
 /**
  * Tomorrow line — the one-sentence forward look at the bottom of the brief.
  *
- * The realtor reads the brief, sees what today needs, and looks one day
+ * The provider reads the brief, sees what today needs, and looks one day
  * out. Not a calendar, not a schedule — one sentence naming the one or
  * two loudest things on the horizon so they finish today with the next
  * day already framed.
@@ -11,7 +11,7 @@
  *
  * What we name (priority order, top two win):
  *   - Deals closing tomorrow (named subject)
- *   - Tours scheduled tomorrow (named or counted, depending on quantity)
+ *   - Appointments scheduled tomorrow (named or counted, depending on quantity)
  *   - Follow-ups due tomorrow (counted)
  */
 
@@ -36,7 +36,7 @@ function tomorrowBounds(): { start: string; end: string; dateOnly: string } {
 interface ForwardItems {
   closingDeal: { name: string } | null;
   closingDealsCount: number;
-  tourCount: number;
+  appointmentCount: number;
   followUpCount: number;
 }
 
@@ -50,8 +50,8 @@ function renderForward(items: ForwardItems): string | null {
     pieces.push(`${items.closingDealsCount} deals close`);
   }
 
-  if (items.tourCount > 0) {
-    pieces.push(items.tourCount === 1 ? '1 tour' : `${items.tourCount} tours`);
+  if (items.appointmentCount > 0) {
+    pieces.push(items.appointmentCount === 1 ? '1 appointment' : `${items.appointmentCount} appointments`);
   }
 
   if (items.followUpCount > 0) {
@@ -72,7 +72,7 @@ function renderForward(items: ForwardItems): string | null {
 export async function composeTomorrow(spaceId: string): Promise<string | null> {
   const { start, end, dateOnly } = tomorrowBounds();
 
-  const [closingRes, toursRes, followUpsRes] = await Promise.all([
+  const [closingRes, appointmentsRes, followUpsRes] = await Promise.all([
     supabase
       .from('Deal')
       .select('id, title')
@@ -80,7 +80,7 @@ export async function composeTomorrow(spaceId: string): Promise<string | null> {
       .eq('status', 'active')
       .eq('closeDate', dateOnly),
     supabase
-      .from('Tour')
+      .from('Appointment')
       .select('id', { count: 'exact', head: true })
       .eq('spaceId', spaceId)
       .gte('startsAt', start)
@@ -90,7 +90,7 @@ export async function composeTomorrow(spaceId: string): Promise<string | null> {
       .from('Contact')
       .select('id', { count: 'exact', head: true })
       .eq('spaceId', spaceId)
-      .is('brokerageId', null)
+      .is('agencyId', null)
       .gte('followUpAt', start)
       .lt('followUpAt', end),
   ]);
@@ -99,7 +99,7 @@ export async function composeTomorrow(spaceId: string): Promise<string | null> {
   const items: ForwardItems = {
     closingDeal: closingRows.length > 0 ? { name: closingRows[0].title } : null,
     closingDealsCount: closingRows.length,
-    tourCount: toursRes.count ?? 0,
+    appointmentCount: appointmentsRes.count ?? 0,
     followUpCount: followUpsRes.count ?? 0,
   };
 

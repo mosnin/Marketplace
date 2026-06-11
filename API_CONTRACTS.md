@@ -1,6 +1,6 @@
 # API_CONTRACTS.md
 
-Request/response contracts for all Chippi API endpoints. Use this to prevent breaking changes when fixing bugs or adding features.
+Request/response contracts for all Koala API endpoints. Use this to prevent breaking changes when fixing bugs or adding features.
 
 **Rule**: If you change an endpoint's request or response shape, update this file and verify all callers.
 
@@ -15,7 +15,7 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 | `requireAuth()` | `{ userId }` or `401` | Route needs auth but not space context |
 | `requireSpaceOwner(slug)` | `{ userId, space }` or `401/403/404` | Route operates on a specific workspace |
 | `requireContactAccess(contactId)` | `{ userId, space }` or `401/403/404` | Route operates on a specific contact |
-| `requireBroker()` | `{ brokerage, membership, dbUserId }` or throws | Broker dashboard routes |
+| `requireAgency()` | `{ agency, membership, dbUserId }` or throws | Agency dashboard routes |
 | `requirePlatformAdmin()` | `{ userId }` or throws | Admin routes |
 
 ---
@@ -26,13 +26,13 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 
 #### `GET /api/contacts?slug=X`
 - **Auth**: `requireSpaceOwner(slug)`
-- **Query params**: `slug` (required), `search`, `type` (QUALIFICATION|TOUR|APPLICATION|ALL), `limit` (default 500, max 1000), `offset` (default 0)
+- **Query params**: `slug` (required), `search`, `type` (QUALIFICATION|APPOINTMENT|APPLICATION|ALL), `limit` (default 500, max 1000), `offset` (default 0)
 - **Response**: `200` — `Contact[]`
 - **Search**: ILIKE on name, email, phone, preferences (escaped)
 
 #### `POST /api/contacts`
 - **Auth**: `requireSpaceOwner(slug)`
-- **Body**: `{ slug, name (required), email?, phone?, budget?, preferences?, properties?, address?, notes?, type?, tags? }`
+- **Body**: `{ slug, name (required), email?, phone?, budget?, preferences?, services?, address?, notes?, type?, tags? }`
 - **Validation**: name required (string, max 200 chars)
 - **Response**: `201` — `Contact`
 - **Side effect**: Async vector sync (`syncContact`)
@@ -143,34 +143,34 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 - **Response**: `201` — `{ id, scoring: LeadScoringResult }` | `200` (duplicate)
 - **Side effects**: Creates Contact, triggers lead scoring, sends email notification
 
-### `POST /api/tours/book`
+### `POST /api/appointments/book`
 - **Auth**: None (public)
-- **Body**: `{ slug, guestName, guestEmail, guestPhone?, propertyAddress?, notes?, startsAt, propertyProfileId? }`
-- **Response**: `201` — Tour object with `manageToken` | `409` (conflict/double-booking)
+- **Body**: `{ slug, guestName, guestEmail, guestPhone?, serviceAddress?, notes?, startsAt, serviceProfileId? }`
+- **Response**: `201` — Appointment object with `manageToken` | `409` (conflict/double-booking)
 - **Validation**: `guestName` required, `guestEmail` required (valid format), `startsAt` required (not in past). `endsAt` auto-calculated from settings/profile duration.
-- **Implementation**: Uses `book_tour_atomic` RPC for atomic booking with conflict detection
+- **Implementation**: Uses `book_appointment_atomic` RPC for atomic booking with conflict detection
 - **Side effects**: Auto-creates Contact if no match by email. Sends confirmation email to guest. Sends notification email to space owner.
 
-### `GET /api/tours/available?slug=X&date=Y&propertyId=Z`
+### `GET /api/appointments/available?slug=X&date=Y&serviceId=Z`
 - **Auth**: None (public)
-- **Query params**: `slug` (required), `date` (optional, YYYY-MM-DD, defaults to today), `propertyId` (optional)
-- **Response**: `200` — `{ slots: [{ date, times: [ISO8601] }], duration, timezone, propertyProfileId, propertyProfiles: [{ id, name, address, tourDuration, isActive }] }`
-- **Computation**: 14-day rolling window. Considers existing bookings, Google Calendar busy times, availability overrides (including recurring), property profile settings, buffer minutes
+- **Query params**: `slug` (required), `date` (optional, YYYY-MM-DD, defaults to today), `serviceId` (optional)
+- **Response**: `200` — `{ slots: [{ date, times: [ISO8601] }], duration, timezone, serviceProfileId, serviceProfiles: [{ id, name, address, appointmentDuration, isActive }] }`
+- **Computation**: 14-day rolling window. Considers existing bookings, Google Calendar busy times, availability overrides (including recurring), service profile settings, buffer minutes
 
-### `GET /api/tours/manage?token=X`
+### `GET /api/appointments/manage?token=X`
 - **Auth**: Guest manage token
-- **Response**: `200` — Tour details for self-service management
+- **Response**: `200` — Appointment details for self-service management
 
-### `POST /api/tours/manage`
+### `POST /api/appointments/manage`
 - **Auth**: Guest manage token (in body)
 - **Body**: `{ token, action: 'cancel' }`
-- **Validation**: Cannot cancel within 1 hour of tour. Cannot cancel completed tours.
+- **Validation**: Cannot cancel within 1 hour of appointment. Cannot cancel completed appointments.
 - **Response**: `200` — `{ success: true, status: 'cancelled' }`
 
-### `POST /api/tours/feedback`
+### `POST /api/appointments/feedback`
 - **Auth**: None (token-based)
-- **Body**: `{ tourId, rating (1-5), comment? }`
-- **Response**: `201` — `TourFeedback`
+- **Body**: `{ appointmentId, rating (1-5), comment? }`
+- **Response**: `201` — `AppointmentFeedback`
 
 ---
 
@@ -227,68 +227,68 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 
 ---
 
-## Tour management endpoints (authenticated)
+## Appointment management endpoints (authenticated)
 
-### `GET /api/tours?slug=X`
+### `GET /api/appointments?slug=X`
 - **Auth**: `requireSpaceOwner(slug)`
-- **Response**: `200` — `Tour[]` with optional contact info
+- **Response**: `200` — `Appointment[]` with optional contact info
 
-### `PATCH /api/tours/[id]`
-- **Auth**: `requireAuth()` + verify tour belongs to user's space
-- **Body**: `{ status?, guestName?, guestEmail?, guestPhone?, propertyAddress?, notes?, startsAt?, endsAt?, contactId? }`
-- **Response**: `200` — updated `Tour`
+### `PATCH /api/appointments/[id]`
+- **Auth**: `requireAuth()` + verify appointment belongs to user's space
+- **Body**: `{ status?, guestName?, guestEmail?, guestPhone?, serviceAddress?, notes?, startsAt?, endsAt?, contactId? }`
+- **Response**: `200` — updated `Appointment`
 - **Side effects on status change**:
-  - `completed` → Sets contact `followUpAt` to 24h later, sends follow-up email to guest, logs activity, updates contact type to TOUR
+  - `completed` → Sets contact `followUpAt` to 24h later, sends follow-up email to guest, logs activity, updates contact type to APPOINTMENT
   - `no_show` → Sets contact `followUpAt` to 48h later
   - `cancelled` → Sends cancellation email
 
-### `GET /api/tours/[id]/prep`
-- **Auth**: `requireAuth()` + verify tour belongs to user's space
-- **Response**: `200` — AI-generated tour prep notes
+### `GET /api/appointments/[id]/prep`
+- **Auth**: `requireAuth()` + verify appointment belongs to user's space
+- **Response**: `200` — AI-generated appointment prep notes
 
-### `POST /api/tours/convert`
+### `POST /api/appointments/convert`
 - **Auth**: `requireAuth()`
-- **Body**: `{ tourId, slug }`
-- **Response**: `201` — Created `Deal` from tour
+- **Body**: `{ appointmentId, slug }`
+- **Response**: `201` — Created `Deal` from appointment
 
-### Tour properties
+### Appointment services
 
-#### `GET /api/tours/properties?slug=X`
+#### `GET /api/appointments/services?slug=X`
 - **Auth**: `requireSpaceOwner(slug)`
-- **Response**: `200` — `TourPropertyProfile[]`
+- **Response**: `200` — `AppointmentServiceProfile[]`
 
-#### `POST /api/tours/properties`
+#### `POST /api/appointments/services`
 - **Auth**: `requireSpaceOwner(slug)`
-- **Body**: `{ slug, name, address?, tourDuration?, startHour?, endHour?, daysAvailable?, bufferMinutes? }`
-- **Response**: `201` — `TourPropertyProfile`
+- **Body**: `{ slug, name, address?, appointmentDuration?, startHour?, endHour?, daysAvailable?, bufferMinutes? }`
+- **Response**: `201` — `AppointmentServiceProfile`
 
-#### `PATCH /api/tours/properties/[id]`
+#### `PATCH /api/appointments/services/[id]`
 - **Auth**: `requireAuth()` + verify profile belongs to user's space
-- **Response**: `200` — updated `TourPropertyProfile`
+- **Response**: `200` — updated `AppointmentServiceProfile`
 
-### Tour overrides
+### Appointment overrides
 
-#### `GET /api/tours/overrides?slug=X`
+#### `GET /api/appointments/overrides?slug=X`
 - **Auth**: `requireSpaceOwner(slug)`
-- **Response**: `200` — `TourAvailabilityOverride[]`
+- **Response**: `200` — `AppointmentAvailabilityOverride[]`
 
-#### `POST /api/tours/overrides`
+#### `POST /api/appointments/overrides`
 - **Auth**: `requireSpaceOwner(slug)`
 - **Body**: `{ slug, date, isBlocked?, startHour?, endHour?, label?, recurrence?, endDate? }`
-- **Response**: `201` — `TourAvailabilityOverride`
+- **Response**: `201` — `AppointmentAvailabilityOverride`
 
-#### `DELETE /api/tours/overrides/[id]`
+#### `DELETE /api/appointments/overrides/[id]`
 - **Auth**: `requireAuth()` + verify override belongs to user's space
 - **Response**: `200`
 
-### Tour waitlist
+### Appointment waitlist
 
-#### `POST /api/tours/waitlist`
+#### `POST /api/appointments/waitlist`
 - **Auth**: None (public)
-- **Body**: `{ spaceId, guestName, guestEmail, guestPhone?, preferredDate, notes?, propertyProfileId? }`
-- **Response**: `201` — `TourWaitlist`
+- **Body**: `{ spaceId, guestName, guestEmail, guestPhone?, preferredDate, notes?, serviceProfileId? }`
+- **Response**: `201` — `AppointmentWaitlist`
 
-#### `POST /api/tours/waitlist/notify`
+#### `POST /api/appointments/waitlist/notify`
 - **Auth**: `requireSpaceOwner(slug)`
 - **Body**: `{ waitlistId }`
 - **Response**: `200`
@@ -318,88 +318,88 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
   - `start` — no extra fields → `{ success: true }`
   - `save_step` + `{ step: number }` → `{ success: true }`
   - `save_profile` + `{ name, phone?, businessName }` → `{ success: true }`
-  - `create_space` + `{ slug, intakePageTitle, intakePageIntro, businessName, logoUrl?, realtorPhotoUrl? }` → `{ success: true, slug }` | `409` (slug taken)
+  - `create_space` + `{ slug, intakePageTitle, intakePageIntro, businessName, logoUrl?, providerPhotoUrl? }` → `{ success: true, slug }` | `409` (slug taken)
   - `save_notifications` + `{ emailNotifications, defaultSubmissionStatus }` → `{ success: true }`
-  - `complete` + `{ accountType?: 'realtor' | 'broker_only' | 'both' }` → `{ success: true, onboard: true, onboardingCompletedAt }`
+  - `complete` + `{ accountType?: 'provider' | 'agency_only' | 'both' }` → `{ success: true, onboard: true, onboardingCompletedAt }`
   - `check_slug` + `{ slug }` → `{ available: boolean, reason?: string }`
 - **Side effects**: `create_space` uses RPC `create_space_with_defaults` (atomic). `complete` sets accountType if provided.
 
 ---
 
-## Broker endpoints
+## Agency endpoints
 
-### `POST /api/broker/create`
+### `POST /api/agency/create`
 - **Auth**: `requireAuth()` + completed workspace
-- **Response**: `201` — `{ brokerageId }` | `409` (already exists)
+- **Response**: `201` — `{ agencyId }` | `409` (already exists)
 
-### `POST /api/broker/invite`
-- **Auth**: `requireBroker()`
+### `POST /api/agency/invite`
+- **Auth**: `requireAgency()`
 - **Body**: `{ email, role }`
 - **Response**: `201` — `Invitation`
 
-### `POST /api/broker/invite/bulk`
-- **Auth**: `requireBroker()`
+### `POST /api/agency/invite/bulk`
+- **Auth**: `requireAgency()`
 - **Body**: `{ invitations: [{ email, role }] }`
 - **Response**: `200` — Bulk result
 
-### `GET /api/broker/stats`
-- **Auth**: `requireBroker()`
+### `GET /api/agency/stats`
+- **Auth**: `requireAgency()`
 - **Response**: `200` — Member counts, leads, applications
 
-### `GET /api/broker/trends`
-- **Auth**: `requireBroker()`
+### `GET /api/agency/trends`
+- **Auth**: `requireAgency()`
 - **Response**: `200` — Time-series analytics
 
-### `GET /api/broker/settings`
-- **Auth**: `requireBroker()`
-- **Response**: `200` — Brokerage settings
+### `GET /api/agency/settings`
+- **Auth**: `requireAgency()`
+- **Response**: `200` — Agency settings
 
-### `PATCH /api/broker/settings`
-- **Auth**: `requireBroker()`
-- **Body**: Brokerage fields (name, websiteUrl, logoUrl, joinCode)
-- **Response**: `200` — Updated brokerage
+### `PATCH /api/agency/settings`
+- **Auth**: `requireAgency()`
+- **Body**: Agency fields (name, websiteUrl, logoUrl, joinCode)
+- **Response**: `200` — Updated agency
 
-### `GET /api/broker/export`
-- **Auth**: `requireBroker()`
+### `GET /api/agency/export`
+- **Auth**: `requireAgency()`
 - **Response**: `200` — CSV export of member data
 
-### `POST /api/broker/join`
+### `POST /api/agency/join`
 - **Auth**: `requireAuth()`
 - **Body**: `{ joinCode }`
 - **Response**: `200` — Membership created
 
-### `POST /api/broker/join-code`
-- **Auth**: `requireBroker()`
+### `POST /api/agency/join-code`
+- **Auth**: `requireAgency()`
 - **Response**: `200` — Generated/refreshed join code
 
-### Broker member management
+### Agency member management
 
-#### `GET /api/broker/realtors/[userId]`
-- **Auth**: `requireBroker()` + verify member belongs to brokerage
-- **Response**: `200` — Realtor details with stats
+#### `GET /api/agency/providers/[userId]`
+- **Auth**: `requireAgency()` + verify member belongs to agency
+- **Response**: `200` — Provider details with stats
 
-#### `DELETE /api/broker/members/[id]`
-- **Auth**: `requireBroker()`
+#### `DELETE /api/agency/members/[id]`
+- **Auth**: `requireAgency()`
 - **Response**: `200`
 
-#### `PATCH /api/broker/members/[id]/role`
-- **Auth**: `requireBroker()`
+#### `PATCH /api/agency/members/[id]/role`
+- **Auth**: `requireAgency()`
 - **Body**: `{ role }`
 - **Response**: `200` — Updated membership
 
-### `GET /api/broker/notifications`
-- **Auth**: `requireBroker()`
-- **Response**: `200` — `BrokerNotification[]`
+### `GET /api/agency/notifications`
+- **Auth**: `requireAgency()`
+- **Response**: `200` — `AgencyNotification[]`
 
 ---
 
 ## Admin endpoints
 
-### `GET /api/admin/brokerages`
+### `GET /api/admin/agencies`
 - **Auth**: `requirePlatformAdmin()`
-- **Response**: `200` — All brokerages with owner info and member counts
+- **Response**: `200` — All agencies with owner info and member counts
 
-### `PATCH /api/admin/brokerages/[id]`
+### `PATCH /api/admin/agencies/[id]`
 - **Auth**: `requirePlatformAdmin()`
 - **Body**: `{ status: 'active' | 'suspended' }`
 - **Response**: `200`
@@ -427,7 +427,7 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 
 ### `GET /api/invitations/[token]`
 - **Auth**: None (public read)
-- **Response**: `200` — Brokerage name + invitation details (no sensitive data)
+- **Response**: `200` — Agency name + invitation details (no sensitive data)
 
 ### `POST /api/invitations/[token]`
 - **Auth**: `requireAuth()`
@@ -441,15 +441,15 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 - **Auth**: `requireAuth()` + admin role in Clerk publicMetadata
 - **Response**: `200` — `{ status: 'ok', db: 'ok' | 'error' }` (opaque, never exposes internals)
 
-### `GET /api/tours/gcal?slug=X`
+### `GET /api/appointments/gcal?slug=X`
 - **Auth**: `requireSpaceOwner(slug)`
 - **Response**: `200` — `{ connected, configured, authUrl?, token? }`
 
-### `POST /api/tours/gcal`
+### `POST /api/appointments/gcal`
 - **Auth**: `requireSpaceOwner(slug)`
 - **Body**: `{ slug, action }` where action is:
   - `exchange_code` + `{ code }` → `{ connected: true }` (OAuth code exchange)
-  - `sync_tour` + `{ tourId }` → `{ synced: true, googleEventId }` (create/update GCal event)
+  - `sync_appointment` + `{ appointmentId }` → `{ synced: true, googleEventId }` (create/update GCal event)
   - `disconnect` → `{ connected: false }` (remove stored token)
 
 ### `GET /api/search?slug=X&q=Y`
@@ -469,8 +469,8 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 ### `GET /api/notifications?slug=X`
 - **Auth**: `requireSpaceOwner(slug)`
 - **Response**: `200` — `[{ id, type, title, description, href, createdAt, priority }]`
-- **Types**: `new_lead`, `upcoming_tour`, `follow_up_due`, `waitlist`, `tour_needs_action`
-- **Computed in real-time** from: new unread leads, upcoming tours (24h), due follow-ups, waitlist entries, completed tours without deals
+- **Types**: `new_lead`, `upcoming_appointment`, `follow_up_due`, `waitlist`, `appointment_needs_action`
+- **Computed in real-time** from: new unread leads, upcoming appointments (24h), due follow-ups, waitlist entries, completed appointments without deals
 
 ### `POST /api/applications/compare`
 - **Auth**: `requireSpaceOwner(slug)`
@@ -494,7 +494,7 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 - **Auth**: `CRON_SECRET` header validation
 - **Response**: `200` — Processed reminders count
 
-### `POST /api/tours/reminders`
+### `POST /api/appointments/reminders`
 - **Auth**: `CRON_SECRET` header validation
 - **Response**: `200` — Sent reminders count
 
@@ -508,7 +508,7 @@ All protected routes use one of these auth helpers from `lib/api-auth.ts`:
 | `401` | Unauthorized | No auth token / invalid session |
 | `403` | Forbidden | Authenticated but not authorized for this resource |
 | `404` | Not found | Resource doesn't exist or not in user's space |
-| `409` | Conflict | Duplicate (brokerage already exists, tour double-booking) |
+| `409` | Conflict | Duplicate (agency already exists, appointment double-booking) |
 | `429` | Rate limited | Too many submissions (public endpoints) |
 | `500` | Server error | Unhandled exception |
 

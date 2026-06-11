@@ -47,7 +47,7 @@ export default async function PublicBookingPage({
   const [{ data: settingsData }, { data: customSettings }, { data: ownerData }] = await Promise.all([
     supabase
       .from('SpaceSetting')
-      .select('tourBookingPageTitle, tourBookingPageIntro, businessName, tourDuration, timezone, logoUrl, realtorPhotoUrl')
+      .select('appointmentBookingPageTitle, appointmentBookingPageIntro, businessName, appointmentDuration, timezone, logoUrl, providerPhotoUrl')
       .eq('spaceId', space.id)
       .maybeSingle(),
     supabase
@@ -68,13 +68,13 @@ export default async function PublicBookingPage({
 
   const allSettings = { ...((settingsData ?? {}) as any), ...((customSettings ?? {}) as any) };
   const settings = allSettings as {
-    tourBookingPageTitle: string | null;
-    tourBookingPageIntro: string | null;
+    appointmentBookingPageTitle: string | null;
+    appointmentBookingPageIntro: string | null;
     businessName: string | null;
-    tourDuration: number | null;
+    appointmentDuration: number | null;
     timezone: string | null;
     logoUrl: string | null;
-    realtorPhotoUrl: string | null;
+    providerPhotoUrl: string | null;
     intakeAccentColor: string | null;
     intakeFont: string | null;
     intakeDarkMode: boolean | null;
@@ -86,13 +86,13 @@ export default async function PublicBookingPage({
     trackingPixels: TrackingPixelsType | null;
   } | null;
 
-  const pageTitle = settings?.tourBookingPageTitle || 'Book a Tour';
-  const pageIntro = settings?.tourBookingPageIntro || 'Pick a time that works for you and we\'ll confirm your tour.';
+  const pageTitle = settings?.appointmentBookingPageTitle || 'Book an Appointment';
+  const pageIntro = settings?.appointmentBookingPageIntro || 'Pick a time that works for you and we\'ll confirm your appointment.';
   const businessName = settings?.businessName || space.name;
-  const duration = settings?.tourDuration || 30;
+  const duration = settings?.appointmentDuration || 30;
   const timezone = settings?.timezone || 'America/New_York';
   const agentName = ownerData?.name || businessName;
-  const rawAgentPhoto = settings?.realtorPhotoUrl || ownerData?.avatar || null;
+  const rawAgentPhoto = settings?.providerPhotoUrl || ownerData?.avatar || null;
   const logoUrl = settings?.logoUrl || null;
 
   // Resolve the same identity material as /p/[slug] so the booking page
@@ -118,8 +118,8 @@ export default async function PublicBookingPage({
     return <FormUnavailable agentName={agentName} />;
   }
 
-  // Hide the Chippi mark on paid tiers — visible only on the free tier as
-  // a value-exchange brand exposure. The realtor pays for white-label when
+  // Hide the Koala mark on paid tiers — visible only on the free tier as
+  // a value-exchange brand exposure. The provider pays for white-label when
   // they're on an active paid plan (or trialing into one).
   const hidePoweredBy = subStatus === 'active' || subStatus === 'trialing';
 
@@ -147,8 +147,8 @@ export default async function PublicBookingPage({
         agentPhoto={agentPhoto}
         pageTitle={pageTitle}
         pageIntro={pageIntro}
-        trustLine={`Your information is shared only with ${agentName} and used solely for scheduling.`}
-        agentPresenceLabel="Booking with"
+        trustLine={`Your information is shared only with ${businessName} and used solely for scheduling.`}
+        agentPresenceLabel="Scheduling with"
         hidePoweredBy={hidePoweredBy}
         customization={customization}
         coverPhotoUrl={coverPhotoUrl}

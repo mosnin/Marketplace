@@ -1,6 +1,6 @@
 'use client';
 
-/** About: fortitudo's two-column belief section, carrying Chippi's conviction
+/** About: fortitudo's two-column belief section, carrying Koala's conviction
  *  (lifted from the /company beliefs). */
 
 import Link from 'next/link';
@@ -12,12 +12,12 @@ const values = [
   {
     title: 'Nothing leaves without your name on it',
     description:
-      'Chippi drafts, books, and updates, but by default every move is yours to approve. The default is you in the loop, and that is where the trust lives.',
+      'Koala replies, books, and updates, but by default every move is yours to approve. The default is you in the loop, and that is where the trust lives.',
   },
   {
     title: 'One workspace, not six tools',
     description:
-      'CRM, inbox, calendar, content studio, files, and the team dashboard. One agent runs all of it, and they finally agree.',
+      'Clients, inbox, calendar, content studio, files, and the team dashboard. One agent runs all of it, and they finally agree.',
   },
   {
     title: 'Configuration is failure to decide',
@@ -32,18 +32,18 @@ export function About() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="font-brand text-xs uppercase tracking-[0.25em] text-brand">Why Chippi</p>
+            <p className="font-brand text-xs uppercase tracking-[0.25em] text-brand">Why Koala</p>
             <h2 className="font-brand mt-3 text-3xl text-foreground sm:text-4xl lg:text-5xl">
-              Real estate, working the way the rest of the world{' '}
+              Professional services, working the way the rest of the world{' '}
               <span className="text-gradient-brand">already does.</span>
             </h2>
             <p className="mt-5 text-lg text-foreground/65">
-              The tools agents and brokerages live in were drawn for a slower era. The work
-              should not be the chrome. The work should be the deals.
+              The tools providers and agencies live in were drawn for a slower era. The work
+              should not be the chrome. The work should be the clients.
             </p>
             <p className="mt-4 text-foreground/55">
-              Chippi is the extra teammate who handles the repetitive work, so the hours go to
-              closing, and you stay in the driver&rsquo;s seat on every send.
+              Koala is the extra teammate who handles the repetitive work, so the hours go to
+              the craft, and you stay in the driver&rsquo;s seat on every send.
             </p>
             <Link
               href="/company"

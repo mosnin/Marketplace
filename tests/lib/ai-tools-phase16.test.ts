@@ -1,5 +1,5 @@
 /**
- * Phase 16 — research, calendar, brokerage, drafts, manual-log tools.
+ * Phase 16 — research, calendar, agency, drafts, manual-log tools.
  * Two cases per tool, ~26 total. Mock pattern follows
  * `tests/lib/ai-tools-phase5.test.ts`.
  */
@@ -72,15 +72,15 @@ vi.mock('@/lib/agent-memory/store', () => ({
   storeMemory: vi.fn(),
 }));
 
-import { findComparablePropertiesTool } from '@/lib/ai-tools/tools/find-comparable-properties';
+import { findComparableServicesTool } from '@/lib/ai-tools/tools/find-comparable-services';
 import { recallHistoryTool } from '@/lib/ai-tools/tools/recall-history';
 import { checkAvailabilityTool } from '@/lib/ai-tools/tools/check-availability';
 import { blockTimeTool } from '@/lib/ai-tools/tools/block-time';
 import { findStuckDealsTool } from '@/lib/ai-tools/tools/find-stuck-deals';
 import { findQuietHotPersonsTool } from '@/lib/ai-tools/tools/find-quiet-hot-persons';
 import { findOverdueFollowupsTool } from '@/lib/ai-tools/tools/find-overdue-followups';
-import { summarizeRealtorTool } from '@/lib/ai-tools/tools/summarize-realtor';
-import { assignLeadToRealtorTool } from '@/lib/ai-tools/tools/assign-lead-to-realtor';
+import { summarizeProviderTool } from '@/lib/ai-tools/tools/summarize-provider';
+import { assignLeadToProviderTool } from '@/lib/ai-tools/tools/assign-lead-to-provider';
 import { draftEmailTool } from '@/lib/ai-tools/tools/draft-email';
 import { draftSmsTool } from '@/lib/ai-tools/tools/draft-sms';
 import { logEmailSentTool } from '@/lib/ai-tools/tools/log-email-sent';
@@ -101,22 +101,22 @@ beforeEach(() => {
   recallMemoryMock.mockReset();
 });
 
-// ── find_comparable_properties ─────────────────────────────────────────────
-describe('findComparablePropertiesTool', () => {
+// ── find_comparable_services ─────────────────────────────────────────────
+describe('findComparableServicesTool', () => {
   it('is read-only (no approval)', () => {
-    expect(findComparablePropertiesTool.requiresApproval).toBe(false);
+    expect(findComparableServicesTool.requiresApproval).toBe(false);
   });
 
   it('returns "no comparables" with explicit note when nothing matches', async () => {
-    mockByTable = { Property: { rows: [] } };
-    const result = await findComparablePropertiesTool.handler({}, makeCtx());
-    expect(result.summary).toMatch(/No comparable properties on file/);
-    expect((result.data as { properties: unknown[] }).properties).toHaveLength(0);
+    mockByTable = { Service: { rows: [] } };
+    const result = await findComparableServicesTool.handler({}, makeCtx());
+    expect(result.summary).toMatch(/No comparable services on file/);
+    expect((result.data as { services: unknown[] }).services).toHaveLength(0);
   });
 
   it('caps results at 6 and sorts by closeness to price midpoint', async () => {
     mockByTable = {
-      Property: {
+      Service: {
         rows: [
           { id: 'p1', address: '1 A St', city: 'X', beds: 3, baths: 2, listPrice: 1_000_000, listingStatus: 'active', updatedAt: '2026-01-01' },
           { id: 'p2', address: '2 B St', city: 'X', beds: 3, baths: 2, listPrice: 510_000, listingStatus: 'active', updatedAt: '2026-01-02' },
@@ -124,14 +124,14 @@ describe('findComparablePropertiesTool', () => {
         ],
       },
     };
-    const result = await findComparablePropertiesTool.handler(
+    const result = await findComparableServicesTool.handler(
       { priceMin: 400_000, priceMax: 600_000 },
       makeCtx(),
     );
-    const properties = (result.data as { properties: { id: string }[] }).properties;
+    const services = (result.data as { services: { id: string }[] }).services;
     // Midpoint = 500k; p2 (510k) and p3 (490k) are closer than p1 (1M).
-    expect(properties[0].id).toMatch(/^p[23]$/);
-    expect(properties.length).toBeLessThanOrEqual(6);
+    expect(services[0].id).toMatch(/^p[23]$/);
+    expect(services.length).toBeLessThanOrEqual(6);
   });
 });
 
@@ -189,8 +189,8 @@ describe('checkAvailabilityTool', () => {
     expect(checkAvailabilityTool.requiresApproval).toBe(false);
   });
 
-  it('returns free=true when no Tour or CalendarEvent overlap', async () => {
-    mockByTable = { Tour: { rows: [] }, CalendarEvent: { rows: [] } };
+  it('returns free=true when no Appointment or CalendarEvent overlap', async () => {
+    mockByTable = { Appointment: { rows: [] }, CalendarEvent: { rows: [] } };
     const result = await checkAvailabilityTool.handler(
       { from: '2026-05-01T14:00:00.000Z', to: '2026-05-01T16:00:00.000Z' },
       makeCtx(),
@@ -199,15 +199,15 @@ describe('checkAvailabilityTool', () => {
     expect(result.summary).toMatch(/free/);
   });
 
-  it('reports a Tour conflict in the conflicts array', async () => {
+  it('reports an Appointment conflict in the conflicts array', async () => {
     mockByTable = {
-      Tour: {
+      Appointment: {
         rows: [
           {
             id: 't1',
             startsAt: '2026-05-01T14:30:00.000Z',
             endsAt: '2026-05-01T15:30:00.000Z',
-            propertyAddress: '123 Main',
+            serviceAddress: '123 Main',
             guestName: 'Alex',
           },
         ],
@@ -220,7 +220,7 @@ describe('checkAvailabilityTool', () => {
     );
     const conflicts = (result.data as { conflicts: { kind: string }[] }).conflicts;
     expect(conflicts).toHaveLength(1);
-    expect(conflicts[0].kind).toBe('tour');
+    expect(conflicts[0].kind).toBe('appointment');
   });
 });
 
@@ -340,43 +340,43 @@ describe('findOverdueFollowupsTool', () => {
   });
 });
 
-// ── summarize_realtor ──────────────────────────────────────────────────────
-describe('summarizeRealtorTool', () => {
+// ── summarize_provider ──────────────────────────────────────────────────────
+describe('summarizeProviderTool', () => {
   it('is read-only', () => {
-    expect(summarizeRealtorTool.requiresApproval).toBe(false);
+    expect(summarizeProviderTool.requiresApproval).toBe(false);
   });
 
-  it('refuses when caller has no broker membership', async () => {
+  it('refuses when caller has no agency membership', async () => {
     mockByTable = {
       User: { single: { id: 'u_caller' } },
-      BrokerageMembership: { rows: [] },
+      AgencyMembership: { rows: [] },
     };
-    const result = await summarizeRealtorTool.handler(
-      { realtorUserId: 'u_realtor', windowDays: 7 },
+    const result = await summarizeProviderTool.handler(
+      { providerUserId: 'u_provider', windowDays: 7 },
       makeCtx(),
     );
     expect(result.display).toBe('error');
-    expect(result.summary).toMatch(/Broker access required/);
+    expect(result.summary).toMatch(/Agency access required/);
   });
 });
 
-// ── assign_lead_to_realtor ─────────────────────────────────────────────────
-describe('assignLeadToRealtorTool', () => {
+// ── assign_lead_to_provider ─────────────────────────────────────────────────
+describe('assignLeadToProviderTool', () => {
   it('requires approval', () => {
-    expect(assignLeadToRealtorTool.requiresApproval).toBe(true);
+    expect(assignLeadToProviderTool.requiresApproval).toBe(true);
   });
 
-  it('refuses when caller is not a broker', async () => {
+  it('refuses when caller is not an agency', async () => {
     mockByTable = {
       User: { single: { id: 'u_caller' } },
-      BrokerageMembership: { rows: [] },
+      AgencyMembership: { rows: [] },
     };
-    const result = await assignLeadToRealtorTool.handler(
-      { personId: 'c_1', realtorUserId: 'u_2', why: 'they asked' },
+    const result = await assignLeadToProviderTool.handler(
+      { personId: 'c_1', providerUserId: 'u_2', why: 'they asked' },
       makeCtx(),
     );
     expect(result.display).toBe('error');
-    expect(result.summary).toMatch(/Broker access required/);
+    expect(result.summary).toMatch(/Agency access required/);
   });
 });
 

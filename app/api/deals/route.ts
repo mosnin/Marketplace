@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { slug, title, description, value, commissionRate, probability, milestones, address, priority, closeDate, stageId, contactIds, propertyId } = body;
+  const { slug, title, description, value, commissionRate, probability, milestones, address, priority, closeDate, stageId, contactIds, serviceId } = body;
 
   const auth = await requireSpaceOwner(slug);
   if (auth instanceof NextResponse) return auth;
@@ -184,24 +184,24 @@ export async function POST(req: NextRequest) {
     closeDateVal = d.toISOString();
   }
 
-  // propertyId: optional FK to an existing Property in this space. We verify
+  // serviceId: optional FK to an existing Service in this space. We verify
   // ownership rather than trusting the client — wizard step 3 picks from the
   // workspace's own list, but the request still has to be authoritative.
-  let propertyIdVal: string | null = null;
-  if (propertyId != null && propertyId !== '') {
-    if (typeof propertyId !== 'string') {
-      return NextResponse.json({ error: 'Invalid propertyId' }, { status: 400 });
+  let serviceIdVal: string | null = null;
+  if (serviceId != null && serviceId !== '') {
+    if (typeof serviceId !== 'string') {
+      return NextResponse.json({ error: 'Invalid serviceId' }, { status: 400 });
     }
-    const trimmed = propertyId.slice(0, 64);
+    const trimmed = serviceId.slice(0, 64);
     const { data: propRow, error: propErr } = await supabase
-      .from('Property')
+      .from('Service')
       .select('id')
       .eq('id', trimmed)
       .eq('spaceId', space.id)
       .maybeSingle();
     if (propErr) throw propErr;
-    if (!propRow) return NextResponse.json({ error: 'Invalid propertyId' }, { status: 400 });
-    propertyIdVal = trimmed;
+    if (!propRow) return NextResponse.json({ error: 'Invalid serviceId' }, { status: 400 });
+    serviceIdVal = trimmed;
   }
 
   let milestonesVal: import('@/lib/types').DealMilestone[] = [];
@@ -254,7 +254,7 @@ export async function POST(req: NextRequest) {
     probability: probabilityVal,
     milestones: milestonesVal,
     address: address || null,
-    propertyId: propertyIdVal,
+    serviceId: serviceIdVal,
     priority: priority || 'MEDIUM',
     closeDate: closeDateVal,
     stageId: finalStageId,

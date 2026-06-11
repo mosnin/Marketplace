@@ -39,7 +39,7 @@ const MAX_MESSAGE_CHARS = 2000;
 const ALLOWED_COLLECTED_FIELD_KEYS = new Set([
   'name', 'email', 'phone', 'leadType', 'budget', 'timing', 'timeline',
   'location', 'income', 'employment', 'occupants', 'intentLevel',
-  'preApproval', 'propertyPreferences',
+  'preApproval', 'servicePreferences',
 ]);
 
 // ── CORS headers ──────────────────────────────────────────────────────────────
@@ -143,7 +143,7 @@ function buildSystemPrompt(
 3. Ask: "What's the best phone number to reach you?" [REQUIRED]
 4. Ask: "What's your purchase budget?" [REQUIRED]
 5. Ask: "Have you been pre-approved for a mortgage?" (Options: "Yes, fully approved", "Pre-approval in progress", "Not yet started") [REQUIRED]
-6. Ask: "What type of property are you looking for, and how many beds/baths?"
+6. Ask: "What type of service are you looking for, and how many beds/baths?"
 7. Ask: "What's your target timeline for closing?"
 8. Ask: "How would you describe where you are in your search?" (Options: "Ready to make an offer", "Actively looking", "Just exploring")`;
 
@@ -193,7 +193,7 @@ When you have collected ALL required fields (marked as required above), emit the
 Use these exact JSON keys in the output (map the answers to these keys regardless of how the question was worded):
 - Core: "name" (full name), "email", "phone", "leadType" ("rental" or "buyer")
 - Rental: "budget", "timing", "location", "income", "employment", "occupants", "intentLevel"
-- Buyer: "budget", "preApproval", "propertyPreferences", "timeline", "intentLevel"
+- Buyer: "budget", "preApproval", "servicePreferences", "timeline", "intentLevel"
 - Any custom question answers: use the question label as the key, snake_cased
 
 Minimum required fields before emitting \`__FIELDS__:\`:
@@ -309,26 +309,26 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     const source = spaceSetting?.formConfigSource ?? 'legacy';
 
-    if (source === 'brokerage' && space.brokerageId) {
-      // Inherit form configs from brokerage template
+    if (source === 'agency' && space.agencyId) {
+      // Inherit form configs from agency template
       try {
-        const { data: brokerage } = await supabase
-          .from('Brokerage')
-          .select('brokerageRentalFormConfig, brokerageBuyerFormConfig, brokerageFormConfig')
-          .eq('id', space.brokerageId)
+        const { data: agency } = await supabase
+          .from('Agency')
+          .select('agencyRentalFormConfig, agencyBuyerFormConfig, agencyFormConfig')
+          .eq('id', space.agencyId)
           .maybeSingle();
-        if (brokerage) {
-          rentalFormConfig = (brokerage.brokerageRentalFormConfig ?? null) as IntakeFormConfig | null;
-          buyerFormConfig = (brokerage.brokerageBuyerFormConfig ?? null) as IntakeFormConfig | null;
-          // Legacy single brokerage config — route by its leadType
-          if (!rentalFormConfig && !buyerFormConfig && brokerage.brokerageFormConfig) {
-            const legacy = brokerage.brokerageFormConfig as IntakeFormConfig;
+        if (agency) {
+          rentalFormConfig = (agency.agencyRentalFormConfig ?? null) as IntakeFormConfig | null;
+          buyerFormConfig = (agency.agencyBuyerFormConfig ?? null) as IntakeFormConfig | null;
+          // Legacy single agency config — route by its leadType
+          if (!rentalFormConfig && !buyerFormConfig && agency.agencyFormConfig) {
+            const legacy = agency.agencyFormConfig as IntakeFormConfig;
             if (legacy.leadType === 'buyer') buyerFormConfig = legacy;
             else rentalFormConfig = legacy;
           }
         }
       } catch (err) {
-        logger.warn('[intake-chat] brokerage form config fetch failed, using defaults', { spaceId: space.id }, err);
+        logger.warn('[intake-chat] agency form config fetch failed, using defaults', { spaceId: space.id }, err);
       }
     } else if (source === 'custom' && spaceSetting) {
       rentalFormConfig = (spaceSetting.rentalFormConfig ?? null) as IntakeFormConfig | null;

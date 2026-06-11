@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * /s/[slug]/cma — Comparative market analysis.
+ * /s/[slug]/cma — Rate Benchmark.
  *
- * One intent: a realtor builds a CMA from a subject property and the comps
- * already in their CRM, then hands a seller a public link. The builder is the
- * focal element; past reports sit below with a copy-link action.
+ * One intent: a provider builds a rate benchmark from a subject service and the
+ * comps already in their CRM, then shares a public link with a client. The
+ * builder is the focal element; past reports sit below with a copy-link action.
  *
  * Design (Jobs lens): paper-flat, serif h1 + status sentence, one builder card,
  * a calm preview of the auto-selected comps + the computed range, a hairline-
- * divided list of past reports. No MLS, no external lookups — comps come from
- * the realtor's own Property rows.
+ * divided list of past reports. No external lookups — comps come from
+ * the provider's own Service rows.
  *
  * Build pass (Musk lens): the heavy lifting (comp selection, stats) lives in
  * lib/cma.ts and runs server-side on save. The client just collects the subject,
@@ -45,7 +45,7 @@ import type { CmaPayload, CmaComp } from '@/lib/cma';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-interface PropertyOption {
+interface ServiceOption {
   id: string;
   address: string;
   city: string | null;
@@ -81,23 +81,23 @@ function compFacts(c: CmaComp): string {
   const parts: string[] = [];
   if (c.beds != null) parts.push(`${c.beds}bd`);
   if (c.baths != null) parts.push(`${c.baths}ba`);
-  if (c.squareFeet != null) parts.push(`${c.squareFeet.toLocaleString()} sqft`);
+  if (c.squareFeet != null) parts.push(`${c.squareFeet.toLocaleString()} sq ft`);
   return parts.join(' · ');
 }
 
 // ── Main view ────────────────────────────────────────────────────────────────
 
 export function CmaView({ slug }: { slug: string }) {
-  const [properties, setProperties] = useState<PropertyOption[]>([]);
+  const [services, setServices] = useState<ServiceOption[]>([]);
   const [reports, setReports] = useState<CmaReport[]>([]);
   const [loadingReports, setLoadingReports] = useState(true);
 
-  // Subject input: either a saved property id, or typed fields.
+  // Subject input: either a saved service id, or typed fields.
   const [subjectId, setSubjectId] = useState<string>('');
   const [address, setAddress] = useState('');
   const [beds, setBeds] = useState('');
   const [baths, setBaths] = useState('');
-  const [sqft, setSqft] = useState('');
+  const [sqft, setSqft] = useState(''); // reused for session duration (minutes) when applicable
   const [listPrice, setListPrice] = useState('');
   const [title, setTitle] = useState('');
 
@@ -124,21 +124,21 @@ export function CmaView({ slug }: { slug: string }) {
     }
   }, [slug]);
 
-  const fetchProperties = useCallback(async () => {
+  const fetchServices = useCallback(async () => {
     try {
-      const res = await fetch(`/api/properties?slug=${encodeURIComponent(slug)}`);
+      const res = await fetch(`/api/services?slug=${encodeURIComponent(slug)}`);
       if (!res.ok) return;
-      const data = (await res.json()) as PropertyOption[];
-      setProperties(Array.isArray(data) ? data : []);
+      const data = (await res.json()) as ServiceOption[];
+      setServices(Array.isArray(data) ? data : []);
     } catch {
-      // Non-fatal: the realtor can still type a subject by hand.
+      // Non-fatal: the provider can still type a subject by hand.
     }
   }, [slug]);
 
   useEffect(() => {
     fetchReports();
-    fetchProperties();
-  }, [fetchReports, fetchProperties]);
+    fetchServices();
+  }, [fetchReports, fetchServices]);
 
   // ── Build (save) ─────────────────────────────────────────────────────────────
 
@@ -149,7 +149,7 @@ export function CmaView({ slug }: { slug: string }) {
 
   const handleBuild = async () => {
     if (!canBuild) {
-      toastError('Pick a subject property or enter an address.');
+      toastError('Pick a subject service or enter a name.');
       return;
     }
 
@@ -157,7 +157,7 @@ export function CmaView({ slug }: { slug: string }) {
     if (title.trim()) body.title = title.trim();
 
     if (subjectId && subjectId !== TYPE_IT) {
-      body.subjectPropertyId = subjectId;
+      body.subjectServiceId = subjectId;
     } else {
       const num = (v: string) => (v.trim() === '' ? null : Number(v));
       body.subject = {
@@ -260,12 +260,12 @@ export function CmaView({ slug }: { slug: string }) {
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-12 space-y-12">
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className="space-y-1.5">
-        <p className={cn(BODY_MUTED)}>Comparative market analysis.</p>
+        <p className={cn(BODY_MUTED)}>Rate Benchmark.</p>
         <h1 className={cn(H1)} style={TITLE_FONT}>
-          Price a home.
+          Benchmark your pricing.
         </h1>
         <p className={cn(BODY_MUTED)}>
-          Pick a subject, and Chippi pulls comps from your CRM and computes a range.
+          Pick a service, and Koala pulls comparable offerings from your CRM and computes a price range.
         </p>
       </header>
 
@@ -273,20 +273,20 @@ export function CmaView({ slug }: { slug: string }) {
       <div className="rounded-xl border border-border/70 bg-card px-5 py-5 space-y-4">
         <div className="space-y-1.5">
           <label htmlFor="cma-subject" className="text-sm font-medium text-foreground">
-            Subject property
+            Subject service
           </label>
           <Select value={subjectId} onValueChange={setSubjectId}>
             <SelectTrigger id="cma-subject" className="w-full">
-              <SelectValue placeholder="Pick a saved property" />
+              <SelectValue placeholder="Pick a saved service" />
             </SelectTrigger>
             <SelectContent>
-              {properties.map((p) => (
+              {services.map((p) => (
                 <SelectItem key={p.id} value={p.id}>
                   {p.address}
                   {p.city ? `, ${p.city}` : ''}
                 </SelectItem>
               ))}
-              <SelectItem value={TYPE_IT}>Type an address instead</SelectItem>
+              <SelectItem value={TYPE_IT}>Type a service name instead</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -295,20 +295,20 @@ export function CmaView({ slug }: { slug: string }) {
           <div className="space-y-4">
             <div className="space-y-1.5">
               <label htmlFor="cma-address" className="text-sm font-medium text-foreground">
-                Address
+                Service name
               </label>
               <Input
                 id="cma-address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="123 Main St, Oakland"
+                placeholder="e.g. 60-min Deep Tissue Massage"
               />
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <Field label="Beds" value={beds} onChange={setBeds} placeholder="3" />
-              <Field label="Baths" value={baths} onChange={setBaths} placeholder="2" />
-              <Field label="Sqft" value={sqft} onChange={setSqft} placeholder="1,450" />
-              <Field label="List price" value={listPrice} onChange={setListPrice} placeholder="750000" />
+              <Field label="Duration (min)" value={beds} onChange={setBeds} placeholder="60" />
+              <Field label="Group size" value={baths} onChange={setBaths} placeholder="1" />
+              <Field label="Area (sqft)" value={sqft} onChange={setSqft} placeholder="optional" />
+              <Field label="Price" value={listPrice} onChange={setListPrice} placeholder="150" />
             </div>
           </div>
         )}
@@ -322,7 +322,7 @@ export function CmaView({ slug }: { slug: string }) {
             value={title}
             maxLength={200}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Market analysis for the Chen residence"
+            placeholder="Rate comparison for 60-min massage services"
           />
         </div>
 
@@ -339,7 +339,7 @@ export function CmaView({ slug }: { slug: string }) {
           <p className={cn(SECTION_LABEL)}>Preview</p>
 
           <div className="rounded-xl border border-border/70 bg-card px-6 py-6 text-center space-y-1.5">
-            <p className={cn(SECTION_LABEL)}>Suggested list-price range</p>
+            <p className={cn(SECTION_LABEL)}>Suggested price range</p>
             {preview.payload.stats.suggestedLow != null &&
             preview.payload.stats.suggestedHigh != null ? (
               <p
@@ -356,7 +356,7 @@ export function CmaView({ slug }: { slug: string }) {
               {preview.payload.stats.compCount} comparable
               {preview.payload.stats.compCount === 1 ? '' : 's'}
               {preview.payload.stats.avgPricePerSqft != null &&
-                ` · avg $${preview.payload.stats.avgPricePerSqft.toLocaleString()}/sqft`}
+                ` · avg $${preview.payload.stats.avgPricePerSqft.toLocaleString()}/unit`}
             </p>
           </div>
 

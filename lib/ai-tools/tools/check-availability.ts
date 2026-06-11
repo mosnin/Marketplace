@@ -1,9 +1,9 @@
 /**
- * `check_availability` — does the realtor have anything booked between two
+ * `check_availability` — does the provider have anything booked between two
  * ISO datetimes?
  *
  * Read-only. Looks at:
- *   • Tour rows (have native startsAt/endsAt)
+ *   • Appointment rows (have native startsAt/endsAt)
  *   • CalendarEvent rows (have date + optional time text — best-effort
  *     conversion to a datetime band; events without a time are treated as
  *     all-day in that local-date sense)
@@ -29,7 +29,7 @@ interface Conflict {
   title: string;
   startsAt: string;
   endsAt: string;
-  kind: 'tour' | 'event';
+  kind: 'appointment' | 'event';
 }
 
 interface CheckAvailabilityResult {
@@ -57,7 +57,7 @@ export const checkAvailabilityTool = defineTool<typeof parameters, CheckAvailabi
   name: 'check_availability',
   riskLevel: 'safe',
   description:
-    'Check whether the realtor has Tours or CalendarEvents booked in a given ISO time window.',
+    'Check whether the provider has Appointments or CalendarEvents booked in a given ISO time window.',
   parameters,
   requiresApproval: false,
 
@@ -67,10 +67,10 @@ export const checkAvailabilityTool = defineTool<typeof parameters, CheckAvailabi
     const fromDate = fromIso.slice(0, 10);
     const toDate = toIso.slice(0, 10);
 
-    const [tourRes, eventRes] = await Promise.all([
+    const [appointmentRes, eventRes] = await Promise.all([
       supabase
-        .from('Tour')
-        .select('id, startsAt, endsAt, propertyAddress, guestName')
+        .from('Appointment')
+        .select('id, startsAt, endsAt, serviceAddress, guestName')
         .eq('spaceId', ctx.space.id)
         .lt('startsAt', toIso)
         .gt('endsAt', fromIso)
@@ -84,28 +84,28 @@ export const checkAvailabilityTool = defineTool<typeof parameters, CheckAvailabi
         .limit(50),
     ]);
 
-    if (tourRes.error) {
-      return { summary: `Availability check failed: ${tourRes.error.message}`, display: 'error' };
+    if (appointmentRes.error) {
+      return { summary: `Availability check failed: ${appointmentRes.error.message}`, display: 'error' };
     }
     if (eventRes.error) {
       return { summary: `Availability check failed: ${eventRes.error.message}`, display: 'error' };
     }
 
     const conflicts: Conflict[] = [];
-    for (const t of (tourRes.data ?? []) as Array<{
+    for (const t of (appointmentRes.data ?? []) as Array<{
       id: string;
       startsAt: string;
       endsAt: string;
-      propertyAddress: string | null;
+      serviceAddress: string | null;
       guestName: string;
     }>) {
       conflicts.push({
-        title: t.propertyAddress
-          ? `Tour: ${t.guestName} — ${t.propertyAddress}`
-          : `Tour: ${t.guestName}`,
+        title: t.serviceAddress
+          ? `Appointment: ${t.guestName} — ${t.serviceAddress}`
+          : `Appointment: ${t.guestName}`,
         startsAt: t.startsAt,
         endsAt: t.endsAt,
-        kind: 'tour',
+        kind: 'appointment',
       });
     }
     for (const e of (eventRes.data ?? []) as Array<{

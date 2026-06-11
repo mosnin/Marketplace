@@ -7,10 +7,10 @@ import { PhoneIncoming, CalendarDays, Briefcase, ArrowRight, CalendarCheck, Cale
 import { getSupabaseBrowser } from '@/lib/supabase-browser';
 import {
   notificationForNewLead,
-  notificationForNewTour,
+  notificationForNewAppointment,
   notificationForNewDeal,
   notificationForDealStageMove,
-  notificationForTourStatus,
+  notificationForAppointmentStatus,
   notificationForLeadScored,
   notificationForLeadScoredHot,
 } from '@/lib/notification-voice';
@@ -20,7 +20,7 @@ interface Props {
   slug: string;
 }
 
-const TOUR_STATUS_ICONS: Record<string, typeof CalendarCheck> = {
+const APPOINTMENT_STATUS_ICONS: Record<string, typeof CalendarCheck> = {
   confirmed: CalendarCheck,
   completed: CalendarCheck,
   cancelled: CalendarX,
@@ -38,7 +38,7 @@ export function LiveNotifications({ spaceId, slug }: Props) {
     onEvent: (payload) => {
       const contact = payload.new as any;
       if (!contact?.name) return;
-      if (contact?.brokerageId) return; // Brokerage intake leads are broker-dashboard only
+      if (contact?.agencyId) return; // Agency intake leads are agency-dashboard only
       toast.success(notificationForNewLead(contact.name), {
         description: contact.phone || contact.email || undefined,
         icon: <PhoneIncoming size={16} />,
@@ -52,15 +52,15 @@ export function LiveNotifications({ spaceId, slug }: Props) {
     },
   });
 
-  // Live tour bookings
+  // Live appointment bookings
   useRealtime({
-    table: 'Tour',
+    table: 'Appointment',
     event: 'INSERT',
     filter: `spaceId=eq.${spaceId}`,
     onEvent: (payload) => {
-      const tour = payload.new as any;
-      if (!tour?.guestName) return;
-      toast.success(notificationForNewTour(tour.guestName, tour.propertyAddress), {
+      const appointment = payload.new as any;
+      if (!appointment?.guestName) return;
+      toast.success(notificationForNewAppointment(appointment.guestName, appointment.serviceAddress), {
         icon: <CalendarDays size={16} />,
         action: {
           label: 'View',
@@ -89,7 +89,7 @@ export function LiveNotifications({ spaceId, slug }: Props) {
   });
 
   // Stage moves — fires when a Deal's stageId changes (drag, manual, or
-  // Chippi via advance_deal_stage). Resolves the stage name lazily so the
+  // Koala via advance_deal_stage). Resolves the stage name lazily so the
   // toast can name the destination instead of just saying "moved".
   useRealtime({
     table: 'Deal',
@@ -132,26 +132,26 @@ export function LiveNotifications({ spaceId, slug }: Props) {
     },
   });
 
-  // Tour status changes — confirmed, completed, cancelled, no_show.
+  // Appointment status changes — confirmed, completed, cancelled, no_show.
   useRealtime({
-    table: 'Tour',
+    table: 'Appointment',
     event: 'UPDATE',
     filter: `spaceId=eq.${spaceId}`,
     onEvent: (payload) => {
-      const oldTour = payload.old as any;
-      const newTour = payload.new as any;
-      if (!newTour?.guestName) return;
-      if (oldTour?.status === newTour?.status) return;
+      const oldAppointment = payload.old as any;
+      const newAppointment = payload.new as any;
+      if (!newAppointment?.guestName) return;
+      if (oldAppointment?.status === newAppointment?.status) return;
 
-      const status = newTour.status as 'confirmed' | 'completed' | 'cancelled' | 'no_show';
-      const Icon = TOUR_STATUS_ICONS[status];
+      const status = newAppointment.status as 'confirmed' | 'completed' | 'cancelled' | 'no_show';
+      const Icon = APPOINTMENT_STATUS_ICONS[status];
       if (!Icon) return;
 
       const fn = status === 'cancelled' || status === 'no_show'
         ? toast.warning
         : toast.success;
 
-      const copy = notificationForTourStatus(newTour.guestName, status, newTour.propertyAddress);
+      const copy = notificationForAppointmentStatus(newAppointment.guestName, status, newAppointment.serviceAddress);
       fn(copy.title, {
         description: copy.description || undefined,
         icon: <Icon size={16} />,
@@ -173,7 +173,7 @@ export function LiveNotifications({ spaceId, slug }: Props) {
     onEvent: (payload) => {
       const oldRecord = payload.old as any;
       const newRecord = payload.new as any;
-      if (newRecord?.brokerageId) return; // Brokerage intake leads are broker-dashboard only
+      if (newRecord?.agencyId) return; // Agency intake leads are agency-dashboard only
       // Only notify when scoring completes
       if (oldRecord?.scoringStatus === 'pending' && newRecord?.scoringStatus === 'scored' && newRecord?.scoreLabel) {
         const name = newRecord.name || 'A new contact';

@@ -6,8 +6,8 @@
 import { motion } from 'motion/react';
 
 const stats = [
-  { value: '24/7', label: 'Works the inbox while you sleep' },
-  { value: '< 1 min', label: 'Median first touch on a new lead' },
+  { value: '24/7', label: 'Answers clients while you work' },
+  { value: '< 1 min', label: 'Median first reply to a new inquiry' },
   { value: '6 → 1', label: 'Tools replaced by one workspace' },
   { value: '7 days', label: 'Free trial. Cancel anytime' },
 ];

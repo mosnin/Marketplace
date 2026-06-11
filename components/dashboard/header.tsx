@@ -18,7 +18,7 @@ import {
 import { useTheme } from '@/components/theme-provider';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BrandLogo } from '@/components/brand-logo';
-import { secondaryNavItems, realtorNavItems } from '@/lib/nav-items';
+import { secondaryNavItems, providerNavItems } from '@/lib/nav-items';
 import type { NavChild, NavItem } from '@/lib/nav-items';
 import { SECTION_LABEL } from '@/lib/typography';
 import { SidebarConversations } from '@/components/dashboard/sidebar-conversations';
@@ -26,8 +26,8 @@ import { SidebarNavItem } from '@/components/dashboard/sidebar-nav-item';
 import {
   SearchPill,
   WorkspaceSwitcher,
-  brokerAdminNavSections,
-  brokerMemberNavSections,
+  agencyAdminNavSections,
+  agencyMemberNavSections,
 } from '@/components/dashboard/sidebar';
 import { triggerAccountSwitch } from '@/components/dashboard/account-switch';
 import { SidebarWhatsNew } from '@/components/dashboard/sidebar-whats-new';
@@ -35,16 +35,16 @@ import { SidebarUserMenu } from '@/components/dashboard/sidebar-user-menu';
 import { Building2, ArrowLeftRight, Briefcase, ChevronDown, ArrowLeft, Bell, CreditCard, Settings, Check, Calendar, BarChart2, ClipboardList, Wallet, FolderOpen, Shield, PanelLeft, PanelLeftClose } from 'lucide-react';
 import { useSidebarCollapsed } from '@/components/dashboard/sidebar-collapse';
 import { NotificationCenter } from './notification-center';
-import { NotificationBell } from '@/components/broker/notification-bell';
+import { NotificationBell } from '@/components/agency/notification-bell';
 import { ShareLinksMenu } from './share-links-menu';
-import { ChippiPowerToggle } from '@/components/chippi/chippi-power-toggle';
+import { KoalaPowerToggle } from '@/components/koala/koala-power-toggle';
 import { getBreadcrumbLabel } from '@/lib/breadcrumb-routes';
 
-// Broker mobile nav is sourced from the SINGLE source of truth shared with the
-// desktop sidebar — `brokerAdminNavSections` / `brokerMemberNavSections` from
+// Agency mobile nav is sourced from the SINGLE source of truth shared with the
+// desktop sidebar — `agencyAdminNavSections` / `agencyMemberNavSections` from
 // components/dashboard/sidebar.tsx — and rendered through the same
 // `SidebarNavItem` accordion. No separate flat copy here (that drifted: it lost
-// the Chippi chip + Brief/Inbox/History dropdown and used different icons).
+// the Koala chip + Brief/Inbox/History dropdown and used different icons).
 
 interface HeaderProps {
   slug: string;
@@ -54,10 +54,10 @@ interface HeaderProps {
   spaceId?: string;
   spaceName: string;
   title: string;
-  isBroker?: boolean;
-  isBrokerOnly?: boolean;
-  brokerageName?: string | null;
-  brokerageRole?: string | null;
+  isAgency?: boolean;
+  isAgencyOnly?: boolean;
+  agencyName?: string | null;
+  agencyRole?: string | null;
   isPlatformAdmin?: boolean;
 }
 
@@ -78,7 +78,7 @@ function doesItemOwnPath(item: NavItem, pathname: string, base: string): boolean
   return pathname.startsWith(`${base}${item.href}`);
 }
 
-/** Lightweight child-active match for the mobile drawer. Realtor children
+/** Lightweight child-active match for the mobile drawer. Provider children
  *  today don't carry query params, so the desktop's query-string branch
  *  isn't needed here. If that changes, swap this for the shared helper. */
 function isMobileChildActive(child: NavChild, pathname: string, base: string): boolean {
@@ -110,14 +110,14 @@ function SidebarCollapseToggle() {
   );
 }
 
-export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBrokerOnly = false, brokerageName = null, brokerageRole = null, isPlatformAdmin = false }: HeaderProps) {
+export function Header({ slug, spaceId, spaceName, title, isAgency = false, isAgencyOnly = false, agencyName = null, agencyRole = null, isPlatformAdmin = false }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const base = `/s/${slug}`;
   const { theme, toggleTheme } = useTheme();
-  const isOnBrokerPage = pathname.startsWith('/broker');
-  const showBrokerMobileNavOnly = isBroker && isOnBrokerPage;
-  const isOnChippi = pathname.startsWith(`${base}/chippi`);
+  const isOnAgencyPage = pathname.startsWith('/agency');
+  const showAgencyMobileNavOnly = isAgency && isOnAgencyPage;
+  const isOnKoala = pathname.startsWith(`${base}/koala`);
   const { user } = useUser();
   // Admin console link — DB platformRole (server prop) OR Clerk metadata, so
   // an admin set either way sees it. Matches the desktop sidebar.
@@ -132,9 +132,9 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
   // Accordion expansion state for the mobile drawer — same contract as the
   // desktop sidebar: at most one parent open at a time, auto-expand the
   // parent that owns the current route. Closing the drawer doesn't reset
-  // this; reopening reflects whatever route the realtor is on now.
+  // this; reopening reflects whatever route the provider is on now.
   const findActiveParentKey = (): string | null => {
-    for (const item of realtorNavItems) {
+    for (const item of providerNavItems) {
       if (item.children?.length && doesItemOwnPath(item, pathname, base)) {
         return item.href;
       }
@@ -153,12 +153,12 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
     setExpandedKey((prev) => (prev === key ? null : key));
   const closeDrawer = () => setOpen(false);
 
-  // Broker drawer accordion — same contract as the realtor one above, driven by
-  // the shared broker nav sections (base="" since broker hrefs are absolute).
-  const brokerSections =
-    brokerageRole === 'realtor_member' ? brokerMemberNavSections : brokerAdminNavSections;
-  const findBrokerActiveParentKey = (): string | null => {
-    for (const section of brokerSections) {
+  // Agency drawer accordion — same contract as the provider one above, driven by
+  // the shared agency nav sections (base="" since agency hrefs are absolute).
+  const agencySections =
+    agencyRole === 'provider_member' ? agencyMemberNavSections : agencyAdminNavSections;
+  const findAgencyActiveParentKey = (): string | null => {
+    for (const section of agencySections) {
       for (const item of section.items) {
         if (item.children?.length && doesItemOwnPath(item, pathname, '')) {
           return item.href;
@@ -167,16 +167,16 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
     }
     return null;
   };
-  const [brokerExpandedKey, setBrokerExpandedKey] = useState<string | null>(
-    findBrokerActiveParentKey,
+  const [agencyExpandedKey, setAgencyExpandedKey] = useState<string | null>(
+    findAgencyActiveParentKey,
   );
   useEffect(() => {
-    const next = findBrokerActiveParentKey();
-    if (next) setBrokerExpandedKey(next);
+    const next = findAgencyActiveParentKey();
+    if (next) setAgencyExpandedKey(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, brokerageRole]);
-  const handleBrokerToggle = (key: string) => () =>
-    setBrokerExpandedKey((prev) => (prev === key ? null : key));
+  }, [pathname, agencyRole]);
+  const handleAgencyToggle = (key: string) => () =>
+    setAgencyExpandedKey((prev) => (prev === key ? null : key));
 
   return (
     <header data-dashboard-header className="h-14 flex items-center justify-between px-4 md:px-6 sticky top-0 z-40">
@@ -203,7 +203,7 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
           >
             {/* 44x44 close affordance, top-right, plain X — Radix wires the
                 close behaviour. Solid background (no translucent overlay)
-                because the drawer is full-screen — the realtor is in nav
+                because the drawer is full-screen — the provider is in nav
                 mode, not peeking through. */}
             <SheetClose asChild>
               <button
@@ -218,7 +218,7 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
             <div className="relative z-10 flex flex-col h-full overflow-y-auto">
             <SheetHeader className="px-4 py-5 border-b border-sidebar-border">
               <SheetTitle className="flex items-center gap-2.5 text-sidebar-foreground">
-                <BrandLogo className="h-5" alt="Chippi" />
+                <BrandLogo className="h-5" alt="Koala" />
               </SheetTitle>
               {/* Workspace switcher — uses the shared desktop component so the
                   rich popover (email header, ⌘-shortcuts, "+ New" footer) is
@@ -226,17 +226,17 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
                   portals to document.body so it isn't clipped by the drawer. */}
               <div className="mt-2 -mx-3">
                 <WorkspaceSwitcher
-                  currentName={pathname.startsWith('/broker') ? (brokerageName ?? 'Team') : spaceName}
-                  currentSubtitle={pathname.startsWith('/broker') ? 'Team' : 'My workspace'}
-                  currentIcon={pathname.startsWith('/broker') ? Building2 : Briefcase}
+                  currentName={pathname.startsWith('/agency') ? (agencyName ?? 'Team') : spaceName}
+                  currentSubtitle={pathname.startsWith('/agency') ? 'Team' : 'My workspace'}
+                  currentIcon={pathname.startsWith('/agency') ? Building2 : Briefcase}
                   slug={slug}
                   spaceName={spaceName}
-                  brokerageMemberships={
-                    isBroker && brokerageName
-                      ? [{ id: 'current', name: brokerageName, role: brokerageRole ?? 'member' }]
+                  agencyMemberships={
+                    isAgency && agencyName
+                      ? [{ id: 'current', name: agencyName, role: agencyRole ?? 'member' }]
                       : []
                   }
-                  isOnBrokerPage={pathname.startsWith('/broker')}
+                  isOnAgencyPage={pathname.startsWith('/agency')}
                   userEmail={drawerEmail}
                   inDrawer
                 />
@@ -246,11 +246,11 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
               <SearchPill />
             </div>
             <nav className="flex-1 overflow-y-auto px-3 pt-4 pb-2 space-y-0.5">
-              {!isBrokerOnly && !showBrokerMobileNavOnly && (
+              {!isAgencyOnly && !showAgencyMobileNavOnly && (
                 <>
-                  {/* Primary nav ALWAYS renders. The realtor must be able to
+                  {/* Primary nav ALWAYS renders. The provider must be able to
                       reach any destination from any route — the previous
-                      drawer hid the nav entirely on /chippi, which left them
+                      drawer hid the nav entirely on /koala, which left them
                       stranded with only chat history.
 
                       Uses the SAME SidebarNavItem the desktop sidebar
@@ -261,7 +261,7 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
                       parent's chevron closes the previous one (one open at
                       a time). Tapping a link closes the drawer. */}
                   <div className="space-y-0.5">
-                    {realtorNavItems.map((item) => {
+                    {providerNavItems.map((item) => {
                       const hasChildren = !!item.children?.length;
                       return (
                         <SidebarNavItem
@@ -279,13 +279,13 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
                   </div>
 
                   {/* Chat history — animates in/out below the primary nav
-                      when the route enters/leaves /chippi. Same motion
-                      params as the desktop sidebar's chippi section so the
+                      when the route enters/leaves /koala. Same motion
+                      params as the desktop sidebar's koala section so the
                       app feels coherent across viewports. */}
                   <AnimatePresence initial={false} mode="wait">
-                    {isOnChippi && (
+                    {isOnKoala && (
                       <motion.div
-                        key="mobile-chippi-history"
+                        key="mobile-koala-history"
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
@@ -303,20 +303,20 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
                   </AnimatePresence>
                 </>
               )}
-              {/* Broker drawer — renders the SAME broker nav sections as the
+              {/* Agency drawer — renders the SAME agency nav sections as the
                   desktop sidebar through the SAME SidebarNavItem accordion, so
-                  the Chippi chip, Brief/Inbox/History dropdown, icons, and
+                  the Koala chip, Brief/Inbox/History dropdown, icons, and
                   adminOnly gating are identical across viewports. Only shown on
-                  broker pages; brokerage links never bleed into the agent
+                  agency pages; agency links never bleed into the agent
                   drawer (you switch workspaces with the switcher up top). */}
-              {isBroker && showBrokerMobileNavOnly && (
+              {isAgency && showAgencyMobileNavOnly && (
                 <div className="space-y-3">
-                  {brokerSections.map((section) => {
+                  {agencySections.map((section) => {
                     const visibleItems = section.items.filter(
                       (item) =>
                         !item.adminOnly ||
-                        brokerageRole === 'broker_owner' ||
-                        brokerageRole === 'broker_admin',
+                        agencyRole === 'agency_owner' ||
+                        agencyRole === 'agency_admin',
                     );
                     if (visibleItems.length === 0) return null;
                     return (
@@ -332,9 +332,9 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
                               item={item}
                               base=""
                               isActive={doesItemOwnPath(item, pathname, '')}
-                              isExpanded={hasChildren && brokerExpandedKey === item.href}
+                              isExpanded={hasChildren && agencyExpandedKey === item.href}
                               isChildActive={(child) => isMobileChildActive(child, pathname, '')}
-                              onToggle={handleBrokerToggle(item.href)}
+                              onToggle={handleAgencyToggle(item.href)}
                               onNavigate={closeDrawer}
                             />
                           );
@@ -347,9 +347,9 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
             </nav>
             {/* What's new + user-menu chip — same components the desktop
                 sidebar uses so localStorage state is shared (dismissals,
-                favorites, etc.). Only renders for the realtor workspace —
-                the broker drawer keeps its existing team/account footer. */}
-            {!isBrokerOnly && !showBrokerMobileNavOnly && slug && (
+                favorites, etc.). Only renders for the provider workspace —
+                the agency drawer keeps its existing team/account footer. */}
+            {!isAgencyOnly && !showAgencyMobileNavOnly && slug && (
               <>
                 <SidebarWhatsNew />
                 {showAdminLink && (
@@ -376,7 +376,7 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
               </>
             )}
             <div className="px-3 pb-4 space-y-0.5 border-t border-sidebar-border pt-3">
-              {!showBrokerMobileNavOnly && ((pathname.startsWith(`${base}/settings`) || pathname.startsWith(`${base}/billing`)) ? (
+              {!showAgencyMobileNavOnly && ((pathname.startsWith(`${base}/settings`) || pathname.startsWith(`${base}/billing`)) ? (
                 <>
                   <Link
                     href={base}
@@ -438,31 +438,31 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
                 </>
               ) : null)}
               <div className="flex items-center gap-2 px-3 pt-3">
-                <BrandLogo className="h-4" alt="Chippi" />
+                <BrandLogo className="h-4" alt="Koala" />
               </div>
             </div>
             </div>
           </SheetContent>
         </Sheet>
 
-        {/* Mobile: the Chippi mark in the top bar. On desktop the sidebar logo
+        {/* Mobile: the Koala mark in the top bar. On desktop the sidebar logo
             and the breadcrumb carry identity; on mobile the sidebar is hidden
             (bottom MobileNav takes over) and the top bar otherwise shows only
             the menu button — so the brand mark would be absent until the drawer
             is opened. Links to the dashboard home. */}
         <Link
-          href={isOnBrokerPage ? '/broker' : base}
+          href={isOnAgencyPage ? '/agency' : base}
           className="md:hidden inline-flex items-center"
-          aria-label="Chippi home"
+          aria-label="Koala home"
         >
-          <BrandLogo className="h-5" alt="Chippi" />
+          <BrandLogo className="h-5" alt="Koala" />
         </Link>
 
-        {/* Chippi mark on the brokerage dashboard header — gives the broker
-            surface the same brand anchor the realtor side carries. */}
-        {isOnBrokerPage && (
-          <Link href="/broker" className="hidden md:inline-flex items-center mr-1" aria-label="Chippi">
-            <BrandLogo className="h-5" alt="Chippi" />
+        {/* Koala mark on the agency dashboard header — gives the agency
+            surface the same brand anchor the provider side carries. */}
+        {isOnAgencyPage && (
+          <Link href="/agency" className="hidden md:inline-flex items-center mr-1" aria-label="Koala">
+            <BrandLogo className="h-5" alt="Koala" />
           </Link>
         )}
 
@@ -470,14 +470,14 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
             The current section reads as the focal label; the workspace name
             is quiet context. Quick-switch is a borderless link, not a chip. */}
         <div className="hidden md:flex items-center gap-2 text-[13px]">
-          {(pathname.startsWith('/broker') || isBrokerOnly) && brokerageName ? (
+          {(pathname.startsWith('/agency') || isAgencyOnly) && agencyName ? (
             <>
-              <span className="text-muted-foreground/70 truncate max-w-[160px]">{brokerageName}</span>
+              <span className="text-muted-foreground/70 truncate max-w-[160px]">{agencyName}</span>
               <span className="text-muted-foreground/30">/</span>
               <span className="font-medium text-foreground">
                 {getBreadcrumbLabel(pathname)}
               </span>
-              {!isBrokerOnly && slug && (
+              {!isAgencyOnly && slug && (
                 <Link
                   href={base}
                   className="ml-2 inline-flex items-center gap-1 text-[11px] text-muted-foreground/70 hover:text-foreground transition-colors"
@@ -495,15 +495,15 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
               <span className="font-medium text-foreground">
                 {getBreadcrumbLabel(pathname, base)}
               </span>
-              {isBroker && brokerageName && (
+              {isAgency && agencyName && (
                 <Link
-                  href="/broker"
+                  href="/agency"
                   onClick={() => triggerAccountSwitch()}
                   className="ml-2 inline-flex items-center gap-1 text-[11px] text-muted-foreground/70 hover:text-foreground transition-colors"
-                  title={`Switch to ${brokerageName}`}
+                  title={`Switch to ${agencyName}`}
                 >
                   <ArrowLeftRight size={10} />
-                  {brokerageName}
+                  {agencyName}
                 </Link>
               )}
             </>
@@ -515,10 +515,10 @@ export function Header({ slug, spaceId, spaceName, title, isBroker = false, isBr
           lives on the sidebar's pill (and ⌘K) so the header doesn't carry a
           duplicate trigger. */}
       <div className="flex items-center gap-1.5">
-        {slug && <ChippiPowerToggle />}
-        {slug && !isOnBrokerPage && <ShareLinksMenu slug={slug} />}
+        {slug && <KoalaPowerToggle />}
+        {slug && !isOnAgencyPage && <ShareLinksMenu slug={slug} />}
         {slug && <NotificationCenter slug={slug} spaceId={spaceId} />}
-        {isBrokerOnly && !slug && <NotificationBell />}
+        {isAgencyOnly && !slug && <NotificationBell />}
         <button
           type="button"
           onClick={toggleTheme}

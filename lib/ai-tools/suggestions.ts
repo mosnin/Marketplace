@@ -4,31 +4,31 @@
  * v1; an LLM-driven follow-up generator can replace this later without
  * touching the render layer.
  *
- * Design intent (Jobs): the chips remove a typing step for the realtor's
+ * Design intent (Jobs): the chips remove a typing step for the provider's
  * next move. Each chip is the ENTIRE next prompt — clicking it fires the
  * exact text as the user's next message. So the labels are written as
- * the realtor would say them, not as commands.
+ * the provider would say them, not as commands.
  */
 
 import type { MessageBlock, ToolCallBlock } from './blocks';
 
 /** Map last-tool-in-turn → curated follow-up prompts. */
 const SUGGESTIONS_BY_TOOL: Record<string, string[]> = {
-  search_contacts: ['Draft a follow-up email', 'Schedule a tour', 'Show their deals'],
+  search_contacts: ['Draft a follow-up email', 'Schedule an appointment', 'Show their deals'],
   get_contact: ['Draft an email', 'Schedule a call', 'Add a note'],
-  find_person: ['Draft a follow-up', 'Add to pipeline', 'Schedule a tour'],
+  find_person: ['Draft a follow-up', 'Add to pipeline', 'Schedule an appointment'],
   search_deals: ['Show stuck deals', 'Find overdue follow-ups', "What's closing this week?"],
   pipeline_summary: ['Show stuck deals', 'Find overdue follow-ups', 'Show hot leads'],
   find_stuck_deals: ['Draft re-engagement emails', "What's closing this week?", 'Show hot leads'],
   find_overdue_followups: ['Draft reminders for these', 'Snooze for tomorrow', 'Show pipeline'],
   find_quiet_hot_persons: ['Draft re-engagement emails', 'Schedule check-in calls', 'Show pipeline'],
-  search_properties: ['Schedule a tour here', 'Find similar properties', 'Save this property'],
-  find_property: ['Schedule a tour here', 'Find similar properties', 'Show recent comparables'],
-  add_property: ['Schedule a tour', 'Match to interested buyers', 'Add another property'],
-  schedule_tour: ['Send a confirmation', 'Add follow-up reminder', 'Block prep time'],
-  reschedule_tour: ['Send the update', 'Add a follow-up note', 'Show this week'],
-  check_availability: ['Schedule a tour', 'Send these times to the lead', 'Block focus time'],
-  find_tours: ['Send a reminder', 'Add follow-up after tour', "Show today's calendar"],
+  search_services: ['Schedule an appointment here', 'Find similar services', 'Save this service'],
+  find_service: ['Schedule an appointment here', 'Find similar services', 'Show recent comparables'],
+  add_service: ['Schedule an appointment', 'Match to interested buyers', 'Add another service'],
+  schedule_appointment: ['Send a confirmation', 'Add follow-up reminder', 'Block prep time'],
+  reschedule_appointment: ['Send the update', 'Add a follow-up note', 'Show this week'],
+  check_availability: ['Schedule an appointment', 'Send these times to the lead', 'Block focus time'],
+  find_appointments: ['Send a reminder', 'Add follow-up after appointment', "Show today's calendar"],
   send_email: ['Log to deal notes', 'Schedule a follow-up', 'Draft another'],
   draft_email: ['Send it', 'Adjust the tone', 'Save as template'],
   send_sms: ['Log to deal notes', 'Set a follow-up reminder', 'Draft another'],

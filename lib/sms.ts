@@ -123,31 +123,31 @@ export function newLeadSMS(p: { spaceName: string; leadName: string; leadPhone?:
   const leadContact = p.leadPhone ? ` Phone: ${p.leadPhone}.` : '';
   return {
     to: p.phone,
-    body: `[${p.spaceName}] New lead: ${p.leadName}${score}.${leadContact} Open your dashboard to review.`,
+    body: `[${p.spaceName}] New inquiry: ${p.leadName}${score}.${leadContact} Open your dashboard to review.`,
   };
 }
 
-export function newTourSMS(p: { spaceName: string; guestName: string; date: string; time: string; property?: string | null; phone: string }): SendSMSParams {
-  const prop = p.property ? ` at ${p.property}` : '';
+export function newAppointmentSMS(p: { spaceName: string; guestName: string; date: string; time: string; service?: string | null; phone: string }): SendSMSParams {
+  const prop = p.service ? ` for ${p.service}` : '';
   return {
     to: p.phone,
-    body: `[${p.spaceName}] New tour booked: ${p.guestName}${prop} on ${p.date} at ${p.time}. Check your dashboard for details.`,
+    body: `[${p.spaceName}] New session booked: ${p.guestName}${prop} on ${p.date} at ${p.time}. Check your dashboard for details.`,
   };
 }
 
-export function tourConfirmationSMS(p: { guestName: string; guestPhone: string; businessName: string; date: string; time: string; property?: string | null }): SendSMSParams {
-  const prop = p.property ? ` at ${p.property}` : '';
+export function appointmentConfirmationSMS(p: { guestName: string; guestPhone: string; businessName: string; date: string; time: string; service?: string | null }): SendSMSParams {
+  const prop = p.service ? ` for ${p.service}` : '';
   return {
     to: p.guestPhone,
-    body: `Hi ${p.guestName}! Your tour with ${p.businessName}${prop} is confirmed for ${p.date} at ${p.time}. Contact your agent if you need to reschedule.`,
+    body: `Hi ${p.guestName}, your session with ${p.businessName}${prop} is confirmed for ${p.date} at ${p.time}. Reply to reschedule.`,
   };
 }
 
-export function tourReminderSMS(p: { guestName: string; guestPhone: string; businessName: string; time: string; property?: string | null }): SendSMSParams {
-  const prop = p.property ? ` at ${p.property}` : '';
+export function appointmentReminderSMS(p: { guestName: string; guestPhone: string; businessName: string; time: string; service?: string | null }): SendSMSParams {
+  const prop = p.service ? ` for ${p.service}` : '';
   return {
     to: p.guestPhone,
-    body: `Hi ${p.guestName}, reminder: your tour with ${p.businessName}${prop} is tomorrow at ${p.time}. See you there!`,
+    body: `Hi ${p.guestName}, reminder: your session with ${p.businessName}${prop} is tomorrow at ${p.time}. See you then.`,
   };
 }
 

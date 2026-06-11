@@ -53,7 +53,7 @@ Vercel for frontend and API routes. Supabase for managed PostgreSQL.
 
 ### Email
 
-Resend for transactional email delivery (tour confirmations, waitlist notifications, broker notifications, invitation emails).
+Resend for transactional email delivery (appointment confirmations, waitlist notifications, agency notifications, invitation emails).
 
 ### Dark Mode
 
@@ -114,7 +114,7 @@ Tanstack Table (headless) — add when feature modules require sortable, filtera
 
 ### File Uploads
 
-uploadthing for upload infrastructure, react-dropzone for drag-and-drop UI — add when avatar uploads, document attachments, or property photos are needed.
+uploadthing for upload infrastructure, react-dropzone for drag-and-drop UI — add when avatar uploads, document attachments, or service photos are needed.
 
 ### Background Jobs
 

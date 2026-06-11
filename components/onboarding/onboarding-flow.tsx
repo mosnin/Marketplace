@@ -26,21 +26,21 @@ import {
   type TileOption,
 } from './onboarding-steps';
 
-// ── Brokerage cinematics copy ───────────────────────────────────────────────
-// The brokerage flow gets its OWN bookend preloaders (separate from the
-// realtor cold open), built on the same OnboardingIntro / OnboardingReady
+// ── Agency cinematics copy ───────────────────────────────────────────────
+// The agency flow gets its OWN bookend preloaders (separate from the
+// provider cold open), built on the same OnboardingIntro / OnboardingReady
 // engine. Module-level so their array identity is stable across renders.
-const BROKER_INTRO_LINE = 'Introducing the future of brokerage software.';
-const BROKER_READY_WORDS = ['Building.', 'Wiring.', 'Done.'] as const;
+const AGENCY_INTRO_LINE = 'Introducing the future of agency software.';
+const AGENCY_READY_WORDS = ['Building.', 'Wiring.', 'Done.'] as const;
 
 // ── Role ───────────────────────────────────────────────────────────────────
 
-type Role = 'realtor' | 'broker' | 'broker_only';
+type Role = 'provider' | 'agency' | 'agency_only';
 
 const ROLE_OPTIONS: TileOption<Role>[] = [
-  { value: 'realtor',     label: 'Realtor',           description: 'Solo agent with a pipeline.',      icon: Home },
-  { value: 'broker',      label: 'Broker + realtor',  description: 'Run a team and sell.',             icon: Briefcase },
-  { value: 'broker_only', label: 'Broker only',       description: 'Team lead - no personal pipeline.', icon: Building2 },
+  { value: 'provider',     label: "I'm an independent professional", description: 'Solo provider with my own pipeline.',   icon: Home },
+  { value: 'agency',      label: 'I run a team + take clients',     description: 'Manage a team and serve my own clients.', icon: Briefcase },
+  { value: 'agency_only', label: 'I run a team only',              description: 'Team lead — no personal client pipeline.', icon: Building2 },
 ];
 
 // ── Shared option sets ─────────────────────────────────────────────────────
@@ -69,16 +69,19 @@ const AGENT_COUNT: TileOption<string>[] = [
   { value: '50+',   label: '50+' },
 ];
 
-const BROKERAGE_TYPE: TileOption<string>[] = [
+const AGENCY_TYPE: TileOption<string>[] = [
   { value: 'independent', label: 'Independent', icon: Building2 },
   { value: 'franchise',   label: 'Franchise',   icon: Briefcase },
   { value: 'virtual',     label: 'Virtual',     icon: Users2 },
 ];
 
 const PRIMARY_MARKET: TileOption<string>[] = [
-  { value: 'residential_rental', label: 'Residential rental' },
-  { value: 'commercial',         label: 'Commercial' },
-  { value: 'mixed',              label: 'Mixed' },
+  { value: 'residential_rental', label: 'Hair & beauty' },
+  { value: 'commercial',         label: 'Fitness & coaching' },
+  { value: 'mixed',              label: 'Photography' },
+  { value: 'tutoring',           label: 'Tutoring & education' },
+  { value: 'consulting',         label: 'Consulting' },
+  { value: 'other',              label: 'Other' },
 ];
 
 const COMMISSION_STRUCTURE: TileOption<string>[] = [
@@ -92,23 +95,23 @@ const COMMISSION_STRUCTURE: TileOption<string>[] = [
 interface FormValues {
   name: string;
   role: Role | null;
-  // Realtor / broker-with-workspace
+  // Provider / agency-with-workspace
   businessName: string;
   slug: string;
-  realtorPhone: string;
-  realtorBio: string;
+  providerPhone: string;
+  providerBio: string;
   logoUrl: string | null;
   // Shared
   timezone: string;
   hearAbout: string;
-  // Brokerage
-  brokerageName: string;
-  brokerWebsiteUrl: string;
+  // Agency
+  agencyName: string;
+  agencyWebsiteUrl: string;
   officeAddress: string;
   officePhone: string;
-  brokerLogoUrl: string;
+  agencyLogoUrl: string;
   agentCount: string;
-  brokerageType: string;
+  agencyType: string;
   primaryMarket: string;
   commissionStructure: string;
   geographicCoverage: string;
@@ -121,7 +124,7 @@ interface FormValues {
  * string union rather than enum so typos surface at compile time.
  *
  * `role-and-timezone` is one screen that captures both - collapsing two earlier
- * friction steps into a single pill-pair. Pain-point survey was removed; Chippi
+ * friction steps into a single pill-pair. Pain-point survey was removed; Koala
  * infers usage from behavior.
  */
 type StepId =
@@ -132,13 +135,13 @@ type StepId =
   | 'about-you'          // grouped: phone + bio
   | 'logo'
   | 'hear'
-  | 'brokerage-name'
-  | 'brokerage-contact'  // grouped: office address + phone
-  | 'brokerage-logo'
-  | 'brokerage-agent-count'
-  | 'brokerage-type'
-  | 'brokerage-market'
-  | 'brokerage-commission';
+  | 'agency-name'
+  | 'agency-contact'  // grouped: office address + phone
+  | 'agency-logo'
+  | 'agency-agent-count'
+  | 'agency-type'
+  | 'agency-market'
+  | 'agency-commission';
 
 /**
  * Compute the step sequence from the chosen role. The combined
@@ -152,18 +155,18 @@ function stepsFor(role: Role | null): StepId[] {
   if (!role) return ['role-and-timezone'];
 
   const base: StepId[] = ['role-and-timezone', 'name'];
-  if (role === 'realtor' || role === 'broker') {
+  if (role === 'provider' || role === 'agency') {
     base.push('business-name', 'slug', 'about-you', 'logo');
   }
-  if (role === 'broker' || role === 'broker_only') {
+  if (role === 'agency' || role === 'agency_only') {
     base.push(
-      'brokerage-name',
-      'brokerage-contact',
-      'brokerage-logo',
-      'brokerage-agent-count',
-      'brokerage-type',
-      'brokerage-market',
-      'brokerage-commission',
+      'agency-name',
+      'agency-contact',
+      'agency-logo',
+      'agency-agent-count',
+      'agency-type',
+      'agency-market',
+      'agency-commission',
     );
   }
   base.push('hear');
@@ -176,7 +179,7 @@ interface OnboardingFlowProps {
   defaultName: string;
   /**
    * The signed-in user's Clerk avatar. Intentionally not used to prefill the
-   * business-logo step - a realtor's profile photo should not double as their
+   * business-logo step - a provider's profile photo should not double as their
    * company logo. Accepted here so callers can pass it for a future
    * avatar-specific step.
    */
@@ -190,18 +193,18 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
     role: null,
     businessName: '',
     slug: '',
-    realtorPhone: '',
-    realtorBio: '',
+    providerPhone: '',
+    providerBio: '',
     logoUrl: null,
     timezone: '',
     hearAbout: '',
-    brokerageName: '',
-    brokerWebsiteUrl: '',
+    agencyName: '',
+    agencyWebsiteUrl: '',
     officeAddress: '',
     officePhone: '',
-    brokerLogoUrl: '',
+    agencyLogoUrl: '',
     agentCount: '',
-    brokerageType: '',
+    agencyType: '',
     primaryMarket: '',
     commissionStructure: '',
     geographicCoverage: '',
@@ -264,8 +267,8 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
     const role = values.role!;
     setSubmitting(true);
     try {
-      if (role === 'broker_only') {
-        // Broker-only: skip workspace creation.
+      if (role === 'agency_only') {
+        // Agency-only: skip workspace creation.
         // User-level fields (timezone, hearAbout, etc.) aren't persisted in
         // this path - save_profile doesn't accept them and there's no
         // create_space call. Pre-existing API limitation.
@@ -276,31 +279,31 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
             action: 'save_profile',
             name: values.name.trim(),
             phone: '',
-            businessName: values.brokerageName.trim(),
+            businessName: values.agencyName.trim(),
           }),
         });
         if (!profileRes.ok) throw await errorFrom(profileRes);
 
-        const brokerRes = await fetch('/api/broker/create', {
+        const agencyRes = await fetch('/api/agency/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(brokerCreateBody(values)),
+          body: JSON.stringify(agencyCreateBody(values)),
         });
-        if (!brokerRes.ok) throw await errorFrom(brokerRes);
+        if (!agencyRes.ok) throw await errorFrom(agencyRes);
 
         const completeRes = await fetch('/api/onboarding', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'complete', accountType: 'broker_only' }),
+          body: JSON.stringify({ action: 'complete', accountType: 'agency_only' }),
         });
         if (!completeRes.ok) throw await errorFrom(completeRes);
 
-        redirectRef.current = '/broker';
+        redirectRef.current = '/agency';
         setPhase('ready');
         return;
       }
 
-      // Realtor or broker-with-workspace. Personal phone is collected on the
+      // Provider or agency-with-workspace. Personal phone is collected on the
       // about-you step for both roles, so persist it in both cases.
       const profileRes = await fetch('/api/onboarding', {
         method: 'POST',
@@ -308,7 +311,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         body: JSON.stringify({
           action: 'save_profile',
           name: values.name.trim(),
-          phone: values.realtorPhone.trim(),
+          phone: values.providerPhone.trim(),
           businessName: values.businessName.trim(),
         }),
       });
@@ -317,19 +320,19 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
       // create_space persists space-level config AND User-level fields via its
       // userUpdates block - so we send timezone, bio, and referralSource here
       // (save_profile silently drops them). biggestPainPoint is intentionally
-      // null: the survey step was removed; Chippi infers usage from behavior.
+      // null: the survey step was removed; Koala infers usage from behavior.
       const spaceRes = await fetch('/api/onboarding', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'create_space',
           slug: values.slug.trim(),
-          intakePageTitle: 'Rental Application',
-          intakePageIntro: 'Share a few details so I can review your rental fit faster.',
+          intakePageTitle: 'New Client Intake',
+          intakePageIntro: 'Share a few details so I can get you set up quickly.',
           businessName: values.businessName.trim(),
           logoUrl: values.logoUrl ?? undefined,
-          bio: values.realtorBio.trim() || undefined,
-          phone: values.realtorPhone.trim() || undefined,
+          bio: values.providerBio.trim() || undefined,
+          phone: values.providerPhone.trim() || undefined,
           timezone: values.timezone || undefined,
           referralSource: values.hearAbout || undefined,
           biggestPainPoint: null,
@@ -347,26 +350,26 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         throw new Error(spaceData?.error || 'Failed to create workspace.');
       }
 
-      if (role === 'broker') {
-        const brokerRes = await fetch('/api/broker/create', {
+      if (role === 'agency') {
+        const agencyRes = await fetch('/api/agency/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(brokerCreateBody(values)),
+          body: JSON.stringify(agencyCreateBody(values)),
         });
-        const brokerData = await brokerRes.json().catch(() => ({}));
-        if (!brokerRes.ok) throw new Error(brokerData?.error || 'Failed to create brokerage.');
+        const agencyData = await agencyRes.json().catch(() => ({}));
+        if (!agencyRes.ok) throw new Error(agencyData?.error || 'Failed to create agency.');
 
-        const newBrokerageId = brokerData.brokerage?.id;
-        if (newBrokerageId && spaceData?.slug) {
+        const newAgencyId = agencyData.agency?.id;
+        if (newAgencyId && spaceData?.slug) {
           await fetch('/api/spaces', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug: spaceData.slug, brokerageId: newBrokerageId }),
+            body: JSON.stringify({ slug: spaceData.slug, agencyId: newAgencyId }),
           }).catch(() => undefined);
         }
       }
 
-      const accountType = role === 'broker' ? 'both' : 'realtor';
+      const accountType = role === 'agency' ? 'both' : 'provider';
       const completeRes = await fetch('/api/onboarding', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -374,8 +377,8 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
       });
       if (!completeRes.ok) throw await errorFrom(completeRes);
 
-      redirectRef.current = role === 'broker'
-        ? '/broker'
+      redirectRef.current = role === 'agency'
+        ? '/agency'
         : `/s/${(spaceData.slug as string) ?? values.slug}`;
       setPhase('ready');
     } catch (err) {
@@ -385,9 +388,9 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
     }
   }
 
-  // Cold open — the brokerage cinematic preloader, before the form.
+  // Cold open — the agency cinematic preloader, before the form.
   if (phase === 'intro') {
-    return <OnboardingIntro line={BROKER_INTRO_LINE} onDone={() => setPhase('flow')} />;
+    return <OnboardingIntro line={AGENCY_INTRO_LINE} onDone={() => setPhase('flow')} />;
   }
 
   return (
@@ -426,7 +429,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
           title="What do you call your business?"
           subtitle="Goes on intake forms, emails, and your public page."
           label="Business or brand name"
-          placeholder="Sunset Realty"
+          placeholder="Sunrise Studio"
           value={values.businessName}
           onChange={(v) => set('businessName', v)}
           onNext={goNext}
@@ -456,16 +459,16 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
               label: 'Phone number',
               placeholder: '(415) 555-0123',
               type: 'tel',
-              value: values.realtorPhone,
-              onChange: (v) => set('realtorPhone', v),
+              value: values.providerPhone,
+              onChange: (v) => set('providerPhone', v),
               maxLength: 40,
             },
             {
               key: 'bio',
               label: 'Short bio',
-              placeholder: '15 years helping families find their next home.',
-              value: values.realtorBio,
-              onChange: (v) => set('realtorBio', v),
+              placeholder: '10 years helping clients look and feel their best.',
+              value: values.providerBio,
+              onChange: (v) => set('providerBio', v),
               maxLength: 500,
               multiline: true,
               rows: 3,
@@ -488,20 +491,20 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         />
       )}
 
-      {stepId === 'brokerage-name' && (
+      {stepId === 'agency-name' && (
         <TextStep
-          title="What's your brokerage called?"
-          label="Brokerage name"
-          placeholder="Sunset Realty Group"
-          value={values.brokerageName}
-          onChange={(v) => set('brokerageName', v)}
+          title="What's your agency called?"
+          label="Agency name"
+          placeholder="Sunrise Studios Group"
+          value={values.agencyName}
+          onChange={(v) => set('agencyName', v)}
           onNext={goNext}
           required
           maxLength={120}
         />
       )}
 
-      {stepId === 'brokerage-contact' && (
+      {stepId === 'agency-contact' && (
         <MultiFieldStep
           title="Where should leads find you?"
           subtitle="Optional - office address and a main phone line."
@@ -529,21 +532,21 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         />
       )}
 
-      {stepId === 'brokerage-logo' && (
+      {stepId === 'agency-logo' && (
         <PhotoStep
-          title="Add your brokerage logo"
+          title="Add your agency logo"
           subtitle="Optional - goes on emails and shared packets."
-          value={values.brokerLogoUrl || null}
-          onChange={(url) => set('brokerLogoUrl', url ?? '')}
+          value={values.agencyLogoUrl || null}
+          onChange={(url) => set('agencyLogoUrl', url ?? '')}
           onNext={goNext}
           onSkip={goNext}
-          uploadKind="broker_logo"
+          uploadKind="agency_logo"
         />
       )}
 
-      {stepId === 'brokerage-agent-count' && (
+      {stepId === 'agency-agent-count' && (
         <TilesStep
-          title="How many agents on the team?"
+          title="How many providers on the team?"
           options={AGENT_COUNT}
           value={values.agentCount || null}
           onSelect={(v) => set('agentCount', v)}
@@ -553,21 +556,21 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         />
       )}
 
-      {stepId === 'brokerage-type' && (
+      {stepId === 'agency-type' && (
         <TilesStep
-          title="What kind of brokerage are you?"
-          options={BROKERAGE_TYPE}
-          value={values.brokerageType || null}
-          onSelect={(v) => set('brokerageType', v)}
+          title="What kind of agency are you?"
+          options={AGENCY_TYPE}
+          value={values.agencyType || null}
+          onSelect={(v) => set('agencyType', v)}
           onNext={goNext}
           columns={3}
           advanceOnSelect
         />
       )}
 
-      {stepId === 'brokerage-market' && (
+      {stepId === 'agency-market' && (
         <TilesStep
-          title="Primary market?"
+          title="What's your team's primary category?"
           options={PRIMARY_MARKET}
           value={values.primaryMarket || null}
           onSelect={(v) => set('primaryMarket', v)}
@@ -577,7 +580,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
         />
       )}
 
-      {stepId === 'brokerage-commission' && (
+      {stepId === 'agency-commission' && (
         <TilesStep
           title="How do you structure commission?"
           options={COMMISSION_STRUCTURE}
@@ -591,7 +594,7 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
 
       {stepId === 'hear' && (
         <TilesStep
-          title="How did you hear about Chippi?"
+          title="How did you hear about Koala?"
           options={HEAR_ABOUT}
           value={values.hearAbout || null}
           onSelect={(v) => set('hearAbout', v)}
@@ -605,8 +608,8 @@ export function OnboardingFlow({ defaultName, userImageUrl: _userImageUrl }: Onb
 
     {phase === 'ready' && (
       <OnboardingReady
-        words={BROKER_READY_WORDS}
-        finalLine={values.role === 'realtor' ? 'Your account is ready.' : 'Your brokerage is ready.'}
+        words={AGENCY_READY_WORDS}
+        finalLine={values.role === 'provider' ? 'Your account is ready.' : 'Your agency is ready.'}
         onDone={() => { if (redirectRef.current) router.push(redirectRef.current); }}
       />
     )}
@@ -729,15 +732,15 @@ function RoleAndTimezoneStep({
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-function brokerCreateBody(v: FormValues) {
+function agencyCreateBody(v: FormValues) {
   return {
-    name: v.brokerageName.trim(),
-    logoUrl: v.brokerLogoUrl.trim() || undefined,
-    websiteUrl: v.brokerWebsiteUrl.trim() || undefined,
+    name: v.agencyName.trim(),
+    logoUrl: v.agencyLogoUrl.trim() || undefined,
+    websiteUrl: v.agencyWebsiteUrl.trim() || undefined,
     officeAddress: v.officeAddress.trim() || undefined,
     officePhone: v.officePhone.trim() || undefined,
     agentCount: v.agentCount || undefined,
-    brokerageType: v.brokerageType || undefined,
+    agencyType: v.agencyType || undefined,
     primaryMarket: v.primaryMarket || undefined,
     commissionStructure: v.commissionStructure || undefined,
     geographicCoverage: v.geographicCoverage.trim() || undefined,

@@ -49,8 +49,8 @@ const STRICT_MODE_BANNED_KEYS = [
   'maxItems',
   'pattern',
   'multipleOf',
-  'minProperties',
-  'maxProperties',
+  'minServices',
+  'maxServices',
   'uniqueItems',
 ] as const;
 

@@ -125,7 +125,7 @@ export function LeadDetailPanel({
     budgetDisplay ||
     app?.preApprovalStatus ||
     app?.preApprovalAmount ||
-    app?.propertyType ||
+    app?.serviceType ||
     app?.bedrooms ||
     app?.bathrooms ||
     app?.employmentStatus ||
@@ -134,7 +134,7 @@ export function LeadDetailPanel({
     app?.numberOfOccupants != null ||
     app?.adultsOnApplication != null ||
     app?.hasPets ||
-    app?.propertyAddress ||
+    app?.serviceAddress ||
     lead.preferences;
 
   return (
@@ -246,8 +246,8 @@ export function LeadDetailPanel({
                     <Tag size={10} />
                     {lead.sourceLabel === 'intake-form'
                       ? 'Intake form'
-                      : lead.sourceLabel === 'tour-booking'
-                      ? 'Tour booking'
+                      : lead.sourceLabel === 'appointment-booking'
+                      ? 'Appointment booking'
                       : lead.sourceLabel}
                   </span>
                 </>
@@ -373,7 +373,7 @@ export function LeadDetailPanel({
                     {app?.preApprovalAmount && (
                       <DetailChip icon={DollarSign} label={`Approved: ${app.preApprovalAmount}`} />
                     )}
-                    {app?.propertyType && <DetailChip icon={Home} label={app.propertyType} />}
+                    {app?.serviceType && <DetailChip icon={Home} label={app.serviceType} />}
                     {app?.bedrooms && <DetailChip icon={BedDouble} label={`${app.bedrooms} bed`} />}
                     {app?.bathrooms && <DetailChip icon={Bath} label={`${app.bathrooms} bath`} />}
                     {app?.employmentStatus && (
@@ -411,10 +411,10 @@ export function LeadDetailPanel({
                     )}
                   </>
                 )}
-                {(app?.propertyAddress || lead.preferences) && (
+                {(app?.serviceAddress || lead.preferences) && (
                   <DetailChip
                     icon={MapPin}
-                    label={app?.propertyAddress ?? lead.preferences ?? ''}
+                    label={app?.serviceAddress ?? lead.preferences ?? ''}
                   />
                 )}
               </div>

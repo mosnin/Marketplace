@@ -1,9 +1,9 @@
--- Per-date availability overrides for tour scheduling.
+-- Per-date availability overrides for appointment scheduling.
 -- Allows agents to set custom hours for specific dates or block them entirely.
 -- When an override exists for a date, it takes priority over the default
 -- SpaceSetting hours/days. If isBlocked = true, the entire day is unavailable.
 
-CREATE TABLE IF NOT EXISTS "TourAvailabilityOverride" (
+CREATE TABLE IF NOT EXISTS "AppointmentAvailabilityOverride" (
   id          text PRIMARY KEY DEFAULT gen_random_uuid()::text,
   "spaceId"   text NOT NULL REFERENCES "Space"(id) ON DELETE CASCADE,
   date        date NOT NULL,
@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS "TourAvailabilityOverride" (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_override_space_date
-  ON "TourAvailabilityOverride" ("spaceId", date);
+  ON "AppointmentAvailabilityOverride" ("spaceId", date);
 
 CREATE INDEX IF NOT EXISTS idx_override_space
-  ON "TourAvailabilityOverride" ("spaceId");
+  ON "AppointmentAvailabilityOverride" ("spaceId");
 
-ALTER TABLE "TourAvailabilityOverride" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "AppointmentAvailabilityOverride" ENABLE ROW LEVEL SECURITY;

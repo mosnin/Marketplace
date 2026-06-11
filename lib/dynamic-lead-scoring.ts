@@ -186,12 +186,12 @@ function collectMissingRequired(
 
 function deriveNextAction(tier: string, leadType: string): string {
   if (leadType === 'buyer') {
-    if (tier === 'hot') return 'Schedule showing or buyer consultation within 2 hours';
-    if (tier === 'warm') return 'Send property listings and follow up within 24 hours';
-    return 'Add to nurture campaign with market updates';
+    if (tier === 'hot') return 'Schedule a consultation or session within 2 hours';
+    if (tier === 'warm') return 'Send service details and follow up within 24 hours';
+    return 'Add to nurture sequence with relevant offerings';
   }
-  // rental / general
-  if (tier === 'hot') return 'Schedule tour or call within 2 hours';
+  // service inquiry / general
+  if (tier === 'hot') return 'Schedule a session or call within 2 hours';
   if (tier === 'warm') return 'Send follow-up within 24 hours';
   return 'Add to weekly follow-up queue';
 }
@@ -213,7 +213,7 @@ function deriveLeadState(
     return 'likely_unqualified';
   }
 
-  if (tier === 'hot') return 'high_priority_qualified_renter';
+  if (tier === 'hot') return 'high_priority_qualified_client';
   if (tier === 'warm') return 'qualified_low_urgency';
   return 'likely_unqualified';
 }

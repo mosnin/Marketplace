@@ -42,7 +42,7 @@ export const publicApplicationSchema = z.object({
   preApprovalStatus: optStr,
   preApprovalLender: optStr,
   preApprovalAmount: optStr,
-  propertyType: optStr,
+  serviceType: optStr,
   bedrooms: optStr,
   bathrooms: optStr,
   mustHaves: optStr,
@@ -59,8 +59,8 @@ export const publicApplicationSchema = z.object({
   housingSituation: optStr,
   buyerTimeline: optStr,
 
-  // Step 1: Property Selection
-  propertyAddress: optStr,
+  // Step 1: Service Selection
+  serviceAddress: optStr,
   unitType: optStr,
   targetMoveInDate: optStr,
   monthlyRent: z
@@ -205,7 +205,7 @@ export function applicationFingerprintKey(input: Pick<PublicApplicationInput, 's
 export function buildApplicationData(input: PublicApplicationInput) {
   return {
     leadType: input.leadType,
-    propertyAddress: input.propertyAddress,
+    serviceAddress: input.serviceAddress,
     unitType: input.unitType,
     targetMoveInDate: input.targetMoveInDate,
     monthlyRent: input.monthlyRent,
@@ -249,7 +249,7 @@ export function buildApplicationData(input: PublicApplicationInput) {
     preApprovalStatus: input.preApprovalStatus,
     preApprovalLender: input.preApprovalLender,
     preApprovalAmount: input.preApprovalAmount,
-    propertyType: input.propertyType,
+    serviceType: input.serviceType,
     bedrooms: input.bedrooms,
     bathrooms: input.bathrooms,
     mustHaves: input.mustHaves,

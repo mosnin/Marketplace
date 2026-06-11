@@ -1,0 +1,8 @@
+{
+  "name": "koala-appointment-assistant",
+  "description": "Prepare for service appointments with your Koala data. Get appointment schedules, prep sheets, and post-appointment follow-up guidance.",
+  "version": "1.0.0",
+  "author": { "name": "Koala", "url": "https://usekoala.com" },
+  "homepage": "https://usekoala.com",
+  "keywords": ["crm", "appointments", "real-estate", "koala"]
+}

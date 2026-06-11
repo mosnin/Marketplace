@@ -20,7 +20,7 @@ interface OnboardingChecklistProps {
   slug: string;
   hasLeads: boolean;
   hasContacts: boolean;
-  hasTours: boolean;
+  hasAppointments: boolean;
   hasDeals: boolean;
 }
 
@@ -38,9 +38,9 @@ type Step = {
 // (e.g. a `dismissedOnboardingChecklist` column on the User table), but
 // that requires a schema migration. Keeping localStorage for now as a
 // low-priority known limitation.
-const STORAGE_KEY = 'chippi-onboarding-dismissed';
+const STORAGE_KEY = 'koala-onboarding-dismissed';
 
-export function OnboardingChecklist({ slug, hasLeads, hasContacts, hasTours, hasDeals }: OnboardingChecklistProps) {
+export function OnboardingChecklist({ slug, hasLeads, hasContacts, hasAppointments, hasDeals }: OnboardingChecklistProps) {
   const [dismissed, setDismissed] = useState(true); // Start hidden to avoid flash
 
   useEffect(() => {
@@ -78,12 +78,12 @@ export function OnboardingChecklist({ slug, hasLeads, hasContacts, hasTours, has
       completed: hasContacts,
     },
     {
-      id: 'first-tour',
-      label: 'Schedule a tour',
-      description: 'Book a property showing with a prospect',
+      id: 'first-appointment',
+      label: 'Schedule an appointment',
+      description: 'Book a service showing with a prospect',
       href: `${base}/calendar`,
       icon: CalendarDays,
-      completed: hasTours,
+      completed: hasAppointments,
     },
     {
       id: 'first-deal',
@@ -120,7 +120,7 @@ export function OnboardingChecklist({ slug, hasLeads, hasContacts, hasTours, has
             </div>
             <div>
               <p className="text-sm font-semibold text-foreground">
-                {allDone ? 'You\'re all set!' : 'Get started with Chippi'}
+                {allDone ? 'You\'re all set!' : 'Get started with Koala'}
               </p>
               <p className="text-xs text-muted-foreground">
                 {allDone

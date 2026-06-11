@@ -97,7 +97,7 @@ describe('conversionRate', () => {
 describe('stageBottlenecks', () => {
   const stages: StageMetricRow[] = [
     { id: 'lead', name: 'Lead' },
-    { id: 'tour', name: 'Touring' },
+    { id: 'appointment', name: 'Appointmenting' },
     { id: 'app', name: 'Application' },
   ];
   const now = new Date('2026-02-01T00:00:00.000Z');
@@ -113,20 +113,20 @@ describe('stageBottlenecks', () => {
     const deals: DealMetricRow[] = [
       // Lead: one deal, 1 day in stage
       row({ id: 'a', status: 'active', stageId: 'lead', stageChangedAt: '2026-01-31T00:00:00.000Z' }),
-      // Touring: two deals, 10 and 20 days -> avg 15
-      row({ id: 'b', status: 'active', stageId: 'tour', stageChangedAt: '2026-01-22T00:00:00.000Z' }),
-      row({ id: 'c', status: 'active', stageId: 'tour', stageChangedAt: '2026-01-12T00:00:00.000Z' }),
-      // won deal in tour — ignored (not active)
-      row({ id: 'd', status: 'won', stageId: 'tour', stageChangedAt: '2026-01-01T00:00:00.000Z' }),
+      // Appointmenting: two deals, 10 and 20 days -> avg 15
+      row({ id: 'b', status: 'active', stageId: 'appointment', stageChangedAt: '2026-01-22T00:00:00.000Z' }),
+      row({ id: 'c', status: 'active', stageId: 'appointment', stageChangedAt: '2026-01-12T00:00:00.000Z' }),
+      // won deal in appointment — ignored (not active)
+      row({ id: 'd', status: 'won', stageId: 'appointment', stageChangedAt: '2026-01-01T00:00:00.000Z' }),
     ];
     const report = stageBottlenecks(deals, stages, now);
     const byId = Object.fromEntries(report.stages.map((s) => [s.stageId, s]));
     expect(byId.lead.count).toBe(1);
     expect(byId.lead.avgAgeDays).toBe(1);
-    expect(byId.tour.count).toBe(2);
-    expect(byId.tour.avgAgeDays).toBe(15);
+    expect(byId.appointment.count).toBe(2);
+    expect(byId.appointment.avgAgeDays).toBe(15);
     expect(byId.app.count).toBe(0);
-    expect(report.worstStage?.stageId).toBe('tour');
+    expect(report.worstStage?.stageId).toBe('appointment');
     expect(report.worstStage?.avgAgeDays).toBe(15);
   });
 

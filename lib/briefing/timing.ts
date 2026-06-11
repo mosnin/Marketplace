@@ -1,15 +1,15 @@
 /**
- * Per-realtor brief timing — translates the cron's UTC tick into "is it
- * this realtor's briefing hour right now, in their own timezone."
+ * Per-provider brief timing — translates the cron's UTC tick into "is it
+ * this provider's briefing hour right now, in their own timezone."
  *
  * The cron at /api/cron/daily-briefing runs hourly (UTC). Each tick,
  * every space's `briefHour` is compared against the local hour in that
  * space's timezone. Match → the space gets a brief generated for today's
  * local date. No match → skip; the next hour will check again.
  *
- * Why per-realtor local time: a 7am brief at UTC is 2am in Pacific time.
- * The realtor wakes up to a brief from yesterday. The Vitruvian principle
- * for time: the realtor's morning is the unit, not the server's clock.
+ * Why per-provider local time: a 7am brief at UTC is 2am in Pacific time.
+ * The provider wakes up to a brief from yesterday. The Vitruvian principle
+ * for time: the provider's morning is the unit, not the server's clock.
  */
 
 /**
@@ -35,7 +35,7 @@ export function localHourIn(at: Date, timezone: string): number {
 
 /**
  * Returns the local date (YYYY-MM-DD) at `at` in the given IANA timezone.
- * Used as the `forDate` key on Brief rows so the realtor's "today's brief"
+ * Used as the `forDate` key on Brief rows so the provider's "today's brief"
  * matches the date they see on their phone, not the server's UTC date.
  *
  * Falls back to UTC date if the timezone is invalid.

@@ -29,8 +29,8 @@ export interface FlagForReviewButtonProps {
   /** Called after a successful flag so the parent can refetch or update
    *  the deal's UI (e.g. re-enable this button when the review resolves). */
   onFlagged?: () => void;
-  /** When the deal is NOT in a brokerage workspace, pass false to hide
-   *  the affordance entirely. Parent knows (Space.brokerageId). */
+  /** When the deal is NOT in an agency workspace, pass false to hide
+   *  the affordance entirely. Parent knows (Space.agencyId). */
   visible?: boolean;
 }
 
@@ -53,7 +53,7 @@ export function FlagForReviewButton({
   if (hasOpenReview) {
     // Clickable — calls router.refresh() so the agent can pull the latest
     // server state. Without this, the chip stays "Review pending" even
-    // after the broker resolves (server components re-render on navigation,
+    // after the agency resolves (server components re-render on navigation,
     // but the agent has no in-app reason to navigate and no real-time
     // subscription tells them to). Worst case: click does nothing visible
     // because the review is still open.
@@ -65,7 +65,7 @@ export function FlagForReviewButton({
           'inline-flex items-center gap-1.5 rounded-md border border-border bg-muted/50',
           'px-2.5 h-8 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors',
         )}
-        title="Your broker is reviewing this deal. Click to check for updates."
+        title="Your agency is reviewing this deal. Click to check for updates."
       >
         <Flag size={13} className="text-muted-foreground" />
         Review pending
@@ -100,7 +100,7 @@ export function FlagForReviewButton({
       });
 
       if (res.status === 201) {
-        toast.success('Sent to your broker.');
+        toast.success('Sent to your agency.');
         setOpen(false);
         setReason('');
         setInlineError(null);
@@ -125,7 +125,7 @@ export function FlagForReviewButton({
 
       if (res.status === 409) {
         if (errMsg.includes('already has an open review')) {
-          toast.message('Already flagged — your broker is reviewing.');
+          toast.message('Already flagged — your agency is reviewing.');
         } else {
           toast.error(errMsg);
         }
@@ -151,7 +151,7 @@ export function FlagForReviewButton({
           variant="outline"
           size="sm"
           className="h-8 gap-1.5 text-xs font-medium"
-          aria-label="Flag this deal for broker review"
+          aria-label="Flag this deal for agency review"
         >
           <Flag size={13} />
           Flag for review
@@ -160,11 +160,11 @@ export function FlagForReviewButton({
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Flag this deal for broker review</DialogTitle>
+            <DialogTitle>Flag this deal for agency review</DialogTitle>
             <DialogDescription>
-              Write a short note for your broker. They&apos;ll see this on
+              Write a short note for your agency. They&apos;ll see this on
               {' '}
-              <span className="font-mono text-xs">/broker/reviews</span>
+              <span className="font-mono text-xs">/agency/reviews</span>
               {' '}
               and can comment, approve, or close the request.
             </DialogDescription>
@@ -176,7 +176,7 @@ export function FlagForReviewButton({
               id="flag-reason"
               value={reason}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setReason(e.target.value)}
-              placeholder="Briefly describe what you'd like your broker to look at…"
+              placeholder="Briefly describe what you'd like your agency to look at…"
               rows={5}
               maxLength={MAX_REASON_LEN}
               required
@@ -214,7 +214,7 @@ export function FlagForReviewButton({
               Cancel
             </Button>
             <Button type="submit" disabled={!canSubmit}>
-              {submitting ? 'Sending…' : 'Send to broker'}
+              {submitting ? 'Sending…' : 'Send to agency'}
             </Button>
           </DialogFooter>
         </form>

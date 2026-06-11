@@ -18,16 +18,16 @@ ALTER TABLE "SpaceSetting"
   ADD COLUMN IF NOT EXISTS "buyerFormConfig" jsonb DEFAULT NULL;
 
 -- ============================================================
--- Brokerage: brokerage-level dual form templates
+-- Agency: agency-level dual form templates
 -- ============================================================
 
--- Rental-specific brokerage template
-ALTER TABLE "Brokerage"
-  ADD COLUMN IF NOT EXISTS "brokerageRentalFormConfig" jsonb DEFAULT NULL;
+-- Rental-specific agency template
+ALTER TABLE "Agency"
+  ADD COLUMN IF NOT EXISTS "agencyRentalFormConfig" jsonb DEFAULT NULL;
 
--- Buyer-specific brokerage template
-ALTER TABLE "Brokerage"
-  ADD COLUMN IF NOT EXISTS "brokerageBuyerFormConfig" jsonb DEFAULT NULL;
+-- Buyer-specific agency template
+ALTER TABLE "Agency"
+  ADD COLUMN IF NOT EXISTS "agencyBuyerFormConfig" jsonb DEFAULT NULL;
 
 -- ============================================================
 -- Contact: which form path the applicant used
@@ -49,11 +49,11 @@ CREATE INDEX IF NOT EXISTS idx_space_setting_rental_form_config
 CREATE INDEX IF NOT EXISTS idx_space_setting_buyer_form_config
   ON "SpaceSetting" USING gin("buyerFormConfig") WHERE "buyerFormConfig" IS NOT NULL;
 
-CREATE INDEX IF NOT EXISTS idx_brokerage_rental_form_config
-  ON "Brokerage" USING gin("brokerageRentalFormConfig") WHERE "brokerageRentalFormConfig" IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_agency_rental_form_config
+  ON "Agency" USING gin("agencyRentalFormConfig") WHERE "agencyRentalFormConfig" IS NOT NULL;
 
-CREATE INDEX IF NOT EXISTS idx_brokerage_buyer_form_config
-  ON "Brokerage" USING gin("brokerageBuyerFormConfig") WHERE "brokerageBuyerFormConfig" IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_agency_buyer_form_config
+  ON "Agency" USING gin("agencyBuyerFormConfig") WHERE "agencyBuyerFormConfig" IS NOT NULL;
 
 -- Index for filtering contacts by form lead type
 CREATE INDEX IF NOT EXISTS idx_contact_form_lead_type
@@ -64,7 +64,7 @@ CREATE INDEX IF NOT EXISTS idx_contact_form_lead_type
 -- ============================================================
 -- These backfills READ the legacy single-config columns created by
 -- 20260408_add_form_builder.sql (SpaceSetting."formConfig" and
--- Brokerage."brokerageFormConfig"). Because the 20260408_* filenames carry no
+-- Agency."agencyFormConfig"). Because the 20260408_* filenames carry no
 -- time component, Supabase sorts this file BEFORE add_form_builder.sql, so on a
 -- FRESH database those source columns do not exist yet when this runs. Guard the
 -- backfills behind an existence check so a fresh DB skips them harmlessly (the
@@ -97,24 +97,24 @@ BEGIN
   END IF;
 END $$;
 
--- Brokerage backfill (depends on "Brokerage"."brokerageFormConfig")
+-- Agency backfill (depends on "Agency"."agencyFormConfig")
 DO $$
 BEGIN
   IF EXISTS (
     SELECT 1 FROM information_schema.columns
-    WHERE table_name = 'Brokerage' AND column_name = 'brokerageFormConfig'
+    WHERE table_name = 'Agency' AND column_name = 'agencyFormConfig'
   ) THEN
-    UPDATE "Brokerage"
-      SET "brokerageRentalFormConfig" = "brokerageFormConfig"
-      WHERE "brokerageFormConfig" IS NOT NULL
-        AND "brokerageRentalFormConfig" IS NULL
-        AND ("brokerageFormConfig"->>'leadType' IS NULL
-             OR "brokerageFormConfig"->>'leadType' IN ('rental', 'general'));
+    UPDATE "Agency"
+      SET "agencyRentalFormConfig" = "agencyFormConfig"
+      WHERE "agencyFormConfig" IS NOT NULL
+        AND "agencyRentalFormConfig" IS NULL
+        AND ("agencyFormConfig"->>'leadType' IS NULL
+             OR "agencyFormConfig"->>'leadType' IN ('rental', 'general'));
 
-    UPDATE "Brokerage"
-      SET "brokerageBuyerFormConfig" = "brokerageFormConfig"
-      WHERE "brokerageFormConfig" IS NOT NULL
-        AND "brokerageBuyerFormConfig" IS NULL
-        AND "brokerageFormConfig"->>'leadType' = 'buyer';
+    UPDATE "Agency"
+      SET "agencyBuyerFormConfig" = "agencyFormConfig"
+      WHERE "agencyFormConfig" IS NOT NULL
+        AND "agencyBuyerFormConfig" IS NULL
+        AND "agencyFormConfig"->>'leadType' = 'buyer';
   END IF;
 END $$;

@@ -6,11 +6,11 @@ import DOMPurify from 'isomorphic-dompurify';
 import Link from 'next/link';
 
 /**
- * Sanitize the realtor's stored privacy policy HTML before rendering.
+ * Sanitize the provider's stored privacy policy HTML before rendering.
  *
- * The realtor authors this content in their settings (rich-text editor in
+ * The provider authors this content in their settings (rich-text editor in
  * dashboard → settings → legal). It's then displayed to APPLICANTS when
- * they click "Privacy Policy" in the intake flow. A compromised realtor
+ * they click "Privacy Policy" in the intake flow. A compromised provider
  * account, or any code path that mistakenly accepts unsanitized HTML on
  * write, could plant stored XSS that fires on every applicant's browser.
  *
@@ -43,7 +43,7 @@ function sanitizeHtml(html: string): string {
 
 export const revalidate = 300; // Cache 5 minutes
 
-export default async function RealtorPrivacyPolicyPage({
+export default async function ProviderPrivacyPolicyPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -66,8 +66,8 @@ export default async function RealtorPrivacyPolicyPage({
   ]);
 
   const businessName = settings?.businessName || space.name;
-  // Use the realtor's custom policy, or auto-generate a comprehensive default
-  const rawPolicyHtml = settings?.privacyPolicyHtml || generatePrivacyPolicy(businessName, 'realtor');
+  // Use the provider's custom policy, or auto-generate a comprehensive default
+  const rawPolicyHtml = settings?.privacyPolicyHtml || generatePrivacyPolicy(businessName, 'provider');
   const policyHtml = sanitizeHtml(rawPolicyHtml);
 
   return (
@@ -79,7 +79,7 @@ export default async function RealtorPrivacyPolicyPage({
             <p className="text-xs text-muted-foreground">Privacy Policy</p>
           </div>
           <Link href={`/apply/${slug}`} className="text-xs text-primary underline">
-            Back to application
+            Back to inquiry form
           </Link>
         </div>
       </header>
@@ -92,10 +92,10 @@ export default async function RealtorPrivacyPolicyPage({
           <p>This privacy policy is maintained by {businessName}.</p>
           <p>
             {businessName} uses{' '}
-            <a href="https://usechippi.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">
-              Chippi
+            <a href="https://usekoala.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">
+              Koala
             </a>{' '}
-            to process applications. Chippi&apos;s own{' '}
+            to manage service inquiries and bookings. Koala&apos;s own{' '}
             <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">
               Privacy Policy
             </a>{' '}

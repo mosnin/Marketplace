@@ -248,7 +248,7 @@ function parseAIWeightsResponse(raw: AIResponseRaw): ScoringModelAIResponse {
   };
 }
 
-const SYSTEM_PROMPT = `You are a real estate lead scoring expert. Given an intake form's questions, generate an optimal scoring model.
+const SYSTEM_PROMPT = `You are a lead scoring expert for a professional-services marketplace. Given an intake form's questions, generate an optimal scoring model.
 
 RESPONSE FORMAT:
 - "weights" is an ARRAY of objects, each with: questionId (string), weight (number 0-100), optionScores (array or null), ranges (array or null).
@@ -259,13 +259,13 @@ RESPONSE FORMAT:
 SCORING GUIDELINES:
 - Distribute importance weights across ALL questions that should be scored, summing to exactly 100.
 - Skip system fields (name, email, phone) and informational-only fields (notes, additional info).
-- Consider the lead type (rental vs buyer) when assigning weights.
+- Consider the lead type (service inquiry vs buyer) when assigning weights.
 
-For RENTAL leads, prioritize: move-in timeline urgency, income stability, employment status, budget-to-income ratio, and readiness to commit.
+For SERVICE INQUIRY leads, prioritize: budget fit with the provider's pricing, urgency/timeline, engagement quality, fit with the offering, and readiness to commit.
 
-For BUYER leads, prioritize: pre-approval status, purchase budget, timeline to close, property type clarity, and readiness to commit.
+For BUYER leads, prioritize: budget adequacy, timeline to start, clarity of need, engagement quality, and readiness signals.
 
-When creating number ranges, consider realistic real estate values in USD.
+When creating number ranges, consider realistic service pricing values in USD.
 
 The weights MUST sum to exactly 100. Double-check your arithmetic.`;
 
@@ -546,7 +546,7 @@ export function generateFallbackModel(
   return {
     weights,
     totalWeight: 100,
-    reasoning: `Fallback scoring model generated using label-based heuristics for ${leadType} leads. Budget, income, timeline, and readiness are weighted highest.`,
+    reasoning: `Fallback scoring model generated using label-based heuristics for ${leadType} leads. Budget fit, urgency, timeline, and readiness are weighted highest.`,
     generatedAt: new Date().toISOString(),
     leadType,
   };

@@ -9,38 +9,38 @@ describe('parseImmediateEvents', () => {
   it('defaults to all when empty or all', () => {
     expect([...parseImmediateEvents(undefined)].sort()).toEqual([
       'application_submitted',
+      'appointment_completed',
       'deal_stage_changed',
       'goal_completed',
       'inbound_message',
       'new_lead',
-      'tour_completed',
     ]);
     expect([...parseImmediateEvents('all')].sort()).toEqual([
       'application_submitted',
+      'appointment_completed',
       'deal_stage_changed',
       'goal_completed',
       'inbound_message',
       'new_lead',
-      'tour_completed',
     ]);
   });
 
   it('returns only valid subset', () => {
-    expect([...parseImmediateEvents('tour_completed,application_submitted')].sort()).toEqual([
+    expect([...parseImmediateEvents('appointment_completed,application_submitted')].sort()).toEqual([
       'application_submitted',
-      'tour_completed',
+      'appointment_completed',
     ]);
   });
 
   it('fails safe to all on invalid token and warns', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    expect([...parseImmediateEvents('tour_completed,nope')].sort()).toEqual([
+    expect([...parseImmediateEvents('appointment_completed,nope')].sort()).toEqual([
       'application_submitted',
+      'appointment_completed',
       'deal_stage_changed',
       'goal_completed',
       'inbound_message',
       'new_lead',
-      'tour_completed',
     ]);
     expect(warn).toHaveBeenCalled();
   });

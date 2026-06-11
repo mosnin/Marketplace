@@ -4,11 +4,11 @@
  * Approval-gated. Adding a new person is a meaningful CRM action — it
  * lands on /people, may fire a new-contact notification, gets vectorized
  * for semantic recall, and (if tagged 'new-lead') counts toward the
- * realtor's morning unread-leads number. The realtor confirms the name
+ * provider's morning unread-leads number. The provider confirms the name
  * + key fields before we write.
  *
  * Mirrors POST /api/contacts but the agent contract is shaped for the
- * verbs realtors actually say ("buyer", "$3,200/mo", "looking for a
+ * verbs providers actually say ("buyer", "$3,200/mo", "looking for a
  * 2BR in Brickell") rather than the HTTP route's superset.
  *
  * Without this tool, the model could call `find_person` to confirm
@@ -44,13 +44,13 @@ const parameters = z
       .max(40)
       .nullable()
       .optional()
-      .describe('Phone number in any format the realtor said it.'),
+      .describe('Phone number in any format the provider said it.'),
     leadType: z
       .enum(['buyer', 'rental'])
       .nullable()
       .optional()
       .describe(
-        'Buyer (purchasing) or rental (looking to lease). Default: buyer if unspecified — most realtors think "buyer" unless told otherwise.',
+        'Buyer (purchasing) or rental (looking to lease). Default: buyer if unspecified — most providers think "buyer" unless told otherwise.',
       ),
     budget: z
       .number()
@@ -63,7 +63,7 @@ const parameters = z
       .max(500)
       .nullable()
       .optional()
-      .describe("The person's home address (NOT the property they want — that goes in `preferences`)."),
+      .describe("The person's home address (NOT the service they want — that goes in `preferences`)."),
     preferences: z
       .string()
       .max(2000)
@@ -84,11 +84,11 @@ const parameters = z
       .nullable()
       .optional()
       .describe(
-        'Optional tags. Use `new-lead` for fresh leads (counts toward the morning unread-leads number); use `hot` only when the realtor explicitly said this person is hot. Prefer REUSING the workspace\'s existing tags over inventing new ones — only create a new tag for a meaningfully distinct concept. If the realtor mentions a tag verbatim ("tag this guy snowbird"), match the case + spelling they used.',
+        'Optional tags. Use `new-lead` for fresh leads (counts toward the morning unread-leads number); use `hot` only when the provider explicitly said this person is hot. Prefer REUSING the workspace\'s existing tags over inventing new ones — only create a new tag for a meaningfully distinct concept. If the provider mentions a tag verbatim ("tag this guy snowbird"), match the case + spelling they used.',
       ),
   })
   .describe(
-    'Create a new person in the workspace. Use this when the realtor describes someone new — "add a buyer named ...", "log a new lead ...", etc. Prompts for approval first.',
+    'Create a new person in the workspace. Use this when the provider describes someone new — "add a buyer named ...", "log a new lead ...", etc. Prompts for approval first.',
   );
 
 interface AddPersonResult {
@@ -101,7 +101,7 @@ export const addPersonTool = defineTool<typeof parameters, AddPersonResult>({
   name: 'add_person',
   riskLevel: 'low',
   description:
-    'Create a new person (contact) in the workspace with the realtor-provided details. Prompts for approval first.',
+    'Create a new person (contact) in the workspace with the provider-provided details. Prompts for approval first.',
   parameters,
   requiresApproval: true,
   rateLimit: { max: 60, windowSeconds: 3600 },
@@ -128,9 +128,9 @@ export const addPersonTool = defineTool<typeof parameters, AddPersonResult>({
       .insert({
         id,
         spaceId: ctx.space.id,
-        // brokerageId stays null — this is a workspace-owned contact, not
-        // a brokerage lead. Matches POST /api/contacts which never sets it.
-        brokerageId: null,
+        // agencyId stays null — this is a workspace-owned contact, not
+        // an agency lead. Matches POST /api/contacts which never sets it.
+        agencyId: null,
         name,
         email: args.email?.trim() || null,
         phone: args.phone?.trim() || null,
@@ -139,7 +139,7 @@ export const addPersonTool = defineTool<typeof parameters, AddPersonResult>({
         leadType,
         budget: args.budget ?? null,
         preferences: args.preferences?.trim() || null,
-        properties: [],
+        services: [],
         tags,
         // type defaults to QUALIFICATION on the HTTP route — keep parity.
         type: 'QUALIFICATION',

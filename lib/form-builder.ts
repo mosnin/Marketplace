@@ -51,9 +51,9 @@ export function generateSystemFields(): FormQuestion[] {
 }
 
 // ── Default Rental Form Config ──
-// The 10-question rental intake used when a realtor hasn't customized
-// their form. Also the fallback IntakeChat uses on the brokerage variant
-// when no brokerage-level config exists.
+// The 10-question rental intake used when a provider hasn't customized
+// their form. Also the fallback IntakeChat uses on the agency variant
+// when no agency-level config exists.
 // Step 1: Getting Started  |  Step 2: Basics  |  Step 3: Move Timing  |  Step 4: Location
 // Step 5: Budget  |  Step 6: Income  |  Step 7: Employment  |  Step 8: Household
 // Step 9: Additional Info  |  Step 10: Ready?
@@ -269,11 +269,11 @@ export const DEFAULT_RENTAL_FORM_CONFIG: IntakeFormConfig = {
 };
 
 // ── Default Buyer Form Config ──
-// The 9-question buyer intake used when a realtor hasn't customized
-// their form. Also the fallback IntakeChat uses on the brokerage variant
-// when no brokerage-level config exists.
+// The 9-question buyer intake used when a provider hasn't customized
+// their form. Also the fallback IntakeChat uses on the agency variant
+// when no agency-level config exists.
 // Step 1: Getting Started  |  Step 2: Basics  |  Step 3: Budget
-// Step 4: Pre-Approval  |  Step 5: Property Type  |  Step 6: Must-Haves
+// Step 4: Pre-Approval  |  Step 5: Service Type  |  Step 6: Must-Haves
 // Step 7: Timeline  |  Step 8: About You  |  Step 9: Ready?
 
 export const DEFAULT_BUYER_FORM_CONFIG: IntakeFormConfig = {
@@ -363,10 +363,10 @@ export const DEFAULT_BUYER_FORM_CONFIG: IntakeFormConfig = {
         },
       ],
     },
-    // ── Section 3 (Step 4): Property Type ──
+    // ── Section 3 (Step 4): Service Type ──
     {
       id: '20000000-0000-4000-a000-000000000004',
-      title: 'What type of property are you looking for?',
+      title: 'What type of service are you looking for?',
       position: 3,
       questions: [
         {
@@ -550,7 +550,7 @@ export function validateFormConfig(config: unknown) {
 /**
  * Fetches the form config for a given space, with the following fallback chain:
  * 1. If SpaceSetting.formConfig is set and formConfigSource is 'custom', use it
- * 2. If formConfigSource is 'brokerage', fetch from the linked Brokerage.brokerageFormConfig
+ * 2. If formConfigSource is 'agency', fetch from the linked Agency.agencyFormConfig
  * 3. Otherwise (formConfigSource is 'legacy' or formConfig is null), return null (legacy mode)
  */
 export async function getFormConfig(
@@ -575,30 +575,30 @@ export async function getFormConfig(
     return result.success ? result.data : null;
   }
 
-  // Brokerage-inherited form: fetch from the linked brokerage
-  if (source === 'brokerage') {
+  // Agency-inherited form: fetch from the linked agency
+  if (source === 'agency') {
     const { data: space } = await supabase
       .from('Space')
-      .select('"brokerageId"')
+      .select('"agencyId"')
       .eq('id', spaceId)
       .single();
 
-    if (space?.brokerageId) {
-      const { data: brokerage } = await supabase
-        .from('Brokerage')
-        .select('"brokerageFormConfig"')
-        .eq('id', space.brokerageId)
+    if (space?.agencyId) {
+      const { data: agency } = await supabase
+        .from('Agency')
+        .select('"agencyFormConfig"')
+        .eq('id', space.agencyId)
         .single();
 
-      if (brokerage?.brokerageFormConfig) {
+      if (agency?.agencyFormConfig) {
         const result = formConfigSchema.safeParse(
-          brokerage.brokerageFormConfig
+          agency.agencyFormConfig
         );
         return result.success ? result.data : null;
       }
     }
 
-    // Brokerage config missing: fall back to legacy
+    // Agency config missing: fall back to legacy
     return null;
   }
 
@@ -611,7 +611,7 @@ export async function getFormConfig(
 export type DualFormConfigs = {
   rental: IntakeFormConfig | null;
   buyer: IntakeFormConfig | null;
-  source: 'custom' | 'brokerage' | 'legacy';
+  source: 'custom' | 'agency' | 'legacy';
 };
 
 /** Safely parse a raw JSON value as IntakeFormConfig, returning null on failure. */
@@ -627,13 +627,13 @@ function safeParseConfig(raw: unknown): IntakeFormConfig | null {
  * Fallback chain per lead type:
  *   1. SpaceSetting.[rental|buyer]FormConfig (dual config columns)
  *   2. SpaceSetting.formConfig (legacy single column, treated as rental or buyer based on its leadType)
- *   3. Brokerage.[brokerage[Rental|Buyer]FormConfig] (if formConfigSource === 'brokerage')
- *   4. Brokerage.brokerageFormConfig (legacy single brokerage column)
+ *   3. Agency.[agency[Rental|Buyer]FormConfig] (if formConfigSource === 'agency')
+ *   4. Agency.agencyFormConfig (legacy single agency column)
  *   5. null (caller should use DEFAULT_*_FORM_CONFIG or legacy scoring)
  */
 export async function getFormConfigs(
   spaceId: string,
-  brokerageId?: string | null,
+  agencyId?: string | null,
 ): Promise<DualFormConfigs> {
   const { data: setting, error: settingError } = await supabase
     .from('SpaceSetting')
@@ -668,32 +668,32 @@ export async function getFormConfigs(
     return { rental: rentalConfig, buyer: buyerConfig, source: 'custom' };
   }
 
-  if (source === 'brokerage') {
-    // Resolve brokerageId if not provided
-    let resolvedBrokerageId = brokerageId;
-    if (!resolvedBrokerageId) {
+  if (source === 'agency') {
+    // Resolve agencyId if not provided
+    let resolvedAgencyId = agencyId;
+    if (!resolvedAgencyId) {
       const { data: space } = await supabase
         .from('Space')
-        .select('"brokerageId"')
+        .select('"agencyId"')
         .eq('id', spaceId)
         .maybeSingle();
-      resolvedBrokerageId = space?.brokerageId ?? null;
+      resolvedAgencyId = space?.agencyId ?? null;
     }
 
-    if (resolvedBrokerageId) {
-      const { data: brokerage } = await supabase
-        .from('Brokerage')
-        .select('"brokerageFormConfig", "brokerageRentalFormConfig", "brokerageBuyerFormConfig"')
-        .eq('id', resolvedBrokerageId)
+    if (resolvedAgencyId) {
+      const { data: agency } = await supabase
+        .from('Agency')
+        .select('"agencyFormConfig", "agencyRentalFormConfig", "agencyBuyerFormConfig"')
+        .eq('id', resolvedAgencyId)
         .maybeSingle();
 
-      if (brokerage) {
-        let rentalConfig = safeParseConfig(brokerage.brokerageRentalFormConfig);
-        let buyerConfig = safeParseConfig(brokerage.brokerageBuyerFormConfig);
+      if (agency) {
+        let rentalConfig = safeParseConfig(agency.agencyRentalFormConfig);
+        let buyerConfig = safeParseConfig(agency.agencyBuyerFormConfig);
 
-        // Legacy compatibility: single brokerageFormConfig
-        if (!rentalConfig && !buyerConfig && brokerage.brokerageFormConfig) {
-          const legacySingle = safeParseConfig(brokerage.brokerageFormConfig);
+        // Legacy compatibility: single agencyFormConfig
+        if (!rentalConfig && !buyerConfig && agency.agencyFormConfig) {
+          const legacySingle = safeParseConfig(agency.agencyFormConfig);
           if (legacySingle) {
             if (legacySingle.leadType === 'buyer') {
               buyerConfig = legacySingle;
@@ -703,11 +703,11 @@ export async function getFormConfigs(
           }
         }
 
-        return { rental: rentalConfig, buyer: buyerConfig, source: 'brokerage' };
+        return { rental: rentalConfig, buyer: buyerConfig, source: 'agency' };
       }
     }
 
-    return { rental: null, buyer: null, source: 'brokerage' };
+    return { rental: null, buyer: null, source: 'agency' };
   }
 
   // Legacy mode
@@ -716,7 +716,7 @@ export async function getFormConfigs(
 
 /**
  * Resolves the correct form config for a specific lead type using the full fallback chain:
- *   1. Custom or brokerage config for the specific lead type
+ *   1. Custom or agency config for the specific lead type
  *   2. Default template for the lead type
  *
  * Returns { config, isCustom } so callers know whether to use dynamic scoring
@@ -725,9 +725,9 @@ export async function getFormConfigs(
 export async function getFormConfigForLeadType(
   spaceId: string,
   leadType: 'rental' | 'buyer',
-  brokerageId?: string | null,
+  agencyId?: string | null,
 ): Promise<{ config: IntakeFormConfig; isCustom: boolean }> {
-  const dual = await getFormConfigs(spaceId, brokerageId);
+  const dual = await getFormConfigs(spaceId, agencyId);
 
   const customConfig = leadType === 'buyer'
     ? dual.buyer

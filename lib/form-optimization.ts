@@ -447,7 +447,7 @@ export async function generateOptimizationSuggestions(
 
 function buildOptimizationSystemPrompt(): string {
   return [
-    'You are a form optimization expert for real estate intake forms.',
+    'You are a form optimization expert for professional-services intake forms on a marketplace platform.',
     'Analyze the submission data and suggest specific, actionable improvements.',
     'Focus on increasing form completion rates and improving lead qualification quality.',
     '',
@@ -459,7 +459,7 @@ function buildOptimizationSystemPrompt(): string {
     '- Suggest reordering to put high-engagement questions first',
     '- Identify questions that add friction without value',
     '- Suggest scoring weight adjustments based on answer distribution',
-    '- Consider the real estate context (rental applications, buyer inquiries)',
+    '- Consider the service marketplace context (client booking inquiries, service fit, budget alignment)',
     '- Be specific: reference question labels, sections, and data points',
     '- Limit to 3-5 high-value suggestions',
     '',

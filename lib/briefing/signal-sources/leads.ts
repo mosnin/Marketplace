@@ -1,9 +1,9 @@
 /**
- * Leads signal source — reads the realtor's Contact rows for hot leads
+ * Leads signal source — reads the provider's Contact rows for hot leads
  * that haven't been touched and overdue follow-ups.
  *
- * Brokerage-routed contacts (brokerageId !== null) are excluded — those
- * are the brokerage's queue, not on this realtor's desk. Mirrors the
+ * Agency-routed contacts (agencyId !== null) are excluded — those
+ * are the agency's queue, not on this provider's desk. Mirrors the
  * morning-route convention.
  *
  * Confidence calibration:
@@ -52,8 +52,8 @@ export const leadsSource: SignalGatherer = {
       .from('Contact')
       .select('id, name, leadScore, followUpAt, lastContactedAt, phone, email, type, tags')
       .eq('spaceId', spaceId)
-      .is('brokerageId', null)
-      .in('type', ['QUALIFICATION', 'TOUR', 'APPLICATION', 'LEASE_REVIEW']);
+      .is('agencyId', null)
+      .in('type', ['QUALIFICATION', 'APPOINTMENT', 'APPLICATION', 'LEASE_REVIEW']);
 
     if (error || !data) return [];
 

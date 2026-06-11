@@ -1,32 +1,39 @@
-# Chippi
+# Koala
 
-Agentic operating system for realtors and brokerages.
+Professional-services marketplace and agentic operating system for providers and agencies.
 
 ---
 
-## What is Chippi?
+## What is Koala?
 
-Chippi is an agentic operating system for realtors and brokerages. It combines always-on AI agent workflows, lead intake, qualification, follow-up orchestration, and brokerage coordination into a single operational platform.
+Koala is two products in one:
+
+1. **Marketplace front end** — Buyers browse service offerings at `/marketplace` and track their purchases at `/buyer` (powered by the `Purchase` table added in `supabase/migrations/20260611200000_buyer_marketplace.sql`).
+2. **Agentic seller OS** — Each provider gets a workspace at `/s/[slug]` and each agency gets a console at `/agency`. The OS combines always-on AI agent workflows, client inquiry intake, AI scoring, deal pipeline management, appointment scheduling, and agency coordination into a single operational platform.
+
+Koala serves the full professional-services category: hair stylists, personal trainers, coaches, photographers, tutors, consultants, and the studios, salons, and gyms that employ them.
 
 ### Key features
 
-- **Public intake forms** — Custom-branded application pages for prospects to submit rental applications
-- **AI lead scoring** — Automatic lead qualification using GPT-4o-mini with score, tier (hot/warm/cold), and actionable summaries
-- **Deal pipeline** — Kanban-style deal management with customizable stages, drag-and-drop, and contact linking
-- **Tour scheduling** — Public booking page, calendar integration, automated confirmations/reminders
-- **Brokerage management** — Multi-user team dashboards, invite system, performance tracking across realtors
-- **AI agent** — Agent runtime with tool-use over the realtor operating system (read-only tools auto-run; mutating tools — email, SMS, deal/stage changes, tours — require per-call user approval). Delegates research questions to read-only sub-agents so profile lookups don't bloat the orchestrator's context. See `lib/ai-tools/tools/index.ts` for the tool registry and `lib/ai-tools/skills/*` for the sub-agents.
-- **Always-on background activation** — Incoming workspace events (new lead, deal stage change, tour completed, application submitted) are queued in Redis and immediately attempt a Modal webhook fire (`POST /api/agent/trigger`) so per-realtor agents can react in near real-time with queue-based fallback if Modal is unavailable. Immediate fire policy is configurable with `AGENT_IMMEDIATE_EVENTS` (`all` by default, or comma-separated event names; invalid values fail safe to `all`).
+- **Marketplace & buyer purchase tracking** — Public service discovery at `/marketplace`; authenticated buyers track purchases and session history at `/buyer` via the `Purchase` table.
+- **Public booking/inquiry forms** — Custom-branded intake pages for prospects to submit service inquiries or book sessions with a provider.
+- **AI scoring of client inquiries** — Automatic lead qualification with a score, tier (hot/warm/cold), and plain-language summary so providers know where to focus first.
+- **Deal pipeline for service sales** — Kanban-style deal management with customizable stages, drag-and-drop, and contact linking.
+- **Appointment scheduling** — Public booking page, calendar integration, automated confirmations and reminders.
+- **Agency console** — Multi-provider dashboards, invite system, performance tracking across all providers in a studio, salon, or gym.
+- **AI agent** — Agent runtime with tool-use over the provider OS (read-only tools auto-run; mutating tools — email, SMS, deal/stage changes, appointments — require per-call user approval). Delegates research questions to read-only sub-agents so profile lookups don't bloat the orchestrator's context. See `lib/ai-tools/tools/index.ts` for the tool registry and `lib/ai-tools/skills/*` for the sub-agents.
+- **Always-on background activation** — Incoming workspace events (new inquiry, deal stage change, session completed, booking submitted) are queued in Redis and immediately attempt a Modal webhook fire (`POST /api/agent/trigger`) so per-provider agents can react in near real-time with queue-based fallback if Modal is unavailable. Immediate fire policy is configurable with `AGENT_IMMEDIATE_EVENTS` (`all` by default, or comma-separated event names; invalid values fail safe to `all`).
 - **Trigger operations runbook** — Operational endpoints, env vars, alerting, and replay workflow are documented in `docs/AGENT_TRIGGER_OPERATIONS.md`.
-- **Brokerage tier** — Multi-agent organisation with per-seat billing: brokerage membership + role tiers (`broker_owner`, `broker_admin`, `realtor_member`) in `lib/permissions.ts`; lead routing across agents (`lib/brokerage-routing.ts`); commission ledger (`lib/commissions.ts`); Stripe-backed seat subscriptions (`lib/brokerage-seats.ts`, `app/api/billing/*`)
-- **Notifications** — Email (Resend) and SMS (Telnyx) notifications for leads, tours, deals, and follow-ups
-- **Analytics** — Weekly trends, conversion funnels, and team performance metrics
+- **Agency tier** — Multi-provider organisation with per-seat billing: agency membership + role tiers (`agency_owner`, `agency_admin`, `provider_member`) in `lib/permissions.ts`; inquiry routing across providers (`lib/agency-routing.ts`); commission ledger (`lib/commissions.ts`); Stripe-backed seat subscriptions (`lib/agency-seats.ts`, `app/api/billing/*`).
+- **Notifications** — Email (Resend) and SMS (Telnyx) notifications for inquiries, appointments, deals, and follow-ups.
+- **Analytics** — Weekly trends, conversion funnels, and team performance metrics.
 
 ### Who it's for
 
-- **Solo realtors** handling leasing and rental leads
-- **Small teams** and brokerages managing multiple realtors
-- **Broker-only users** overseeing team performance without a personal workspace
+- **Solo providers** (hair stylists, personal trainers, coaches, photographers, tutors, consultants) handling client inquiries and bookings.
+- **Small teams and agencies** (studios, salons, gyms) managing multiple providers under one roof.
+- **Agency-only users** overseeing team performance without running a personal provider workspace.
+- **Buyers** browsing the marketplace and tracking their service purchases.
 
 ---
 
@@ -53,25 +60,27 @@ Chippi is an agentic operating system for realtors and brokerages. It combines a
 ```
 app/                    # Next.js App Router pages, layouts, API routes
   (auth)/               # Sign-in, sign-up, login pages
-  s/[slug]/             # Workspace pages (dashboard, leads, contacts, deals, tours, settings)
-  broker/               # Brokerage management pages
+  marketplace/          # Public service discovery (buyer-facing browse)
+  buyer/                # Authenticated buyer dashboard (purchase tracking)
+  s/[slug]/             # Provider workspace (leads, contacts, deals, appointments, settings, AI)
+  agency/               # Agency console (roster, routing, commissions, reviews)
   setup/                # Onboarding and workspace creation
-  api/                  # API routes (contacts, deals, tours, onboarding, AI, etc.)
+  api/                  # API routes (contacts, deals, appointments, onboarding, AI, etc.)
 components/             # UI and feature components
   ui/                   # Base shadcn/ui components
   dashboard/            # Dashboard widgets (header, sidebar, notification center)
   deals/                # Kanban board, deal forms
-  broker/               # Brokerage-specific components
+  agency/               # Agency-specific components
   auth/                 # Auth page layout, onboarding flow
 lib/                    # Core business logic
-  email.ts              # Resend email templates (leads, deals, invitations, digests)
-  tour-emails.ts        # Tour confirmation, reminder, follow-up emails
+  email.ts              # Resend email templates (inquiries, deals, invitations, digests)
+  appointment-emails.ts # Appointment confirmation, reminder, follow-up emails
   sms.ts                # Telnyx SMS integration
   notify.ts             # Unified notification dispatcher (email + SMS)
-  lead-scoring.ts       # AI lead scoring via OpenAI
+  lead-scoring.ts       # AI inquiry scoring via OpenAI
   ai.ts                 # AI assistant with provider fallback
   supabase.ts           # Supabase client
-  permissions.ts        # Auth helpers and broker context
+  permissions.ts        # Auth helpers and agency context
 supabase/
   schema.sql            # Database schema and migrations
 docs/framework/         # Design system documentation (tokens, components, archetypes)
@@ -130,13 +139,14 @@ pnpm start
 
 ## Core workflows
 
-1. **Realtor signs up** via Clerk and completes onboarding (or skips to set up later)
-2. **Workspace created** with a custom slug and public intake link
-3. **Prospects submit** rental applications through the public intake form
-4. **Leads are scored** automatically by AI and saved as contacts
-5. **Realtor manages** leads, contacts, deals, and tours from the workspace dashboard
-6. **Notifications sent** via email and/or SMS based on workspace preferences
-7. **Brokers** can invite realtors, track team performance, and manage the brokerage
+1. **Provider signs up** via Clerk and completes onboarding (or skips to set up later)
+2. **Workspace created** with a custom slug and public booking/inquiry link
+3. **Clients submit** service inquiries or booking requests through the public intake form
+4. **Inquiries are scored** automatically by AI and saved as contacts
+5. **Provider manages** leads, contacts, deals, and appointments from the workspace dashboard
+6. **Buyers browse** services at `/marketplace` and track purchases at `/buyer`
+7. **Notifications sent** via email and/or SMS based on workspace preferences
+8. **Agencies** can invite providers, track team performance, and manage the agency
 
 ---
 

@@ -1,5 +1,5 @@
 /**
- * Chippi Proprietary Lead Scoring Engine
+ * Koala Proprietary Lead Scoring Engine
  *
  * Deterministic, weighted scoring system for rental and buyer leads.
  * Produces consistent scores across runs — no LLM dependency for the score itself.
@@ -122,7 +122,7 @@ export type ScoringInput = {
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Credit score is NOT collected on the intake form — this returns a neutral score.
-// Kept as a stub for type compatibility; not included in rental weight calculations.
+// Kept as a stub for type compatibility; not included in weight calculations.
 function scoreCreditScore(_input: ScoringInput): CategoryResult {
   return {
     category: 'affordability' as ScoringCategory, // placeholder category
@@ -182,29 +182,29 @@ function scoreAffordability(input: ScoringInput): CategoryResult {
 
     if (ratio >= 4.0) {
       rawScore = 1.0;
-      signals.push(`Strong income-to-rent ratio: ${ratio.toFixed(1)}x (≥4x target rent)`);
+      signals.push(`Strong income-to-budget ratio: ${ratio.toFixed(1)}x (≥4x target budget)`);
     } else if (ratio >= 3.0) {
       rawScore = 0.85;
-      signals.push(`Meets 3x rent rule: ${ratio.toFixed(1)}x`);
+      signals.push(`Meets 3x budget rule: ${ratio.toFixed(1)}x`);
     } else if (ratio >= 2.5) {
       rawScore = 0.6;
-      signals.push(`Below 3x rent rule: ${ratio.toFixed(1)}x — marginal affordability`);
+      signals.push(`Below 3x budget rule: ${ratio.toFixed(1)}x — marginal affordability`);
     } else if (ratio >= 2.0) {
       rawScore = 0.35;
-      signals.push(`Significantly below 3x: ${ratio.toFixed(1)}x — high rent burden`);
+      signals.push(`Significantly below 3x: ${ratio.toFixed(1)}x — budget may be stretched`);
     } else {
       rawScore = 0.1;
-      signals.push(`Income-to-rent ratio ${ratio.toFixed(1)}x — likely unaffordable`);
+      signals.push(`Income-to-budget ratio ${ratio.toFixed(1)}x — likely out of range`);
     }
   } else if (income > 0) {
     rawScore = 0.5;
-    signals.push(`Income reported but no target rent provided`);
+    signals.push(`Income reported but no target budget provided`);
   } else if (rent > 0) {
     rawScore = 0.25;
-    signals.push(`Target rent provided but no income reported`);
+    signals.push(`Target budget provided but no income reported`);
   } else {
     rawScore = 0.15;
-    signals.push('No income or rent data provided');
+    signals.push('No income or budget data provided');
   }
 
   return {
@@ -226,7 +226,7 @@ function scoreMoveInUrgency(input: ScoringInput): CategoryResult {
 
     if (moveIn === 'asap') {
       rawScore = 1.0;
-      signals.push('Immediate move-in: ASAP');
+      signals.push('Immediate start: ASAP');
     } else if (moveIn === '30days') {
       rawScore = 0.85;
       signals.push('Near-term: within 30 days');
@@ -235,7 +235,7 @@ function scoreMoveInUrgency(input: ScoringInput): CategoryResult {
       signals.push('Medium-term: 1-2 months');
     } else if (moveIn === 'browsing') {
       rawScore = 0.15;
-      signals.push('Just browsing — low urgency');
+      signals.push('Just exploring — low urgency');
     } else {
       // Fallback: try parsing as a date for legacy data
       const target = new Date(app.targetMoveInDate);
@@ -245,19 +245,19 @@ function scoreMoveInUrgency(input: ScoringInput): CategoryResult {
 
         if (daysUntilMove <= 0) {
           rawScore = 0.95;
-          signals.push('Immediate move-in needed (date has passed or is today)');
+          signals.push('Immediate start needed (date has passed or is today)');
         } else if (daysUntilMove <= 14) {
           rawScore = 1.0;
-          signals.push(`Urgent: moving in ${daysUntilMove} days`);
+          signals.push(`Urgent: starting in ${daysUntilMove} days`);
         } else if (daysUntilMove <= 30) {
           rawScore = 0.85;
-          signals.push(`Near-term: moving in ${daysUntilMove} days (~1 month)`);
+          signals.push(`Near-term: starting in ${daysUntilMove} days (~1 month)`);
         } else if (daysUntilMove <= 60) {
           rawScore = 0.65;
-          signals.push(`Medium-term: moving in ${daysUntilMove} days (~2 months)`);
+          signals.push(`Medium-term: starting in ${daysUntilMove} days (~2 months)`);
         } else {
           rawScore = 0.25;
-          signals.push(`Far out: moving in ${daysUntilMove} days`);
+          signals.push(`Far out: starting in ${daysUntilMove} days`);
         }
       } else {
         rawScore = 0.4;
@@ -299,11 +299,11 @@ function scoreEmploymentStability(input: ScoringInput): CategoryResult {
         break;
       case 'student':
         rawScore = 0.4;
-        signals.push('Student — may need co-signer or guarantor');
+        signals.push('Student — verify income or support source');
         break;
       case 'not-employed':
         rawScore = 0.15;
-        signals.push('Not currently employed — verify alternative income sources');
+        signals.push('Not currently employed — verify budget source');
         break;
       default:
         rawScore = 0.3;
@@ -322,15 +322,15 @@ function scoreEmploymentStability(input: ScoringInput): CategoryResult {
   };
 }
 
-// Rental history (landlord refs, late payments, lease violations) is NOT collected on the intake form.
-// Returns neutral score — not included in rental weight calculations.
+// Client history (prior provider refs, late payments, policy violations) is NOT collected on the intake form.
+// Returns neutral score — not included in weight calculations.
 function scoreRentalHistory(_input: ScoringInput): CategoryResult {
   return {
     category: 'affordability' as ScoringCategory, // placeholder
     rawScore: 1.0,
     weight: 0,
     weightedScore: 0,
-    signals: ['Rental history not collected — neutral'],
+    signals: ['Client history not collected — neutral'],
   };
 }
 
@@ -354,7 +354,7 @@ function scoreApplicationCompleteness(input: ScoringInput): CategoryResult {
     input.email,               // email
     input.phone,               // phone
     app.targetMoveInDate,
-    app.propertyAddress,
+    app.serviceAddress,
     app.monthlyRent,
     app.monthlyGrossIncome,
     app.employmentStatus,
@@ -440,8 +440,8 @@ function scoreHouseholdFit(input: ScoringInput): CategoryResult {
   };
 }
 
-// Screening flags (evictions, bankruptcy, outstanding balances) are NOT collected on the intake form.
-// Returns neutral score — not included in rental weight calculations.
+// Screening flags (disputes, bankruptcy, outstanding balances) are NOT collected on the intake form.
+// Returns neutral score — not included in weight calculations.
 function scoreScreeningFlags(_input: ScoringInput): CategoryResult {
   return {
     category: 'affordability' as ScoringCategory, // placeholder
@@ -494,7 +494,7 @@ function computeDataCompleteness(input: ScoringInput): number {
     input.email,               // email
     input.phone,               // phone
     app.targetMoveInDate,
-    app.propertyAddress,
+    app.serviceAddress,
     app.monthlyRent,
     app.monthlyGrossIncome,
     app.employmentStatus,
@@ -518,7 +518,7 @@ function computeBuyerDataCompleteness(input: ScoringInput): number {
     input.phone,                                   // phone
     app.buyerBudget,
     app.preApprovalStatus,
-    app.propertyType,
+    app.serviceType,
     app.bedrooms,
     app.bathrooms,
     app.mustHaves,
@@ -574,7 +574,7 @@ function collectInsights(categories: CategoryResult[], penalties: RiskPenalty[],
     if (!app.buyerBudget) missingInformation.push('Buyer budget');
     if (!app.buyerTimeline && !app.targetMoveInDate) missingInformation.push('Purchase timeline');
     if (!app.housingSituation && !app.currentHousingStatus) missingInformation.push('Current housing situation');
-    if (!app.propertyType) missingInformation.push('Desired property type');
+    if (!app.serviceType) missingInformation.push('Desired service type');
     if (!app.firstTimeBuyer) missingInformation.push('First-time buyer status');
     if (!app.bedrooms) missingInformation.push('Bedroom preferences');
     if (!app.bathrooms) missingInformation.push('Bathroom preferences');
@@ -584,7 +584,7 @@ function collectInsights(categories: CategoryResult[], penalties: RiskPenalty[],
     if (!app.employmentStatus) missingInformation.push('Employment status');
     if (!app.targetMoveInDate) missingInformation.push('Target move-in date');
     if (!app.monthlyRent && !input.budget) missingInformation.push('Target monthly rent');
-    if (!app.propertyAddress) missingInformation.push('Property address');
+    if (!app.serviceAddress) missingInformation.push('Service address');
     if (app.numberOfOccupants == null) missingInformation.push('Number of occupants');
     if (app.hasPets == null) missingInformation.push('Pet information');
     if (!app.leaseTermPreference) missingInformation.push('Lease term preference');
@@ -606,7 +606,7 @@ export const BUYER_WEIGHTS = {
   preApproval: 0.30,
   budgetAlignment: 0.20,
   timelineUrgency: 0.15,
-  propertySpecificity: 0.15,
+  serviceSpecificity: 0.15,
   housingSituation: 0.10,
   completeness: 0.10,
 } as const;
@@ -761,15 +761,15 @@ function scoreBuyerFirstTime(input: ScoringInput): { rawScore: number; signals: 
   return { rawScore, signals };
 }
 
-function scoreBuyerPropertySpecificity(input: ScoringInput): { rawScore: number; signals: string[] } {
+function scoreBuyerServiceSpecificity(input: ScoringInput): { rawScore: number; signals: string[] } {
   const app = input.applicationData;
   const signals: string[] = [];
   let specificityPoints = 0;
   const maxPoints = 5;
 
-  if (app?.propertyType) {
+  if (app?.serviceType) {
     specificityPoints++;
-    signals.push(`Property type: ${app.propertyType}`);
+    signals.push(`Service type: ${app.serviceType}`);
   }
 
   if (app?.bedrooms) {
@@ -794,7 +794,7 @@ function scoreBuyerPropertySpecificity(input: ScoringInput): { rawScore: number;
   }
 
   if (specificityPoints === 0) {
-    signals.push('No property preferences specified');
+    signals.push('No service preferences specified');
   }
 
   const rawScore = Math.min(1.0, specificityPoints / maxPoints);
@@ -819,7 +819,7 @@ function scoreBuyerCompleteness(input: ScoringInput): { rawScore: number; signal
     input.phone,
     app.buyerBudget,
     app.preApprovalStatus,
-    app.propertyType,
+    app.serviceType,
     app.bedrooms,
     app.bathrooms,
     app.mustHaves,
@@ -920,7 +920,7 @@ function collectBuyerInsights(
     if (!app.buyerTimeline && !app.targetMoveInDate) missingInformation.push('Purchase timeline');
     if (!app.housingSituation && !app.currentHousingStatus) missingInformation.push('Current housing situation');
     if (!app.firstTimeBuyer) missingInformation.push('First-time buyer status');
-    if (!app.propertyType) missingInformation.push('Desired property type');
+    if (!app.serviceType) missingInformation.push('Desired service type');
     if (!app.bedrooms) missingInformation.push('Bedroom preferences');
     if (!app.bathrooms) missingInformation.push('Bathroom preferences');
     if (!app.mustHaves) missingInformation.push('Must-have features');
@@ -943,7 +943,7 @@ function computeBuyerScore(input: ScoringInput): ScoringEngineResult {
   const preApproval = scoreBuyerPreApproval(input);
   const budgetAlignment = scoreBuyerBudgetAlignment(input);
   const timeline = scoreBuyerTimeline(input);
-  const specificity = scoreBuyerPropertySpecificity(input);
+  const specificity = scoreBuyerServiceSpecificity(input);
   const housing = scoreBuyerHousingSituation(input);
   const completenessResult = scoreBuyerCompleteness(input);
 
@@ -951,7 +951,7 @@ function computeBuyerScore(input: ScoringInput): ScoringEngineResult {
     { name: 'preApproval', ...preApproval },
     { name: 'budgetAlignment', ...budgetAlignment },
     { name: 'timelineUrgency', ...timeline },
-    { name: 'propertySpecificity', ...specificity },
+    { name: 'serviceSpecificity', ...specificity },
     { name: 'housingSituation', ...housing },
     { name: 'completeness', ...completenessResult },
   ];
@@ -961,7 +961,7 @@ function computeBuyerScore(input: ScoringInput): ScoringEngineResult {
     'affordability',           // preApproval
     'employmentStability',     // budgetAlignment
     'moveInUrgency',           // timelineUrgency
-    'applicationCompleteness', // propertySpecificity
+    'applicationCompleteness', // serviceSpecificity
     'householdFit',            // housingSituation
     'affordability',           // completeness (reuse placeholder)
   ];

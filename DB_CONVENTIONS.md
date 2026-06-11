@@ -1,6 +1,6 @@
 # DB_CONVENTIONS.md
 
-Database naming conventions, query patterns, and migration safety rules for Chippi.
+Database naming conventions, query patterns, and migration safety rules for Koala.
 
 Prevents issues like the `subdomain` vs `slug` column mismatch that broke the app after the Prisma migration.
 
@@ -12,10 +12,10 @@ Prevents issues like the `subdomain` vs `slug` column mismatch that broke the ap
 
 ```
 User, Space, SpaceSetting, Contact, Deal, DealStage, DealContact, DealActivity
-Tour, TourPropertyProfile, TourAvailabilityOverride, TourWaitlist, TourFeedback
+Appointment, AppointmentServiceProfile, AppointmentAvailabilityOverride, AppointmentWaitlist, AppointmentFeedback
 Conversation, Message, DocumentEmbedding
-Brokerage, BrokerageMembership, Invitation
-GoogleCalendarToken, BrokerNotification, AuditLog, ContactDocument
+Agency, AgencyMembership, Invitation
+GoogleCalendarToken, AgencyNotification, AuditLog, ContactDocument
 ```
 
 ### Columns: camelCase
@@ -34,11 +34,11 @@ deal_space_position_idx, audit_actor_created_idx
 
 ### CHECK constraint values: mixed case by domain
 
-- Contact types: UPPERCASE — `'QUALIFICATION'`, `'TOUR'`, `'APPLICATION'`
+- Contact types: UPPERCASE — `'QUALIFICATION'`, `'APPOINTMENT'`, `'APPLICATION'`
 - Deal priority: UPPERCASE — `'LOW'`, `'MEDIUM'`, `'HIGH'`
 - Deal status: lowercase — `'active'`, `'won'`, `'lost'`, `'on_hold'`
-- Roles: lowercase — `'user'`, `'admin'`, `'broker_owner'`, `'broker_admin'`, `'realtor_member'`
-- Brokerage status: lowercase — `'active'`, `'suspended'`
+- Roles: lowercase — `'user'`, `'admin'`, `'agency_owner'`, `'agency_admin'`, `'provider_member'`
+- Agency status: lowercase — `'active'`, `'suspended'`
 
 **Rule**: Follow the existing convention for the domain. Don't mix UPPERCASE and lowercase within the same enum column.
 
@@ -61,14 +61,14 @@ deal_space_position_idx, audit_actor_created_idx
 ### Foreign keys
 
 - Always use `ON DELETE CASCADE` for child records scoped to a parent
-- Use `ON DELETE SET NULL` for optional links (e.g., `Tour.contactId`)
-- Use `ON DELETE RESTRICT` for ownership that must be reassigned first (e.g., `Brokerage.ownerId`)
+- Use `ON DELETE SET NULL` for optional links (e.g., `Appointment.contactId`)
+- Use `ON DELETE RESTRICT` for ownership that must be reassigned first (e.g., `Agency.ownerId`)
 
 ### Multi-tenant scoping
 
 - **Every tenant-scoped table MUST have a `spaceId` column** with FK to `Space.id`
 - This is the primary isolation mechanism — all queries must filter by `spaceId`
-- Tables without `spaceId`: `User`, `Brokerage`, `BrokerageMembership`, `Invitation`, `AuditLog`
+- Tables without `spaceId`: `User`, `Agency`, `AgencyMembership`, `Invitation`, `AuditLog`
 
 ---
 
@@ -137,7 +137,7 @@ const { error } = await supabase.rpc('reorder_deal', {
 });
 
 // Good — prevents double-booking
-const { data: bookedId } = await supabase.rpc('book_tour_atomic', { ... });
+const { data: bookedId } = await supabase.rpc('book_appointment_atomic', { ... });
 
 // Good — creates space + settings + stages in one transaction
 const { data: spaceId } = await supabase.rpc('create_space_with_defaults', { ... });
@@ -164,9 +164,9 @@ const { data: spaceId } = await supabase.rpc('create_space_with_defaults', { ...
 |----------|---------|-------------|
 | `reorder_deal` | Move deal to new stage + position with row locking | Kanban drag-and-drop |
 | `match_documents` | Cosine similarity search on embeddings | AI assistant RAG context |
-| `book_tour_atomic` | Insert tour with double-booking prevention | Tour booking endpoint |
+| `book_appointment_atomic` | Insert appointment with double-booking prevention | Appointment booking endpoint |
 | `create_space_with_defaults` | Create space + settings + stages atomically | Onboarding space creation |
-| `create_brokerage_with_owner` | Create brokerage + owner membership | Brokerage creation endpoint |
+| `create_agency_with_owner` | Create agency + owner membership | Agency creation endpoint |
 
 **Rule**: If an operation touches multiple tables or needs concurrency safety, create an RPC function. Don't do multi-step inserts in application code.
 
