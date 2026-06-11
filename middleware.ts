@@ -14,6 +14,12 @@ const isProtectedRoute = createRouteMatcher([
   '/authorize',
   '/subscribe',
   '/billing-required',
+  // Buyer marketplace data API — every read/write is scoped to the signed-in
+  // Clerk user, so a signed-out request must be rejected. The buyer *pages*
+  // (/buyer) are intentionally NOT listed here: their layout renders a friendly
+  // in-place sign-in gate for signed-out users instead of a hard bounce, while
+  // the routes below stay hard-protected (the security-critical surface).
+  '/api/buyer/(.*)',
 ]);
 
 const isPublicRoute = createRouteMatcher([
@@ -21,6 +27,10 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/login/(.*)',
+  // Buyer-facing marketplace (built by another team). Buyers browse it signed
+  // out; it must never be gated. Listed explicitly so it can't be caught by a
+  // future protected-route addition.
+  '/marketplace(.*)',
 ]);
 
 const isAdminRoute = createRouteMatcher([

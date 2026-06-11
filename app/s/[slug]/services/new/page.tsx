@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * /s/[slug]/services/new — the standalone create flow for a listing.
+ * /s/[slug]/services/new — the standalone create flow for a service offering.
  *
  * A service is a noun (the thing being sold). A deal is a verb (the
  * transaction on it). They earn different shapes; do not conflate. This
- * page is a single form, no wizard ceremony — every field except address
+ * page is a single form, no wizard ceremony — every field except the name
  * is optional, the form is one screen, the provider is done in 30s.
  *
  * Submit → POST /api/services → navigate to the new service's detail
@@ -53,16 +53,16 @@ export default function NewServicePage() {
       <header className="space-y-1.5">
         <p className={cn(BODY_MUTED)}>Services.</p>
         <h1 className={cn(H1)} style={TITLE_FONT}>
-          New listing
+          New service
         </h1>
-        <p className={cn(BODY_MUTED)}>What are you taking to market?</p>
+        <p className={cn(BODY_MUTED)}>What offering are you adding?</p>
       </header>
 
       <ServiceForm
         onCancel={() => router.push(`/s/${slug}/services`)}
         onSubmit={handleSubmit}
         submitting={submitting}
-        submitLabel="Create listing"
+        submitLabel="Create service"
       />
     </div>
   );

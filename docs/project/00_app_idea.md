@@ -6,27 +6,29 @@ Koala
 
 ## One Sentence Product Definition
 
-Koala is a real estate CRM for solo providers that turns a single intake link into qualified, AI-scored renter leads with a clean pipeline for follow-up, appointments, and deals.
+Koala is a professional-services marketplace and agentic OS for solo providers and agencies that turns a single intake link into qualified, AI-scored client inquiries with a clean pipeline for follow-up, sessions, and deals — plus a public marketplace where buyers browse and track purchases.
 
 ## Core User
 
-New solo providers in the U.S. handling renter and leasing leads — early in their career or building a solo practice, needing a fast lightweight way to capture and qualify renter leads without enterprise CRM complexity.
+- **Providers**: solo professionals in the U.S. (hair stylists, personal trainers, coaches, photographers, tutors, consultants) needing a fast lightweight way to capture and qualify client inquiries without enterprise CRM complexity.
+- **Agencies**: studios, salons, gyms managing a roster of providers.
+- **Buyers**: clients browsing service offerings at `/marketplace` and tracking their purchases at `/buyer`.
 
 ## Core Problem
 
-Solo providers waste time switching between spreadsheets, email, social DMs, and generic CRMs to capture and qualify renter leads. This leads to missed follow-ups, no lead prioritization, and poor pipeline visibility.
+Solo providers waste time switching between spreadsheets, email, social DMs, and generic CRMs to capture and qualify client inquiries. This leads to missed follow-ups, no lead prioritization, and poor pipeline visibility.
 
 ## Core Outcome
 
-Providers go from sign-up to a live shareable intake link in under 5 minutes. Renter applications flow in, get AI-scored with explainable context (hot/warm/cold + summary), and appear in a clean CRM where the provider can triage, follow up, schedule appointments, and track deals — all from one place.
+Providers go from sign-up to a live shareable intake link in under 5 minutes. Client inquiries flow in, get AI-scored with explainable context (hot/warm/cold + summary), and appear in a clean CRM where the provider can triage, follow up, schedule sessions, and track deals — all from one place.
 
 ## First Value Event
 
-Provider generates their intake link and shares it. The first renter application arrives, is AI-scored, and appears in the leads view with a priority tier and plain-language summary.
+Provider generates their intake link and shares it. The first client inquiry arrives, is AI-scored, and appears in the leads view with a priority tier and plain-language summary.
 
 ## Main Product Workflow
 
-Sign up → Create workspace → Generate intake link → Share link → Renter submits application → AI scores and triages lead → Provider reviews in leads view → Promotes to contact → Schedules appointment → Creates deal → Tracks through pipeline stages.
+Sign up → Create workspace → Generate intake link → Share link → Client submits inquiry → AI scores and triages lead → Provider reviews in leads view → Promotes to contact → Schedules session → Creates deal → Tracks through pipeline stages. Separately: buyers browse `/marketplace`, purchase a service, and track it at `/buyer`.
 
 ## Dashboard Definition
 
@@ -46,8 +48,9 @@ Multi-step inline onboarding flow triggered on first sign-in at `/`. Steps inclu
 
 ## Product Specific Features
 
-- Shareable public intake form (`/apply/[slug]`) with 9-step structured renter application
-- AI lead scoring using OpenAI gpt-4o-mini with explainable priority tiers (hot/warm/cold/unqualified) and plain-language summaries
+- Marketplace and buyer purchase tracking: public service discovery at `/marketplace`, authenticated buyers track purchases at `/buyer`
+- Shareable public intake/booking form (`/apply/[slug]`) for client inquiry or session booking
+- AI inquiry scoring with explainable priority tiers (hot/warm/cold/unqualified) and plain-language summaries
 - Leads view with score badges, new-lead indicators, and filtering
 - Contact CRM with lifecycle types (QUALIFICATION, APPOINTMENT, APPLICATION), activity logs, follow-up scheduling
 - Deal pipeline with Kanban board, drag-and-drop reordering, stages, values, and close dates

@@ -8,24 +8,24 @@ import { SpotlightCard } from '../spotlight-card';
 
 const steps = [
   {
-    title: 'Connect',
+    title: 'List your services',
     description:
-      'Plug in Gmail or Outlook and your calendar. Two minutes, no migration. Koala starts reading the inbox the moment you connect.',
+      'Add what you offer, connect your inbox and calendar, and your storefront goes live in the marketplace. Two minutes, no migration.',
   },
   {
     title: 'Koala works',
     description:
-      'It drafts replies in your voice, scores each new lead against your deals, and surfaces the one to handle first.',
+      'It replies to inquiries in your voice, scores each new client against your bookings, and surfaces the one to handle first.',
   },
   {
     title: 'You approve',
     description:
-      "Read the draft, edit it, send it. Or don't. By default every move is yours to approve. Nothing leaves without your name on it.",
+      "Read the reply, edit it, send it. Or don't. By default every move is yours to approve. Nothing leaves without your name on it.",
   },
   {
-    title: 'Stay current',
+    title: 'Stay booked',
     description:
-      'Appointments land on the calendar, the pipeline updates itself, and every touch is logged. The board reflects reality, not last week.',
+      'Sessions land on the calendar, your schedule updates itself, and every client touch is logged. The board reflects reality, not last week.',
   },
 ];
 
@@ -36,7 +36,7 @@ export function HowItWorks() {
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-brand text-xs uppercase tracking-[0.25em] text-brand">How it works</p>
           <h2 className="font-brand mt-3 text-3xl text-foreground sm:text-4xl lg:text-5xl">
-            From inbox to <span className="text-gradient-brand">closed.</span>
+            From inquiry to <span className="text-gradient-brand">booked.</span>
           </h2>
           <p className="mt-4 text-lg text-foreground/60">
             A calm, transparent flow that keeps you in control the whole way through.

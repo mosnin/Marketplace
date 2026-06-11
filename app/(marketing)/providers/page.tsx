@@ -40,7 +40,7 @@ import {
 export const metadata = {
   title: 'For solo providers · Koala',
   description:
-    'Koala is the extra teammate in the field, reachable on your phone, the web app, or the office desktop. It drafts in your voice, scores the lead, books the appointment, and keeps every deal current.',
+    'Koala is the extra teammate wherever you work, reachable on your phone, the web app, or your desk. It replies in your voice, scores the inquiry, books the session, and keeps every client current.',
 };
 
 export default async function ProvidersPage() {
@@ -54,13 +54,13 @@ export default async function ProvidersPage() {
       {/* Hero — extra teammate in the field. */}
       <ProvidersHero />
 
-      {/* In the field — phone / web app / office. */}
+      {/* Wherever you work — phone / web app / desk. */}
       <section
         id="in-the-field"
         className="relative mx-auto max-w-7xl px-6 py-24 scroll-mt-28 md:px-8 md:py-32"
       >
         <Reveal className="max-w-3xl">
-          <Eyebrow>In the field</Eyebrow>
+          <Eyebrow>Wherever you work</Eyebrow>
           <h2 className="mt-5 font-title text-[clamp(2.25rem,4.8vw,4rem)] font-normal leading-[1.02] tracking-[-0.025em] text-foreground">
             reachable wherever
             <span className="text-muted-foreground"> the work is.</span>
@@ -68,7 +68,7 @@ export default async function ProvidersPage() {
           <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground/55">
             you&rsquo;re rarely at a desk. Koala is a tap away on whatever screen is
             already in your hand, and the same workspace opens wide when you&rsquo;re
-            back at the office.
+            back at your desk.
           </p>
         </Reveal>
         <FieldSurfaces />
@@ -98,18 +98,18 @@ export default async function ProvidersPage() {
         <div id="first-call" className="scroll-mt-28">
         <FeatureRow
           flip
-          eyebrow="First call"
+          eyebrow="First reply"
           title={
             <>
-              know who to call
+              know who to follow up
               <span className="text-muted-foreground"> first.</span>
             </>
           }
-          sub="every new inquiry comes in scored against your active deals. hot, warm, cold, at a glance, with the reason attached in plain language."
+          sub="every new inquiry comes in scored against your active clients. hot, warm, cold, at a glance, with the reason attached in plain language."
           points={[
-            'multi-signal scoring on each lead.',
+            'multi-signal scoring on each inquiry.',
             'the quiet hot ones surfaced before they go cold.',
-            'priority order updates as deals move.',
+            'priority order updates as bookings move.',
           ]}
           media={<LeadScoreDiagram aspect="square" />}
         />
@@ -119,11 +119,11 @@ export default async function ProvidersPage() {
           eyebrow="Appointments"
           title={
             <>
-              book the appointment
+              book the session
               <span className="text-muted-foreground"> from the thread.</span>
             </>
           }
-          sub="reply with a time. Koala checks your availability, puts it on the calendar, sends the confirmation, and writes it back to the deal. no tab-switching."
+          sub="reply with a time. Koala checks your availability, puts it on the calendar, sends the confirmation, and writes it back to the client. no tab-switching."
           points={[
             'proposes times against your open hours.',
             'two-way Google and Outlook sync.',
@@ -134,18 +134,18 @@ export default async function ProvidersPage() {
 
         <FeatureRow
           flip
-          eyebrow="The pipeline"
+          eyebrow="Your bookings"
           title={
             <>
-              a pipeline that
+              a schedule that
               <span className="text-muted-foreground"> doesn&rsquo;t lie.</span>
             </>
           }
-          sub="drag a card to the next stage; Koala keeps the value, the dates, and the counterparty in sync. the board reflects reality, not yesterday."
+          sub="drag a card to the next stage; Koala keeps the value, the dates, and the client in sync. the board reflects reality, not yesterday."
           points={[
             'auto-updating fields as cards move.',
             'won and lost reasons logged in plain language.',
-            'every change written to the deal timeline.',
+            'every change written to the client timeline.',
           ]}
           media={<KanbanDragDiagram aspect="video" />}
         />
@@ -158,10 +158,10 @@ export default async function ProvidersPage() {
               <span className="text-muted-foreground"> read and triaged.</span>
             </>
           }
-          sub="Gmail and Outlook plug in. Koala reads every inbound, weighs it against your live deals, and quietly lifts the one to look at first. it stays quiet when nothing's worth surfacing."
+          sub="Gmail and Outlook plug in. Koala reads every inbound, weighs it against your active clients, and quietly lifts the one to look at first. it stays quiet when nothing's worth surfacing."
           points={[
             'threads, not loose messages.',
-            'scored against your active deals.',
+            'scored against your active clients.',
             'reply, draft, and send from the address your contacts know.',
           ]}
           media={<InboxDiagram aspect="square" />}

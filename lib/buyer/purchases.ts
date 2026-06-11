@@ -12,96 +12,46 @@
  *
  * The provider side of a purchase (the Space it was bought from, the catalog
  * Service, the scheduled Appointment) is denormalised on read into a small
- * display shape so the buyer pages never need to know the provider table
- * layout. Joins use PostgREST embedded resources with explicit FK columns.
+ * display shape (PurchaseWithProvider — see lib/buyer/types.ts) so the buyer
+ * pages never need to know the provider table layout. Joins use PostgREST
+ * embedded resources with explicit FK constraint names.
  */
 
 import { supabase } from '@/lib/supabase';
+import {
+  ACTIVE_PURCHASE_STATUSES,
+  type PurchaseStatus,
+  type PurchaseAppointment,
+  type PurchaseProvider,
+  type PurchaseWithProvider,
+} from '@/lib/buyer/types';
 
-/** The fulfilment lifecycle a Purchase moves through. Mirrors the CHECK
- *  constraint in supabase/migrations/20260611200000_buyer_marketplace.sql. */
-export type PurchaseStatus =
-  | 'requested'
-  | 'confirmed'
-  | 'in_progress'
-  | 'delivered'
-  | 'completed'
-  | 'cancelled';
+// Re-export the shared types/constants so route + page + component callers can
+// import data shape and data access from one module.
+export {
+  ACTIVE_PURCHASE_STATUSES,
+  PURCHASE_TIMELINE,
+  PURCHASE_STATUS_LABELS,
+} from '@/lib/buyer/types';
+export type {
+  Purchase,
+  PurchaseStatus,
+  PurchaseProvider,
+  PurchaseService,
+  PurchaseAppointment,
+  PurchaseWithProvider,
+  BuyerStats,
+} from '@/lib/buyer/types';
 
-/** Ordered happy-path lifecycle (excludes the terminal `cancelled`). Used to
- *  render the status timeline on the purchases + detail pages. */
-export const PURCHASE_LIFECYCLE: PurchaseStatus[] = [
-  'requested',
-  'confirmed',
-  'in_progress',
-  'delivered',
-  'completed',
-];
-
-/** Statuses that count as "active" (open work) for the dashboard stat —
- *  everything that isn't a terminal completed/cancelled. */
-export const ACTIVE_PURCHASE_STATUSES: PurchaseStatus[] = [
-  'requested',
-  'confirmed',
-  'in_progress',
-  'delivered',
-];
-
-/** Minimal provider-Space shape surfaced to the buyer UI. */
-export interface PurchaseSpace {
-  id: string;
-  slug: string;
-  name: string;
-  emoji: string;
-}
-
-/** Minimal catalog-Service shape surfaced to the buyer UI. */
-export interface PurchaseService {
-  id: string;
-  address: string;
-  city: string | null;
-  stateRegion: string | null;
-  serviceType: string | null;
-  listPrice: number | null;
-}
-
-/** Minimal scheduled-Appointment shape surfaced to the buyer UI. */
-export interface PurchaseAppointment {
-  id: string;
-  startsAt: string;
-  endsAt: string;
-  status: string;
-  serviceAddress: string | null;
-}
-
-/** A buyer's purchase with its linked provider entities denormalised. */
-export interface BuyerPurchase {
-  id: string;
-  buyerUserId: string;
-  buyerEmail: string | null;
-  buyerName: string | null;
-  spaceId: string;
-  serviceId: string | null;
-  appointmentId: string | null;
-  title: string;
-  amountCents: number | null;
-  currency: string;
-  status: PurchaseStatus;
-  notes: string | null;
-  createdAt: string;
-  updatedAt: string;
-  space: PurchaseSpace | null;
-  service: PurchaseService | null;
-  appointment: PurchaseAppointment | null;
-}
-
-// PostgREST embedded-resource select. The FK column is named in the embed so
-// PostgREST resolves the right relationship unambiguously (Purchase has a
-// single FK to each of Space / Service / Appointment).
+// PostgREST embedded-resource select. The FK constraint is named in each embed
+// so PostgREST resolves the right relationship unambiguously (Purchase has a
+// single FK to each of Space / Service / Appointment). Postgres auto-names an
+// inline-REFERENCES constraint `{table}_{column}_fkey`, matching the
+// CommissionLedger embed pattern elsewhere in the app.
 const SELECT_WITH_RELATIONS = `
   id, buyerUserId, buyerEmail, buyerName, spaceId, serviceId, appointmentId,
   title, amountCents, currency, status, notes, createdAt, updatedAt,
-  space:Space!Purchase_spaceId_fkey ( id, slug, name, emoji ),
+  provider:Space!Purchase_spaceId_fkey ( id, name, slug, emoji ),
   service:Service!Purchase_serviceId_fkey ( id, address, city, stateRegion, serviceType, listPrice ),
   appointment:Appointment!Purchase_appointmentId_fkey ( id, startsAt, endsAt, status, serviceAddress )
 `;
@@ -114,7 +64,7 @@ function firstOrNull<T>(value: T | T[] | null | undefined): T | null {
   return value ?? null;
 }
 
-function mapRow(row: Record<string, unknown>): BuyerPurchase {
+function mapRow(row: Record<string, unknown>): PurchaseWithProvider {
   return {
     id: row.id as string,
     buyerUserId: row.buyerUserId as string,
@@ -130,8 +80,10 @@ function mapRow(row: Record<string, unknown>): BuyerPurchase {
     notes: (row.notes as string | null) ?? null,
     createdAt: row.createdAt as string,
     updatedAt: row.updatedAt as string,
-    space: firstOrNull(row.space as PurchaseSpace | PurchaseSpace[] | null),
-    service: firstOrNull(row.service as PurchaseService | PurchaseService[] | null),
+    provider: firstOrNull(row.provider as PurchaseProvider | PurchaseProvider[] | null),
+    service: firstOrNull(
+      row.service as PurchaseWithProvider['service'] | PurchaseWithProvider['service'][] | null,
+    ),
     appointment: firstOrNull(
       row.appointment as PurchaseAppointment | PurchaseAppointment[] | null,
     ),
@@ -144,7 +96,7 @@ function mapRow(row: Record<string, unknown>): BuyerPurchase {
  */
 export async function getPurchasesForUser(
   buyerUserId: string,
-): Promise<BuyerPurchase[]> {
+): Promise<PurchaseWithProvider[]> {
   const { data, error } = await supabase
     .from('Purchase')
     .select(SELECT_WITH_RELATIONS)
@@ -162,7 +114,7 @@ export async function getPurchasesForUser(
 export async function getPurchase(
   buyerUserId: string,
   purchaseId: string,
-): Promise<BuyerPurchase | null> {
+): Promise<PurchaseWithProvider | null> {
   const { data, error } = await supabase
     .from('Purchase')
     .select(SELECT_WITH_RELATIONS)
@@ -174,38 +126,69 @@ export async function getPurchase(
   return mapRow(data as Record<string, unknown>);
 }
 
-/** Upcoming scheduled appointments linked to this buyer's purchases. Reads the
- *  appointment ids off the buyer's purchases, then fetches the future,
- *  non-cancelled appointments — soonest-first. Used by the dashboard. */
+/** An upcoming appointment surfaced on the dashboard, carrying the originating
+ *  purchase so the row can link back to its detail page. */
+export interface UpcomingAppointment extends PurchaseAppointment {
+  provider: PurchaseProvider | null;
+  purchaseId: string;
+  purchaseTitle: string;
+}
+
+/**
+ * Upcoming scheduled appointments linked to this buyer's purchases. Reads the
+ * appointments off the buyer's purchases, then keeps the future, non-cancelled
+ * ones — soonest-first. Used by the dashboard.
+ */
 export async function getUpcomingAppointmentsForUser(
   buyerUserId: string,
   limit = 5,
-): Promise<(PurchaseAppointment & { space: PurchaseSpace | null; purchaseId: string; purchaseTitle: string })[]> {
+): Promise<UpcomingAppointment[]> {
   const purchases = await getPurchasesForUser(buyerUserId);
-  const withAppt = purchases.filter(
-    (p): p is BuyerPurchase & { appointment: PurchaseAppointment } =>
-      p.appointment != null && p.status !== 'cancelled',
-  );
-
   const nowMs = Date.now();
-  return withAppt
+
+  return purchases
     .filter(
-      (p) =>
+      (p): p is PurchaseWithProvider & { appointment: PurchaseAppointment } =>
+        p.appointment != null &&
+        p.status !== 'cancelled' &&
         p.appointment.status !== 'cancelled' &&
+        p.appointment.startsAt != null &&
         new Date(p.appointment.startsAt).getTime() >= nowMs,
     )
     .sort(
       (a, b) =>
-        new Date(a.appointment.startsAt).getTime() -
-        new Date(b.appointment.startsAt).getTime(),
+        new Date(a.appointment.startsAt as string).getTime() -
+        new Date(b.appointment.startsAt as string).getTime(),
     )
     .slice(0, limit)
     .map((p) => ({
       ...p.appointment,
-      space: p.space,
+      provider: p.provider,
       purchaseId: p.id,
       purchaseTitle: p.title,
     }));
+}
+
+/** Aggregate dashboard numbers for a buyer, computed from their purchases. */
+export function computeBuyerStats(
+  purchases: PurchaseWithProvider[],
+  upcomingCount: number,
+): import('@/lib/buyer/types').BuyerStats {
+  const activePurchases = purchases.filter((p) =>
+    (ACTIVE_PURCHASE_STATUSES as readonly string[]).includes(p.status),
+  ).length;
+
+  // Total spent counts completed orders only — money the buyer has actually
+  // settled, not in-flight requests that may still change or be cancelled.
+  const totalSpentCents = purchases
+    .filter((p) => p.status === 'completed' && p.amountCents != null)
+    .reduce((sum, p) => sum + (p.amountCents ?? 0), 0);
+
+  return {
+    activePurchases,
+    upcomingAppointments: upcomingCount,
+    totalSpentCents,
+  };
 }
 
 export interface CreatePurchaseInput {
@@ -229,7 +212,7 @@ export interface CreatePurchaseInput {
  */
 export async function createPurchase(
   input: CreatePurchaseInput,
-): Promise<BuyerPurchase> {
+): Promise<PurchaseWithProvider> {
   // Verify the target Space exists. The marketplace surfaces real Spaces, but
   // the request still has to be authoritative.
   const { data: space, error: spaceErr } = await supabase
@@ -274,7 +257,7 @@ export async function createPurchase(
 }
 
 /** Thrown by createPurchase on a bad reference (unknown Space / Service). The
- *  route maps it to a 400/404; everything else bubbles as a 500. */
+ *  route maps it to a 400; everything else bubbles as a 500. */
 export class PurchaseValidationError extends Error {
   constructor(message: string) {
     super(message);

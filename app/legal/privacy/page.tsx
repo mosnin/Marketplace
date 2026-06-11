@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Privacy Policy | Koala',
-  description: 'Privacy Policy for Koala, a B2B SaaS agentic OS for real estate agents and agencies.',
+  description: 'Privacy Policy for Koala, a professional-services marketplace and agentic OS for providers and agencies.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
       <section>
         <h2 className="text-xl font-semibold">1. Who We Are</h2>
         <div className="mt-3 text-sm text-muted-foreground space-y-3 leading-6">
-          <p>1.1. Koala Inc. operates a B2B SaaS agentic OS for real estate agents and agencies. The platform combines an autonomous AI agent with intake forms, AI lead scoring, deal pipelines, appointment scheduling, voice AI, MCP server integration, and agency team management.</p>
+          <p>1.1. Koala Inc. operates a professional-services marketplace and agentic OS for providers (hair stylists, personal trainers, coaches, photographers, tutors, consultants) and the agencies (studios, salons, gyms) that employ them. The platform combines an autonomous AI agent with booking and inquiry forms, AI inquiry scoring, deal pipelines, appointment scheduling, a public marketplace, voice AI, MCP server integration, and agency team management.</p>
           <p>1.2. With respect to Subscriber Data (including Applicant data), Koala acts as a <strong className="text-foreground">Data Processor</strong>. We process data on behalf of our Subscribers (providers and agencies), who are the <strong className="text-foreground">Data Controllers</strong>.</p>
           <p>1.3. For data we collect directly about Subscribers for account and billing purposes, Koala acts as the Data Controller.</p>
         </div>
@@ -32,9 +32,9 @@ export default function PrivacyPolicyPage() {
       <section>
         <h2 className="text-xl font-semibold">2. Data Controller Clarification</h2>
         <div className="mt-3 text-sm text-muted-foreground space-y-3 leading-6">
-          <p>2.1. Providers and agencies who use the Service are the Data Controllers of the data they collect through intake forms, deal pipelines, and other Service features. They are responsible for how they use their own data.</p>
+          <p>2.1. Providers and agencies who use the Service are the Data Controllers of the data they collect through booking and inquiry forms, deal pipelines, and other Service features. They are responsible for how they use their own data.</p>
           <p>2.2. Subscribers are responsible for obtaining all necessary consents from Applicants and complying with applicable data protection laws.</p>
-          <p>2.3. Applicants who submit data through intake forms agree to both Koala&apos;s Privacy Policy and the applicable Subscriber&apos;s (provider/agency) privacy policy.</p>
+          <p>2.3. Applicants who submit data through booking or inquiry forms agree to both Koala&apos;s Privacy Policy and the applicable Subscriber&apos;s (provider/agency) privacy policy.</p>
           <p>2.4. For details on how we process data on behalf of Subscribers, please refer to our <a href="/legal/dpa" className="underline hover:text-foreground">Data Processing Agreement</a>.</p>
         </div>
       </section>
@@ -54,12 +54,12 @@ export default function PrivacyPolicyPage() {
       <section>
         <h2 className="text-xl font-semibold">4. Information Collected from Applicants</h2>
         <div className="mt-3 text-sm text-muted-foreground space-y-3 leading-6">
-          <p>4.1. When Applicants submit information through a Subscriber&apos;s intake forms, we collect that data <strong className="text-foreground">on behalf of the Subscriber (Data Controller)</strong>. This may include:</p>
+          <p>4.1. When Applicants submit information through a Subscriber&apos;s booking or inquiry forms, we collect that data <strong className="text-foreground">on behalf of the Subscriber (Data Controller)</strong>. This may include:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Name, email address, and phone number.</li>
-            <li>Housing preferences and requirements.</li>
-            <li>Employment and income information (if requested by the Subscriber).</li>
-            <li>Any other information the Subscriber&apos;s intake form requests.</li>
+            <li>Service preferences and scheduling requirements.</li>
+            <li>Budget and availability information (if requested by the Subscriber).</li>
+            <li>Any other information the Subscriber&apos;s booking or inquiry form requests.</li>
           </ul>
           <p>4.2. Applicant data is processed solely for the purpose of providing the Service to the Subscriber. The Subscriber determines what data is collected through their intake forms.</p>
           <p>4.3. Applicants with questions about how their data is used should contact the Subscriber (provider/agency) who collected their information.</p>
@@ -70,8 +70,8 @@ export default function PrivacyPolicyPage() {
       <section>
         <h2 className="text-xl font-semibold">5. How We Use Information</h2>
         <div className="mt-3 text-sm text-muted-foreground space-y-3 leading-6">
-          <p>5.1. <strong className="text-foreground">Provide the Service.</strong> Operate and maintain the platform, including intake forms, deal pipelines, appointment scheduling, agency team management, and MCP server integration.</p>
-          <p>5.2. <strong className="text-foreground">AI Scoring.</strong> Process Applicant data through AI lead scoring features to provide Subscribers with advisory insights. AI scoring is performed solely to deliver the Service, not for any other purpose.</p>
+          <p>5.1. <strong className="text-foreground">Provide the Service.</strong> Operate and maintain the platform, including the marketplace, buyer purchase tracking, booking and inquiry forms, deal pipelines, appointment scheduling, agency team management, and MCP server integration.</p>
+          <p>5.2. <strong className="text-foreground">AI Scoring.</strong> Process Applicant data through AI inquiry scoring features to provide Subscribers with advisory insights. AI scoring is performed solely to deliver the Service, not for any other purpose.</p>
           <p>5.3. <strong className="text-foreground">Notifications.</strong> Send transactional notifications such as new lead alerts, appointment reminders, deal updates, and account-related communications via email (Resend) and SMS (Telnyx).</p>
           <p>5.4. <strong className="text-foreground">Analytics.</strong> Analyze aggregate usage patterns to improve the performance, reliability, and features of the Service.</p>
           <p>5.5. <strong className="text-foreground">Billing.</strong> Process subscription payments and manage billing through Stripe.</p>

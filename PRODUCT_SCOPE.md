@@ -8,9 +8,9 @@ Current as of 2026-05. Read alongside `AGENTS.md` §1–2 (the canonical definit
 
 ## 1. What Koala is
 
-Koala is an **agentic operating system for U.S. real estate agents and agencies.**
+Koala is an **agentic operating system for professional-services providers and agencies** — hair stylists, personal trainers, coaches, photographers, tutors, consultants, and the studios, salons, and gyms that employ them.
 
-A provider's book of business — contacts, leads, deals, appointments, services, applications — is the workspace. Koala is an autonomous AI agent that works *inside* that workspace on the provider's behalf: it qualifies inbound leads, drafts and sends follow-up, schedules appointments, advances deals, produces marketing content, and surfaces what needs attention — taking sign-off only where a human decision is genuinely required.
+A provider's book of business — contacts, leads, deals, appointments, services, applications — is the workspace. Koala is an autonomous AI agent that works *inside* that workspace on the provider's behalf: it qualifies inbound client inquiries, drafts and sends follow-up, schedules sessions, advances deals, produces marketing content, and surfaces what needs attention — taking sign-off only where a human decision is genuinely required.
 
 **The product is the agent.** The CRM-style data structures underneath it — contacts, deals, pipelines — are *substrate, not the product*. Koala is not a database the provider maintains; it is an operator that maintains it for them. It runs two ways:
 
@@ -26,9 +26,10 @@ Two principles follow, and they govern every scope decision:
 
 ## 2. Who it serves
 
-- **Solo and independent providers** — Koala runs the lead pipeline end to end.
-- **Agencies** — agency owners and admins oversee a team of agents: lead routing, commissions, deal review, performance. The agency tier is *part of one product*, not a separate one — an operating system for real estate spans the individual agent and the firm they belong to.
-- **Agency-only users** — oversee a team without running a personal lead workspace.
+- **Solo and independent providers** — Koala runs the client inquiry pipeline end to end.
+- **Agencies** — agency owners and admins oversee a team of providers: lead routing, commissions, deal review, performance. The agency tier is *part of one product*, not a separate one — an operating system for professional services spans the individual provider and the firm they belong to.
+- **Agency-only users** — oversee a team without running a personal provider workspace.
+- **Buyers** — browse services at `/marketplace` and track purchases at `/buyer`.
 
 ---
 
@@ -36,13 +37,13 @@ Two principles follow, and they govern every scope decision:
 
 The product is broad. The **go-to-market entry point is deliberately narrow.** The wedge is how Koala lands a first user and proves itself fast; it is not a cap on what Koala is.
 
-- **Who**: new solo providers in the U.S.
-- **What**: renter and leasing lead qualification
+- **Who**: new solo providers in the U.S. (hair stylists, personal trainers, coaches, photographers, tutors, consultants)
+- **What**: client inquiry qualification and booking
 - **Why this wedge**: it's the shortest path to a provider *feeling* the agent do real work — minimal setup, one shareable intake link, an explainable score, follow-up that happens without being asked
 - **Activation event**: intake link generated
-- **Retention signal**: applications flowing in, and the provider returning to act on what Koala surfaced
+- **Retention signal**: inquiries flowing in, and the provider returning to act on what Koala surfaced
 
-"Protect the wedge" means: keep the **first-run experience** fast and unsprawled — sign-up to live intake link stays minimal. It does **not** mean the product stops at renter leads. Depth elsewhere is welcome; friction on a new provider's path to first value is not.
+"Protect the wedge" means: keep the **first-run experience** fast and unsprawled — sign-up to live intake link stays minimal. It does **not** mean the product stops at first-time inquiries. Depth elsewhere is welcome; friction on a new provider's path to first value is not.
 
 ---
 
@@ -51,7 +52,8 @@ The product is broad. The **go-to-market entry point is deliberately narrow.** T
 A capability snapshot — categorical, not exhaustive. For the live surface map see `ARCHITECTURE.md` and `README.md`.
 
 - **Autonomous agent** — chat plus event-triggered background runs; tool-use across the whole workspace; every mutation is approval-gated; Koala drafts, it never sends silently
-- **Public intake** — branded, customizable, conversational application pages; separate rental and buyer flows
+- **Marketplace & buyer purchase tracking** — public service discovery at `/marketplace`; authenticated buyers track purchases and session history at `/buyer`
+- **Public intake** — branded, customizable, conversational booking and inquiry pages
 - **Explainable lead scoring** — every lead gets a score, a hot/warm/cold label, and a plain-language reason
 - **Lead → contact → deal pipeline** — the CRM substrate, with customizable stages
 - **Appointments** — scheduling, public booking pages, calendar sync, reminders, post-appointment feedback

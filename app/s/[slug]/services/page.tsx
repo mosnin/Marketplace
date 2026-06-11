@@ -64,7 +64,7 @@ export default async function ServicesPage({
   return (
     <div className={cn('space-y-6 mx-auto pb-12', PAGE_MAX)}>
       {/* Page header — status-sentence pattern: muted greeting → serif h1
-          → one-sentence status. Add-listing CTA sits inline; primary
+          → one-sentence status. Add-service CTA sits inline; primary
           action lives where the provider's eye lands after the title. */}
       <header className="flex items-start justify-between gap-4">
         <div className="space-y-1.5 min-w-0">
@@ -93,7 +93,7 @@ export default async function ServicesPage({
           <Building2 size={28} className="mx-auto mb-3 text-muted-foreground/60" aria-hidden />
           <p className="text-sm text-foreground">Quiet — no services yet.</p>
           <p className={cn('text-xs mt-1', BODY_MUTED)}>
-            Add your first listing to start the register.
+            Add your first service to start your catalogue.
           </p>
           <Link
             href={`/s/${slug}/services/new`}

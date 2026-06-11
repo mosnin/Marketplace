@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { getSpaceFromSlug } from '@/lib/space';
 import { CmaView } from './cma-view';
 
-export const metadata = { title: 'CMA — Koala' };
+export const metadata = { title: 'Rate Benchmark — Koala' };
 
 export default async function CmaPage({
   params,

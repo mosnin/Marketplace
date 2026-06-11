@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { PurchaseStatusBadge } from '@/components/buyer/purchase-status-badge';
 import { formatAmount } from '@/lib/buyer/format';
-import type { BuyerPurchase } from '@/lib/buyer/purchases';
+import type { PurchaseWithProvider } from '@/lib/buyer/purchases';
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -22,9 +22,9 @@ function formatDate(iso: string): string {
   });
 }
 
-export function PurchaseRow({ purchase }: { purchase: BuyerPurchase }) {
+export function PurchaseRow({ purchase }: { purchase: PurchaseWithProvider }) {
   const amount = formatAmount(purchase.amountCents, purchase.currency);
-  const providerName = purchase.space?.name ?? 'Provider';
+  const providerName = purchase.provider?.name ?? 'Provider';
 
   return (
     <Link

@@ -38,6 +38,7 @@ import {
   CreditCard,
   Briefcase,
   Activity,
+  Store,
 } from 'lucide-react';
 
 interface MegaMenuItem {
@@ -48,20 +49,21 @@ interface MegaMenuItem {
 }
 
 const providerItems: MegaMenuItem[] = [
-  { label: 'Drafts in your voice', href: '/providers#the-reply', icon: PenLine, description: 'Replies written before you open the thread' },
-  { label: 'Know who to call first', href: '/providers#first-call', icon: Target, description: 'Every lead scored against your deals' },
-  { label: 'Book the appointment', href: '/providers#in-the-field', icon: CalendarCheck, description: 'Reply with a time; Koala handles the rest' },
-  { label: 'A pipeline that does not lie', href: '/providers#one-workspace', icon: KanbanSquare, description: 'One workspace, not six tabs' },
+  { label: 'Replies in your voice', href: '/providers#the-reply', icon: PenLine, description: 'Written before you open the thread' },
+  { label: 'Know who to follow up first', href: '/providers#first-call', icon: Target, description: 'Every inquiry scored against your bookings' },
+  { label: 'Book the session', href: '/providers#in-the-field', icon: CalendarCheck, description: 'Reply with a time; Koala handles the rest' },
+  { label: 'A schedule that does not lie', href: '/providers#one-workspace', icon: KanbanSquare, description: 'One workspace, not six tabs' },
 ];
 
 const agencyItems: MegaMenuItem[] = [
-  { label: 'For agencies', href: '/agencies', icon: Building2, description: 'A teammate for every agent on the floor' },
-  { label: 'Lead routing', href: '/agencies', icon: GitBranch, description: 'The right lead to the right agent' },
+  { label: 'For agencies', href: '/agencies', icon: Building2, description: 'A teammate for every provider on the team' },
+  { label: 'Lead routing', href: '/agencies', icon: GitBranch, description: 'The right client to the right provider' },
   { label: 'The whole room', href: '/agencies', icon: BarChart3, description: 'Performance and bottlenecks at a glance' },
-  { label: 'Book a demo', href: '/demo', icon: Briefcase, description: 'See it on your own floor' },
+  { label: 'Book a demo', href: '/demo', icon: Briefcase, description: 'See it across your own team' },
 ];
 
 const moreItems: MegaMenuItem[] = [
+  { label: 'Marketplace', href: '/marketplace', icon: Store, description: 'Browse and book trusted pros' },
   { label: 'Integrations', href: '/integrations', icon: Plug, description: 'Connect the tools you already use' },
   { label: 'Pricing', href: '/pricing', icon: CreditCard, description: 'One plan, honest pricing' },
   { label: 'Company', href: '/company', icon: Users, description: 'Why we built Koala' },
@@ -161,6 +163,12 @@ export function FortitudoNav() {
 
             {/* Desktop mega-menu nav. */}
             <nav className="hidden items-center gap-0.5 lg:flex">
+              <Link
+                href="/marketplace"
+                className="rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Marketplace
+              </Link>
               {navGroups.map((group) => (
                 <div key={group.label} className="relative">
                   <button

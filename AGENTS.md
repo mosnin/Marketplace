@@ -8,7 +8,7 @@ All AI agents must read and follow this file before making any changes.
 
 ## 1. Project summary
 
-Koala is an **agentic operating system for U.S. real estate agents and agencies.** The provider's book of business — contacts, deals, stages, appointments, applications — is the workspace; Koala is an autonomous agent that works inside it on the provider's behalf, with sign-off only where it's needed. The launch wedge is solo providers handling renter and leasing leads; the product emphasizes speed, clarity, and a polished brand experience.
+Koala is an **agentic operating system for professional-services providers and agencies** — hair stylists, personal trainers, coaches, photographers, tutors, consultants, and the studios, salons, and gyms that employ them. The provider's book of business — contacts, deals, stages, appointments, applications — is the workspace; Koala is an autonomous agent that works inside it on the provider's behalf, with sign-off only where it's needed. The product also includes a public marketplace (`/marketplace`) where buyers browse service offerings and track purchases at `/buyer`. The product emphasizes speed, clarity, and a polished brand experience.
 
 CRM-style data structures (contacts, deals, pipelines) are the substrate, not the product. New work should make Koala do **more** on the provider's behalf — not add more configuration surfaces the provider has to operate themselves.
 
@@ -22,11 +22,11 @@ CRM-style data structures (contacts, deals, pipelines) are the substrate, not th
 
 The launch wedge is narrow and intentional:
 
-- **Who**: new solo providers in the U.S.
-- **What**: renter and leasing lead qualification
+- **Who**: new solo providers in the U.S. (hair stylists, personal trainers, coaches, photographers, tutors, consultants)
+- **What**: client inquiry qualification and session booking
 - **How**: fast setup, intake link activation, explainable AI-assisted scoring, an agent that actually does the work
 - **Activation event**: intake link generation
-- **Retention signal**: completed applications and repeated workflow use
+- **Retention signal**: completed inquiries and repeated workflow use
 
 Do **not** treat this repo as a generic CRM expansion project. The agentic OS positioning means new work should make Koala act on the provider's behalf, not add configuration surfaces the provider has to operate themselves.
 

@@ -41,10 +41,12 @@ System map for Koala.
 ## 2. Directory map
 
 ```
-realestatecrm/
+koala/
 ├── app/                        # Next.js App Router pages, layouts, API routes
 │   ├── (auth)/                 # Sign-in / sign-up (Clerk hosted components)
 │   ├── admin/                  # Admin dashboard (legacy Redis-based)
+│   ├── marketplace/            # Public service discovery (buyer-facing browse)
+│   ├── buyer/                  # Authenticated buyer dashboard (purchase tracking)
 │   ├── api/
 │   │   ├── ai/task/            # On-demand agent streaming endpoint (+ approve/[requestId])
 │   │   ├── contacts/           # Contact CRUD + [id] routes
@@ -54,13 +56,12 @@ realestatecrm/
 │   │   ├── spaces/             # Workspace CRUD
 │   │   ├── stages/             # Deal stage CRUD + [id] routes
 │   │   └── vectorize/sync/     # Vector sync trigger
-│   ├── apply/[slug]/      # Public intake page (prospect-facing)
-│   ├── dashboard/              # Routing gate → redirects to workspace or onboarding
-│   ├── header/                 # Landing page header
+│   ├── apply/[slug]/           # Public booking/inquiry intake page (client-facing)
 │   ├── legal/                  # Terms, privacy, cookies
-│   ├── onboarding/             # 7-step onboarding wizard
-│   ├── s/[slug]/          # Authenticated workspace (CRM)
-│   │   ├── ai/                 # AI assistant page
+│   ├── setup/                  # Onboarding and workspace creation
+│   ├── agency/                 # Agency console (roster, routing, commissions, reviews)
+│   ├── s/[slug]/               # Authenticated provider workspace (leads, contacts, deals, AI)
+│   │   ├── ai/                 # AI assistant chat
 │   │   ├── contacts/           # Contacts list + [id] detail
 │   │   ├── deals/              # Deals kanban board
 │   │   ├── leads/              # Intake leads list
@@ -74,11 +75,12 @@ realestatecrm/
 │   ├── contacts/               # Contact table, form
 │   ├── dashboard/              # Sidebar, header, mobile nav
 │   ├── deals/                  # Kanban board, column, card, form
+│   ├── agency/                 # Agency-specific components
 │   └── ui/                     # shadcn-style primitives
 ├── lib/
 │   ├── ai.ts                   # AI assistant logic (provider routing, RAG, streaming)
 │   ├── embeddings.ts           # OpenAI text-embedding-3-small
-│   ├── lead-scoring.ts         # Lead scoring (OpenAI gpt-4o-mini, structured JSON)
+│   ├── lead-scoring.ts         # Client inquiry scoring (deterministic engine + LLM summary)
 │   ├── nav-links.ts            # Landing page nav config
 │   ├── redis.ts                # Upstash Redis client
 │   ├── space.ts                # Space lookup helpers
@@ -90,10 +92,11 @@ realestatecrm/
 │   └── zilliz.ts               # Vector storage (Supabase pgvector, interface unchanged)
 ├── supabase/
 │   └── schema.sql              # Full database schema (tables + pgvector + RPC)
+├── agent/                      # Python/Modal autonomous agent runtime
 ├── scripts/
 ├── middleware.ts               # Clerk auth middleware + route protection
 ├── next.config.ts              # Next.js config (TS/ESLint errors ignored)
-└── package.json                # Dependencies, scripts
+└── package.json                # Dependencies, scripts (name: "koala")
 ```
 
 ---
@@ -291,7 +294,7 @@ Four helpers gate every API route and server component. They all share an **offb
 
 Supporting helpers: `isPlatformAdmin()` + `requirePlatformAdmin()` for `/admin` routes, `getCurrentDbUser()` for resolving Clerk `userId` → internal `User` row, and role predicates `canManageLeads` / `canEditSettings` / `canManageRoles` / `canChangeRole`.
 
-**Dual-auth pattern** — `POST /api/agency/reviews/[id]/comments` (`app/api/agency/reviews/[id]/comments/route.ts`) accepts **either** an agency member of the review's agency **or** the requesting agent who opened the review. This is the canonical template for "a agency OR the involved agent can do X" endpoints: call `requireAuth()` first, load the resource, then allow access if the caller is in the agency (via `getAgencyMemberContext` / direct membership lookup) OR if `resource.requestingUserId === dbUser.id`.
+**Dual-auth pattern** — `POST /api/agency/reviews/[id]/comments` (`app/api/agency/reviews/[id]/comments/route.ts`) accepts **either** an agency member of the review's agency **or** the requesting agent who opened the review. This is the canonical template for "an agency OR the involved provider can do X" endpoints: call `requireAuth()` first, load the resource, then allow access if the caller is in the agency (via `getAgencyMemberContext` / direct membership lookup) OR if `resource.requestingUserId === dbUser.id`.
 
 ### Invitation Lifecycle
 

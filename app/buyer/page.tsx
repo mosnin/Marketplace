@@ -12,7 +12,7 @@ import {
 import {
   getPurchasesForUser,
   getUpcomingAppointmentsForUser,
-  ACTIVE_PURCHASE_STATUSES,
+  computeBuyerStats,
 } from '@/lib/buyer/purchases';
 import { formatAmount } from '@/lib/buyer/format';
 import { PurchaseRow } from '@/components/buyer/purchase-row';
@@ -28,7 +28,8 @@ function greeting(): string {
   return 'Good evening';
 }
 
-function formatApptTime(iso: string): string {
+function formatApptTime(iso: string | null): string {
+  if (!iso) return '';
   const d = new Date(iso);
   if (isNaN(d.getTime())) return '';
   return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} · ${d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
@@ -47,24 +48,16 @@ export default async function BuyerDashboardPage() {
     getUpcomingAppointmentsForUser(userId, 5),
   ]);
 
-  const activeCount = purchases.filter((p) =>
-    (ACTIVE_PURCHASE_STATUSES as string[]).includes(p.status),
-  ).length;
-
-  // Total spent counts completed orders only — money the buyer has actually
-  // settled, not in-flight requests that may still change or be cancelled.
-  const totalSpentCents = purchases
-    .filter((p) => p.status === 'completed' && p.amountCents != null)
-    .reduce((sum, p) => sum + (p.amountCents ?? 0), 0);
-  const totalSpent = formatAmount(totalSpentCents, 'usd') ?? '$0.00';
+  const stats = computeBuyerStats(purchases, upcoming.length);
+  const totalSpent = formatAmount(stats.totalSpentCents, 'usd') ?? '$0.00';
 
   const recent = purchases.slice(0, 5);
 
   const statusSentence =
     purchases.length === 0
       ? 'No purchases yet — explore the marketplace to get started.'
-      : activeCount > 0
-        ? `${activeCount} active ${activeCount === 1 ? 'order' : 'orders'} in progress.`
+      : stats.activePurchases > 0
+        ? `${stats.activePurchases} active ${stats.activePurchases === 1 ? 'order' : 'orders'} in progress.`
         : 'You are all caught up.';
 
   return (
@@ -84,7 +77,7 @@ export default async function BuyerDashboardPage() {
       >
         <div className="bg-background px-4 py-4">
           <p className={cn(SECTION_LABEL)}>Active</p>
-          <p className={cn(STAT_NUMBER_COMPACT, 'mt-1')}>{activeCount}</p>
+          <p className={cn(STAT_NUMBER_COMPACT, 'mt-1')}>{stats.activePurchases}</p>
         </div>
         <div className="bg-background px-4 py-4">
           <p className={cn(SECTION_LABEL)}>Upcoming</p>
@@ -166,7 +159,7 @@ export default async function BuyerDashboardPage() {
                       {appt.purchaseTitle}
                     </p>
                     <p className="truncate text-xs text-muted-foreground">
-                      {appt.space?.name ?? 'Provider'}
+                      {appt.provider?.name ?? 'Provider'}
                     </p>
                   </div>
                   <p className="flex-shrink-0 text-[11px] tabular-nums text-muted-foreground">

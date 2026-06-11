@@ -69,7 +69,7 @@ export function ProvidersHero() {
           >
             <span className="block">An extra teammate</span>
             <span className="block">
-              in the <em className="font-bold italic text-brand">field.</em>
+              wherever you <em className="font-bold italic text-brand">work.</em>
             </span>
           </motion.h1>
 
@@ -78,9 +78,9 @@ export function ProvidersHero() {
             transition={{ duration: 0.9, ease: EASE }}
             className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-foreground/60 md:text-xl"
           >
-            you&rsquo;re out getting deals done: at the showing, in the car, between
-            doors. Koala reads the inbox, drafts the reply, books the appointment, and
-            keeps every deal current while you work. nothing leaves without your
+            you&rsquo;re with clients all day: in the chair, on the floor, between
+            sessions. Koala reads the inbox, drafts the reply, books the session, and
+            keeps every client current while you work. nothing leaves without your
             tap.
           </motion.p>
 

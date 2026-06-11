@@ -11,6 +11,7 @@ import Link from 'next/link';
 
 const footerLinks = {
   product: [
+    { label: 'Marketplace', href: '/marketplace' },
     { label: 'For providers', href: '/providers' },
     { label: 'For agencies', href: '/agencies' },
     { label: 'Integrations', href: '/integrations' },
@@ -43,8 +44,8 @@ export function FortitudoFooter() {
                 <img src="/logo-white.png" alt="Koala" className="block h-5 w-auto" />
               </Link>
               <p className="max-w-xs text-sm text-white/50">
-                The agentic OS for real-estate agents and agencies. The
-                busywork runs itself, so the hours go to closing.
+                The agentic OS for professional services. The busywork
+                runs itself, so the hours go to your clients.
               </p>
             </div>
 

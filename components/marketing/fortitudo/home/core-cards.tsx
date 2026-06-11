@@ -11,30 +11,30 @@ import { GradientCard } from '../gradient-card';
 
 const cards = [
   {
-    title: 'Reads your inbox',
+    title: 'Answers your clients',
     description:
-      'Gmail and Outlook plug in. Koala reads every inbound, weighs it against your live deals, and quietly lifts the one to look at first.',
+      'Email and DMs plug in. Koala reads every inquiry, weighs it against your active clients, and quietly lifts the one to handle first.',
     cta: 'See the inbox',
     href: '/providers#the-inbox',
   },
   {
-    title: 'Drafts in your voice',
+    title: 'Replies in your voice',
     description:
       "Every reply written before you open the thread. Read it, edit it, send it. Or don't. Nothing leaves without your tap.",
     cta: 'Meet Koala',
     href: '/providers#the-reply',
   },
   {
-    title: 'Knows who to call first',
+    title: 'Knows who to follow up first',
     description:
-      'Every lead scored against your deals, the hottest one rising out of the noise, so your morning starts with the right call.',
+      'Every new inquiry scored against your bookings, the warmest one rising out of the noise, so your day starts with the right client.',
     cta: 'See scoring',
     href: '/providers#first-call',
   },
   {
-    title: 'Books the appointment',
+    title: 'Books the session',
     description:
-      'Reply with a time; Koala checks your calendar, books it, sends the confirmation, and writes it back to the deal.',
+      'Reply with a time; Koala checks your calendar, books it, sends the confirmation, and writes it back to the client record.',
     cta: 'See the calendar',
     href: '/providers#in-the-field',
   },

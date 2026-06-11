@@ -19,17 +19,17 @@ const SURFACES = [
   {
     icon: Smartphone,
     title: 'on your phone.',
-    body: 'talk to Koala between showings. read the thread, approve the draft, book the appointment without sitting down.',
+    body: 'talk to Koala between sessions. read the thread, approve the draft, book the appointment without sitting down.',
   },
   {
     icon: Globe,
     title: 'in the web app.',
-    body: 'install Koala to your home screen. the whole workspace, no app store, online or driving between doors.',
+    body: 'install Koala to your home screen. the whole workspace, no app store, online or on the move between clients.',
   },
   {
     icon: Monitor,
-    title: 'at the office.',
-    body: 'back at the desk, the same workspace opens wide: inbox, pipeline, and calendar where you left them.',
+    title: 'at your desk.',
+    body: 'back at the desk, the same workspace opens wide: inbox, schedule, and calendar where you left them.',
   },
 ];
 

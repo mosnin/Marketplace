@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Terms of Service | Koala',
-  description: 'Terms of Service for Koala, a B2B SaaS agentic OS for real estate agents and agencies.',
+  description: 'Terms of Service for Koala, a professional-services marketplace and agentic OS for providers and agencies.',
 };
 
 export default function TermsPage() {
@@ -25,8 +25,8 @@ export default function TermsPage() {
         <ul className="mt-3 list-disc pl-5 text-sm text-muted-foreground space-y-2 leading-6">
           <li><strong className="text-foreground">&quot;Service&quot;</strong> means the Koala platform, including the web application at my.usekoala.com, all related APIs, integrations, AI features (including lead scoring, voice AI assistant, and MCP server integration), deal pipelines, appointment scheduling, and documentation.</li>
           <li><strong className="text-foreground">&quot;User&quot;</strong> means any individual or entity that accesses or uses the Service, including Subscribers and Applicants.</li>
-          <li><strong className="text-foreground">&quot;Subscriber&quot;</strong> means a provider, agency, or other entity that creates an account and subscribes to the Service to manage real estate operations, including intake forms, lead management, deal pipelines, and agency team management.</li>
-          <li><strong className="text-foreground">&quot;Applicant&quot;</strong> means any individual who submits information through a Subscriber&apos;s intake forms or interacts with the Service on behalf of or at the direction of a Subscriber.</li>
+          <li><strong className="text-foreground">&quot;Subscriber&quot;</strong> means a provider, agency, or other entity that creates an account and subscribes to the Service to manage professional-services operations, including booking and inquiry forms, client lead management, deal pipelines, and agency team management.</li>
+          <li><strong className="text-foreground">&quot;Applicant&quot;</strong> means any individual who submits information through a Subscriber&apos;s booking or inquiry forms, or interacts with the Service on behalf of or at the direction of a Subscriber, including buyers browsing or purchasing through the Koala marketplace.</li>
           <li><strong className="text-foreground">&quot;Content&quot;</strong> means all data, text, files, images, and other materials uploaded, submitted, or generated through the Service.</li>
           <li><strong className="text-foreground">&quot;Subscriber Data&quot;</strong> means all Content that a Subscriber or their Applicants submit, upload, or generate through the Service, including lead information, deal data, appointment schedules, and AI scoring results.</li>
         </ul>
@@ -65,14 +65,14 @@ export default function TermsPage() {
           <p>4.2. You shall not:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Send unsolicited communications or spam through the Service, including via SMS (Telnyx) or email (Resend) integrations.</li>
-            <li>Use the Service in any manner that violates fair housing laws, the Fair Housing Act, or any anti-discrimination statutes.</li>
+            <li>Use the Service in any manner that violates anti-discrimination statutes or any other applicable law.</li>
             <li>Attempt to gain unauthorized access to any part of the Service or its underlying infrastructure.</li>
             <li>Interfere with or disrupt the integrity or performance of the Service.</li>
             <li>Use the Service to collect, store, or process data in violation of any applicable privacy or data protection laws.</li>
             <li>Reverse engineer, decompile, or disassemble any part of the Service.</li>
             <li>Use AI scoring outputs to make automated legal decisions regarding Applicants without human review.</li>
           </ul>
-          <p>4.3. <strong className="text-foreground">Fair Housing Compliance.</strong> Subscribers who are licensed real estate professionals must comply with all applicable fair housing laws. The Service must not be used to discriminate against any person based on race, color, religion, sex, national origin, familial status, disability, or any other protected class.</p>
+          <p>4.3. <strong className="text-foreground">Non-Discrimination.</strong> Subscribers must comply with all applicable anti-discrimination laws. The Service must not be used to discriminate against any person based on race, color, religion, sex, national origin, disability, age, or any other characteristic protected by applicable law.</p>
         </div>
       </section>
 
@@ -80,10 +80,10 @@ export default function TermsPage() {
       <section>
         <h2 className="text-xl font-semibold">5. Data Controller and Processor Relationship</h2>
         <div className="mt-3 text-sm text-muted-foreground space-y-3 leading-6">
-          <p>5.1. With respect to Subscriber Data (including Applicant data collected through intake forms), the Subscriber is the <strong className="text-foreground">Data Controller</strong> and Koala is the <strong className="text-foreground">Data Processor</strong>. Providers and agencies are responsible for how they use their own data.</p>
+          <p>5.1. With respect to Subscriber Data (including Applicant data collected through booking and inquiry forms), the Subscriber is the <strong className="text-foreground">Data Controller</strong> and Koala is the <strong className="text-foreground">Data Processor</strong>. Providers and agencies are responsible for how they use their own data.</p>
           <p>5.2. Koala processes Subscriber Data solely on the Subscriber&apos;s behalf and in accordance with the Subscriber&apos;s instructions as set forth in these Terms and our <a href="/legal/dpa" className="underline hover:text-foreground">Data Processing Agreement</a>.</p>
           <p>5.3. Subscribers are responsible for ensuring that their collection and use of data through the Service complies with all applicable data protection laws, including obtaining any necessary consents from Applicants.</p>
-          <p>5.4. Applicants who submit data through intake forms agree to both Koala&apos;s <a href="/legal/privacy" className="underline hover:text-foreground">Privacy Policy</a> and the applicable Subscriber&apos;s (provider/agency) privacy policy.</p>
+          <p>5.4. Applicants who submit data through booking or inquiry forms agree to both Koala&apos;s <a href="/legal/privacy" className="underline hover:text-foreground">Privacy Policy</a> and the applicable Subscriber&apos;s (provider/agency) privacy policy.</p>
           <p>5.5. Koala does not sell Subscriber Data or Applicant data. Koala does not use Subscriber Data or Applicant data to train artificial intelligence models.</p>
         </div>
       </section>
@@ -159,7 +159,7 @@ export default function TermsPage() {
             <li>Your collection, processing, or use of Applicant data or other personal data through the Service.</li>
             <li>Your violation of any applicable law, regulation, or third-party right, including fair housing laws and data protection regulations.</li>
             <li>Any dispute between you and an Applicant or other third party.</li>
-            <li>Your use of AI scoring outputs or other AI features in making business or housing decisions.</li>
+            <li>Your use of AI scoring outputs or other AI features in making business or service decisions.</li>
           </ul>
           <p>11.2. Subscribers, as Data Controllers, are solely responsible for their data practices and indemnify Koala for any claims arising from the Subscriber&apos;s handling of personal data.</p>
         </div>

@@ -140,13 +140,13 @@ export function ServiceDetailClient({ slug, initial, linkedDeals, linkedAppointm
         )}
       </header>
 
-      {/* ── Facts grid + listing/notes ───────────────────────────────── */}
+      {/* ── Facts grid + details/notes ───────────────────────────────── */}
       <section className="space-y-4 border-t border-border/60 pt-6">
         {(service.yearBuilt != null || service.lotSizeSqft != null || service.mlsNumber) && (
           <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3">
-            {service.yearBuilt != null && <Fact label="Year built" value={String(service.yearBuilt)} />}
-            {service.lotSizeSqft != null && <Fact label="Lot" value={`${service.lotSizeSqft.toLocaleString()} sqft`} />}
-            {service.mlsNumber && <Fact label="MLS" value={service.mlsNumber} />}
+            {service.yearBuilt != null && <Fact label="Year established" value={String(service.yearBuilt)} />}
+            {service.lotSizeSqft != null && <Fact label="Area (sqft)" value={`${service.lotSizeSqft.toLocaleString()}`} />}
+            {service.mlsNumber && <Fact label="Reference #" value={service.mlsNumber} />}
           </dl>
         )}
 
@@ -157,7 +157,7 @@ export function ServiceDetailClient({ slug, initial, linkedDeals, linkedAppointm
             rel="noreferrer"
             className="inline-flex items-center gap-1 text-sm font-medium text-foreground hover:underline"
           >
-            View listing <ExternalLink size={12} />
+            Booking / info page <ExternalLink size={12} />
           </a>
         )}
 

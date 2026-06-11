@@ -85,7 +85,7 @@ export function BuyerShell({ children }: { children: React.ReactNode }) {
               <Store size={15} aria-hidden />
               <span className="hidden sm:inline">Browse marketplace</span>
             </a>
-            <UserButton afterSignOutUrl="/marketplace" />
+            <UserButton />
           </div>
         </div>
       </header>

@@ -20,7 +20,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Koala · Agentic OS for real estate';
+export const alt = 'Koala · Agentic OS for professional services';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -78,7 +78,7 @@ export default async function Image() {
               letterSpacing: '0.2em',
             }}
           >
-            The agentic OS for real estate
+            The agentic OS for professional services
           </span>
           <span
             style={{
@@ -100,8 +100,8 @@ export default async function Image() {
               maxWidth: 900,
             }}
           >
-            An AI agent that qualifies leads, drafts follow-ups, schedules appointments,
-            and keeps your pipeline current.
+            An AI agent that answers clients, drafts follow-ups, books sessions,
+            and keeps your schedule current.
           </span>
         </div>
 

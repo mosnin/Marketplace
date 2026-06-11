@@ -1,4 +1,4 @@
--- Supabase schema for Real Estate CRM
+-- Supabase schema for Koala — Professional-Services Marketplace & Agentic OS
 -- Run this in Supabase SQL Editor (Dashboard → SQL Editor → New query)
 
 -- ============================================================

@@ -88,42 +88,42 @@ export function HomeHero() {
       >
         <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col items-center gap-7">
           <motion.p variants={item} className="font-brand text-xs uppercase tracking-[0.3em] text-brand">
-            Koala // the agentic OS for real estate
+            Koala // the agentic OS for professional services
           </motion.p>
 
           <motion.h1
             variants={item}
             className="font-brand text-4xl leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
           >
-            <span className="block">You close the deals.</span>
-            <span className="block">Koala does the</span>
+            <span className="block">You do the work.</span>
+            <span className="block">Koala runs the</span>
             <span className="block">
               <RotatingWord
-                words={['drafting', 'scoring', 'booking', 'chasing', 'rest']}
+                words={['booking', 'replies', 'scheduling', 'follow-ups', 'rest']}
                 className="text-gradient-brand"
               />
             </span>
           </motion.h1>
 
           <motion.p variants={item} className="max-w-2xl text-lg text-foreground/60 sm:text-xl">
-            Koala reads your inbox, drafts replies in your voice, books the appointments, and keeps
-            every deal current. The busywork runs itself, and nothing leaves without your name
-            on it.
+            Koala is the always-on agent behind your service business — it answers clients, books
+            sessions, and keeps every booking on track. Buyers find you in the marketplace, and
+            nothing goes out without your name on it.
           </motion.p>
 
           <motion.div variants={item} className="mt-1 flex flex-col items-center gap-4 sm:flex-row">
             <Link
-              href="/login/provider?intent=signup"
+              href="/marketplace"
               className="inline-flex items-center gap-2 rounded-full bg-brand px-8 py-3.5 text-base font-semibold text-brand-foreground shadow-lg shadow-brand/25 transition-all hover:-translate-y-0.5 hover:brightness-105 hover:shadow-brand/40"
             >
-              Start free trial
+              Browse the marketplace
               <ArrowRight className="h-5 w-5" />
             </Link>
             <Link
-              href="/demo"
+              href="/login/provider?intent=signup"
               className="inline-flex items-center gap-2 rounded-full border border-border/70 px-8 py-3.5 text-base font-medium text-foreground/80 transition-colors hover:border-border hover:text-foreground"
             >
-              Watch demo
+              Start selling
             </Link>
           </motion.div>
 

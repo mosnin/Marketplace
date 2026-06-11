@@ -6,7 +6,7 @@
  * server components and client components.
  */
 
-import type { PurchaseStatus } from '@/lib/buyer/purchases';
+import type { PurchaseStatus } from '@/lib/buyer/types';
 
 /**
  * Format a minor-unit amount (e.g. Stripe cents) into a currency string.

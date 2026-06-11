@@ -26,7 +26,7 @@ export function ClosingCTA() {
           />
           <div className="relative">
             <h2 className="mx-auto max-w-3xl font-title text-[clamp(2rem,5vw,3.75rem)] font-normal leading-[1.04] tracking-[-0.018em] text-white">
-              the teammate who works the field with you.
+              the teammate who works alongside you.
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-lg text-white/55">
               seven days free. no credit card. bring your inbox and let Koala do

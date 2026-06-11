@@ -33,6 +33,17 @@ export const PURCHASE_TIMELINE: readonly PurchaseStatus[] = [
   'completed',
 ] as const;
 
+/**
+ * Statuses that count as "active" (open work) for the dashboard stat — every
+ * non-terminal state (i.e. not completed, not cancelled).
+ */
+export const ACTIVE_PURCHASE_STATUSES: readonly PurchaseStatus[] = [
+  'requested',
+  'confirmed',
+  'in_progress',
+  'delivered',
+] as const;
+
 /** Human-facing label for a status chip / timeline node. */
 export const PURCHASE_STATUS_LABELS: Record<PurchaseStatus, string> = {
   requested: 'Requested',
@@ -73,6 +84,8 @@ export interface PurchaseProvider {
 export interface PurchaseService {
   id: string;
   address: string | null;
+  city: string | null;
+  stateRegion: string | null;
   serviceType: string | null;
   listPrice: number | null;
 }

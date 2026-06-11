@@ -36,12 +36,12 @@ import { Reveal, Eyebrow, Stagger, StaggerItem } from '@/components/marketing/ho
 
 /** The rooms that used to be separate tabs — now one workspace. */
 const ROOMS = [
-  { icon: Mail, label: 'inbox', note: 'Gmail and Outlook, read and replied in here.' },
-  { icon: Users, label: 'people', note: 'every contact, every touch, on one timeline.' },
-  { icon: KanbanSquare, label: 'pipeline', note: 'the board that reflects reality, not last week.' },
-  { icon: CalendarCheck, label: 'calendar', note: 'appointments and follow-ups in the week you already keep.' },
-  { icon: Building2, label: 'services', note: 'listings as records: offers, specs, who saw what.' },
-  { icon: FolderOpen, label: 'files', note: 'contracts and signed PDFs, filed per deal.' },
+  { icon: Mail, label: 'inbox', note: 'email and DMs, read and replied in here.' },
+  { icon: Users, label: 'clients', note: 'every contact, every touch, on one timeline.' },
+  { icon: KanbanSquare, label: 'bookings', note: 'the board that reflects reality, not last week.' },
+  { icon: CalendarCheck, label: 'calendar', note: 'sessions and follow-ups in the week you already keep.' },
+  { icon: Building2, label: 'services', note: 'your offerings as records: rates, details, what each client booked.' },
+  { icon: FolderOpen, label: 'files', note: 'contracts and signed PDFs, filed per client.' },
 ];
 
 export function OnePlace() {
@@ -54,7 +54,7 @@ export function OnePlace() {
           <span className="text-muted-foreground"> not six tabs.</span>
         </h2>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground/55">
-          your inbox, your people, your pipeline, your calendar, your listings,
+          your inbox, your clients, your bookings, your calendar, your services,
           your files. they stop living in separate apps. it&rsquo;s one workspace, and
           Koala keeps every corner of it current.
         </p>
@@ -94,12 +94,12 @@ const TAILORED = [
   {
     icon: Bell,
     title: 'follow-ups it remembers.',
-    body: 'the callback you would have forgotten gets set when the deal asks for it, and surfaced when it comes due.',
+    body: 'the follow-up you would have forgotten gets set when the client needs it, and surfaced when it comes due.',
   },
   {
     icon: Aperture,
     title: 'content from the record.',
-    body: 'listing copy, the email blast, the social post, all generated from the service record and scheduled to your channels.',
+    body: 'service descriptions, the email blast, the social post, all generated from the service record and scheduled to your channels.',
   },
   {
     icon: ShieldCheck,
@@ -119,7 +119,7 @@ export function TailorIt() {
         </h2>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground/55">
           the repetitive work, the reply, the follow-up, the post, the
-          bookkeeping, runs in the background so the hours go to the deal. you
+          bookkeeping, runs in the background so the hours go to the client. you
           decide how much Koala handles, and you can change your mind anytime.
         </p>
       </Reveal>

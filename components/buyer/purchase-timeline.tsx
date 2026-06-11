@@ -15,7 +15,7 @@
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  PURCHASE_LIFECYCLE,
+  PURCHASE_TIMELINE,
   type PurchaseStatus,
 } from '@/lib/buyer/purchases';
 import { purchaseStatusLabel } from '@/lib/buyer/format';
@@ -31,7 +31,7 @@ export function PurchaseTimeline({ status, className }: Props) {
   // cancelled order there's no position on the line, so nothing is "reached".
   const currentIndex = isCancelled
     ? -1
-    : PURCHASE_LIFECYCLE.indexOf(status);
+    : PURCHASE_TIMELINE.indexOf(status);
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -41,9 +41,9 @@ export function PurchaseTimeline({ status, className }: Props) {
           isCancelled && 'opacity-50',
         )}
       >
-        {PURCHASE_LIFECYCLE.map((step, i) => {
+        {PURCHASE_TIMELINE.map((step, i) => {
           const reached = !isCancelled && i <= currentIndex;
-          const isLast = i === PURCHASE_LIFECYCLE.length - 1;
+          const isLast = i === PURCHASE_TIMELINE.length - 1;
           return (
             <li
               key={step}
