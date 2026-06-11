@@ -16,7 +16,7 @@
  */
 
 import { redirect } from 'next/navigation';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 import { resolveAgencyContext } from '@/lib/agent/agency-context';
 import { supabase } from '@/lib/supabase';
 import { PROVIDER_LABELS, CACHING_PROVIDERS } from '@/lib/llm';
@@ -65,7 +65,7 @@ type UsageRow = {
   costUsd: number | null;
 };
 
-type ProviderRollup = {
+type ModelProviderRollup = {
   provider: string;
   inputTokens: number;
   outputTokens: number;
@@ -129,7 +129,7 @@ export default async function AgencyUsagePage() {
   let totalTurns = 0;
 
   const providerMap = new Map<string, ProviderRollup>();
-  const providerMap = new Map<string, ProviderRollup>();
+  const modelProviderMap = new Map<string, ModelProviderRollup>();
 
   for (const r of rows) {
     const provider = r.provider ?? 'unknown';
@@ -158,8 +158,8 @@ export default async function AgencyUsagePage() {
     existing.turns += 1;
     providerMap.set(r.spaceId, existing);
 
-    // Per-provider rollup
-    const ep = providerMap.get(provider) ?? {
+    // Per-model-provider rollup
+    const ep = modelProviderMap.get(provider) ?? {
       provider,
       inputTokens: 0,
       outputTokens: 0,
@@ -171,18 +171,18 @@ export default async function AgencyUsagePage() {
     ep.outputTokens += output;
     ep.cachedTokens += cached;
     ep.costUsd += cost;
-    providerMap.set(provider, ep);
+    modelProviderMap.set(provider, ep);
   }
 
-  // Compute per-provider cache hit rates and sort by spend desc.
-  const providers: ProviderRollup[] = [];
-  for (const p of providerMap.values()) {
+  // Compute per-model-provider cache hit rates and sort by spend desc.
+  const modelProviders: ModelProviderRollup[] = [];
+  for (const p of modelProviderMap.values()) {
     p.cacheHitRate = p.inputTokens > 0
       ? Math.round((p.cachedTokens / p.inputTokens) * 100)
       : 0;
-    providers.push(p);
+    modelProviders.push(p);
   }
-  providers.sort((a, b) => b.costUsd - a.costUsd);
+  modelProviders.sort((a, b) => b.costUsd - a.costUsd);
 
   // Sort providers by cost desc.
   const providers: ProviderRollup[] = Array.from(providerMap.values()).sort(
@@ -195,7 +195,7 @@ export default async function AgencyUsagePage() {
   const statusSentence = (() => {
     if (rows.length === 0) return `No Koala usage recorded for ${monthName} yet.`;
     const parts: string[] = [];
-    parts.push(`${fmtCost(totalCost)} spent across ${providers.length} ${providers.length === 1 ? 'provider' : 'providers'}`);
+    parts.push(`${fmtCost(totalCost)} spent across ${modelProviders.length} ${modelProviders.length === 1 ? 'model provider' : 'model providers'}`);
     parts.push(`${totalTurns.toLocaleString()} ${totalTurns === 1 ? 'turn' : 'turns'} this month`);
     return parts.join(' · ') + '.';
   })();
@@ -255,9 +255,9 @@ export default async function AgencyUsagePage() {
             </div>
           </section>
 
-          {/* ── Per-provider breakdown ───────────────────────────────────────── */}
+          {/* ── Per-member breakdown ─────────────────────────────────────────── */}
           <section className="space-y-3">
-            <p className={SECTION_LABEL}>By provider</p>
+            <p className={SECTION_LABEL}>By member</p>
 
             {/* Column header */}
             <div className="grid grid-cols-[1fr_auto_auto_auto] gap-x-6 items-center px-1 pb-1">
@@ -301,13 +301,13 @@ export default async function AgencyUsagePage() {
             </p>
           </section>
 
-          {/* ── Per-provider breakdown — mirrors UsageSection ──────────────── */}
-          {providers.length > 0 && (
+          {/* ── Per-model-provider breakdown — mirrors UsageSection ────────── */}
+          {modelProviders.length > 0 && (
             <section className="space-y-3 border-t border-border/60 pt-5">
-              <p className={SECTION_LABEL}>By provider</p>
+              <p className={SECTION_LABEL}>By model provider</p>
 
               <ul className="divide-y divide-border/60">
-                {providers.map((p) => (
+                {modelProviders.map((p) => (
                   <li
                     key={p.provider}
                     className="py-3 px-1 flex items-center justify-between gap-4 transition-colors duration-150 hover:bg-foreground/[0.04]"

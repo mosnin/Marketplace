@@ -20,7 +20,7 @@ import { getFormConfigs, getDefaultFormConfig } from '@/lib/form-builder';
 import { formConfigSchema, type FormQuestion } from '@/lib/form-config-schema';
 import type { ScoringModel } from '@/lib/scoring/scoring-model-types';
 import { logger } from '@/lib/logger';
-import { routeAgencyLead } from '@/lib/agency-setup-routing';
+import { routeAgencyLead } from '@/lib/agency-routing';
 
 /** Parse budget/rent range strings to a midpoint number for the DB. */
 function parseBudgetToNumber(val: unknown): number | null {
@@ -111,7 +111,7 @@ async function fetchAgencyFormConfig(
     const spaceConfig = leadType === 'buyer' ? dual.buyer : dual.rental;
     if (spaceConfig) return spaceConfig;
   } catch (err) {
-    logger.warn('[apply/agency-setup] form config fetch failed', { agencyId, spaceId, leadType }, err);
+    logger.warn('[apply/agency] form config fetch failed', { agencyId, spaceId, leadType }, err);
   }
 
   return null;
@@ -284,7 +284,7 @@ export async function POST(req: NextRequest) {
   try {
     requestBody = await req.json();
   } catch (error) {
-    logger.warn('[apply/agency-setup] invalid JSON body', undefined, error);
+    logger.warn('[apply/agency] invalid JSON body', undefined, error);
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
   }
 
@@ -312,7 +312,7 @@ export async function POST(req: NextRequest) {
     if (!agency || agency.status !== 'active') {
       // Return a generic error for both invalid and not-found agencies
       // to prevent ID enumeration attacks
-      logger.warn('[apply/agency-setup] invalid or inactive agency', { agencyId: rawAgencyId });
+      logger.warn('[apply/agency] invalid or inactive agency', { agencyId: rawAgencyId });
       return NextResponse.json({ error: 'Unable to process application. Please check the link and try again.' }, { status: 422 });
     }
 
@@ -340,7 +340,7 @@ export async function POST(req: NextRequest) {
       const fallbackSpace = ownerSpaces?.[0] ?? null;
       if ((ownerSpaces ?? []).length === 1 && fallbackSpace) {
         space = fallbackSpace;
-        logger.warn('[apply/agency-setup] using legacy owner-only space fallback', {
+        logger.warn('[apply/agency] using legacy owner-only space fallback', {
           agencyId: agency.id,
           ownerId: agency.ownerId,
           spaceId: fallbackSpace.id,
@@ -349,7 +349,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!space) {
-      logger.error('[apply/agency-setup] agency owner has no space', {
+      logger.error('[apply/agency] agency owner has no space', {
         agencyId: agency.id,
         ownerId: agency.ownerId,
       });
@@ -364,7 +364,7 @@ export async function POST(req: NextRequest) {
         formConfig = formConfigSchema.parse(formConfig);
       }
     } catch (err) {
-      logger.warn('[apply/agency-setup] form config invalid or fetch failed, falling back to legacy', {
+      logger.warn('[apply/agency] form config invalid or fetch failed, falling back to legacy', {
         agencyId: agency.id,
         spaceId: space.id,
         leadType: resolvedLeadType,
@@ -388,7 +388,7 @@ export async function POST(req: NextRequest) {
           scoringModel = (scoringSettings as Record<string, unknown>)[scoringColumn] as ScoringModel | null;
         }
       } catch (err) {
-        logger.warn('[apply/agency-setup] scoring model fetch failed (non-fatal, will use legacy scoring)', {
+        logger.warn('[apply/agency] scoring model fetch failed (non-fatal, will use legacy scoring)', {
           spaceId: space.id,
           agencyId: agency.id,
           leadType: resolvedLeadType,
@@ -411,7 +411,7 @@ export async function POST(req: NextRequest) {
 
     if (formConfig) {
       // ── Dynamic form config path ──────────────────────────────────────
-      logger.debug('[apply/agency-setup] using dynamic form config', {
+      logger.debug('[apply/agency] using dynamic form config', {
         agencyId: agency.id,
         spaceId: space.id,
         leadType: resolvedLeadType,
@@ -424,7 +424,7 @@ export async function POST(req: NextRequest) {
 
       const parsed = dynamicSchema.safeParse(requestBody);
       if (!parsed.success) {
-        logger.warn('[apply/agency-setup] dynamic validation failed', { issues: parsed.error.issues });
+        logger.warn('[apply/agency] dynamic validation failed', { issues: parsed.error.issues });
         return NextResponse.json({ error: 'Invalid submission data', issues: parsed.error.issues }, { status: 400 });
       }
 
@@ -453,7 +453,7 @@ export async function POST(req: NextRequest) {
       // ── Legacy path (backwards compatible) ────────────────────────────
       const parsed = agencyApplicationSchema.safeParse(requestBody);
       if (!parsed.success) {
-        logger.warn('[apply/agency-setup] validation failed', { issues: parsed.error.issues });
+        logger.warn('[apply/agency] validation failed', { issues: parsed.error.issues });
         return NextResponse.json({ error: 'Invalid submission data' }, { status: 400 });
       }
 
@@ -503,7 +503,7 @@ export async function POST(req: NextRequest) {
       const lockResult = await redis.set(idempotencyKey, '1', { nx: true, ex: 120 });
       idempotencyLockAcquired = lockResult === 'OK';
     } catch (error) {
-      logger.warn('[apply/agency-setup] idempotency lock unavailable; using DB fallback', {
+      logger.warn('[apply/agency] idempotency lock unavailable; using DB fallback', {
         spaceId: space.id,
       }, error);
     }
@@ -551,7 +551,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!idempotencyLockAcquired) {
-      logger.info('[apply/agency-setup] proceeding without distributed lock', {
+      logger.info('[apply/agency] proceeding without distributed lock', {
         spaceId: space.id,
         agencyId: agency.id,
         fingerprint,
@@ -572,7 +572,7 @@ export async function POST(req: NextRequest) {
       spaceBusinessName = spaceSetting?.businessName ?? null;
       intakeConfirmationEmail = spaceSetting?.intakeConfirmationEmail ?? null;
     } catch (err) {
-      logger.warn('[apply/agency-setup] failed to fetch space settings', { spaceId: space.id }, err);
+      logger.warn('[apply/agency] failed to fetch space settings', { spaceId: space.id }, err);
     }
 
     // ── Lead routing: if auto-assignment is on and an eligible agent ─────
@@ -588,7 +588,7 @@ export async function POST(req: NextRequest) {
     });
     const spaceIdForInsert = routing?.agentSpaceId ?? space.id;
     if (routing) {
-      logger.info('[apply/agency-setup] auto-assigned to agent', {
+      logger.info('[apply/agency] auto-assigned to agent', {
         agencyId: agency.id,
         agentUserId: routing.agentUserId,
         agentSpaceId: routing.agentSpaceId,
@@ -638,7 +638,7 @@ export async function POST(req: NextRequest) {
     if (insertError) throw insertError;
     const contact = contacts![0] as Contact;
 
-    logger.info('[apply/agency-setup] submission persisted', {
+    logger.info('[apply/agency] submission persisted', {
       contactId: contact.id,
       spaceId: spaceIdForInsert,
       ownerSpaceId: space.id,
@@ -691,18 +691,18 @@ export async function POST(req: NextRequest) {
         })
         .eq('id', contact.id);
       if (scoreUpdateError) {
-        logger.error('[apply/agency-setup] scoring update failed', {
+        logger.error('[apply/agency] scoring update failed', {
           contactId: contact.id,
         }, scoreUpdateError);
       } else {
-        logger.info('[apply/agency-setup] scoring persisted', {
+        logger.info('[apply/agency] scoring persisted', {
           contactId: contact.id,
           scoringStatus: scoring.scoringStatus,
           scoreLabel: scoring.scoreLabel,
         });
       }
     } catch (error) {
-      logger.error('[apply/agency-setup] scoring failed', { contactId: contact.id }, error);
+      logger.error('[apply/agency] scoring failed', { contactId: contact.id }, error);
       try {
         await supabase
           .from('Contact')
@@ -715,7 +715,7 @@ export async function POST(req: NextRequest) {
           })
           .eq('id', contact.id);
       } catch (fallbackErr) {
-        logger.error('[apply/agency-setup] fallback scoring state failed', {
+        logger.error('[apply/agency] fallback scoring state failed', {
           contactId: contact.id,
         }, fallbackErr);
       }
@@ -740,7 +740,7 @@ export async function POST(req: NextRequest) {
         source: 'agency-intake',
       },
     }).catch((err) => {
-      logger.error('[apply/agency-setup] agency notification failed', { contactId: contact.id }, err);
+      logger.error('[apply/agency] agency notification failed', { contactId: contact.id }, err);
     });
 
     const applicantConfirmation = contactEmail
@@ -753,12 +753,12 @@ export async function POST(req: NextRequest) {
           leadType: contactLeadType,
           customMessage: intakeConfirmationEmail,
         }).catch((confirmErr) => {
-          logger.error('[apply/agency-setup] applicant confirmation email failed', { contactId: contact.id }, confirmErr);
+          logger.error('[apply/agency] applicant confirmation email failed', { contactId: contact.id }, confirmErr);
         })
       : Promise.resolve();
 
     await Promise.all([agencyNotification, applicantConfirmation]);
-    logger.debug('[apply/agency-setup] notifications dispatched', { contactId: contact.id });
+    logger.debug('[apply/agency] notifications dispatched', { contactId: contact.id });
 
     return NextResponse.json(
       {
@@ -769,7 +769,7 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    logger.error('[apply/agency-setup] unhandled submission failure', {
+    logger.error('[apply/agency] unhandled submission failure', {
       agencyId: rawAgencyId,
     }, error);
     return NextResponse.json({ error: "Server hiccup — usually temporary." }, { status: 500 });

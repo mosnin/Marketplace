@@ -1,6 +1,6 @@
 import { getAgencyMemberContext } from '@/lib/permissions';
 import { supabase } from '@/lib/supabase';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 import { redirect } from 'next/navigation';
 import {
   Building2,

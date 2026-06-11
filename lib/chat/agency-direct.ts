@@ -21,7 +21,7 @@ import { recordChatUsage } from '@/lib/usage/record-chat-usage';
 import type { MessageBlock } from '@/lib/ai-tools/blocks';
 import { runDirectChat, type DirectHistoryRow } from '@/lib/chat/direct-llm';
 import { resolveChatModel } from '@/lib/llm';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 import { supabase } from '@/lib/supabase';
 import { formatCompact } from '@/lib/formatting';
 

@@ -84,14 +84,14 @@ export async function POST(req: NextRequest) {
     // Also check contacts with agencyId (agency-level leads)
     let agencyContact = contact;
     if (!agencyContact) {
-      const { data: agencyContact, error: agencyContactError } = await supabase
+      const { data: fetchedContact, error: agencyContactError } = await supabase
         .from('Contact')
         .select('*')
         .eq('id', contactId)
         .eq('agencyId', agency.id)
         .maybeSingle();
       if (agencyContactError) throw agencyContactError;
-      agencyContact = agencyContact;
+      agencyContact = fetchedContact;
     }
     if (!agencyContact) {
       return NextResponse.json(

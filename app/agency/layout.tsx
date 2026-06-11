@@ -9,7 +9,7 @@ import { Header } from '@/components/dashboard/header';
 import { AccountSwitchSwipe } from '@/components/dashboard/account-switch';
 import { AgencyMain } from '@/components/agency/agency-main';
 import { supabase } from '@/lib/supabase';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 import { KoalaSplash } from '@/components/dashboard/koala-splash';
 import { pickGreeting } from '@/lib/greetings';
 import type { Metadata } from 'next';

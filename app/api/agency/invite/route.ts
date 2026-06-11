@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { sendAgencyInvitation } from '@/lib/email';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { audit } from '@/lib/audit';
-import { checkSeatCapacity } from '@/lib/agency-setup-seats';
+import { checkSeatCapacity } from '@/lib/agency-seats';
 
 /**
  * POST /api/agency/invite

@@ -5,7 +5,7 @@ import { audit } from '@/lib/audit';
 import { notifyAgency } from '@/lib/agency-notify';
 import { notificationForMemberJoined } from '@/lib/notification-voice';
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
-import { checkSeatCapacity } from '@/lib/agency-setup-seats';
+import { checkSeatCapacity } from '@/lib/agency-seats';
 
 /**
  * GET /api/invitations/[token]

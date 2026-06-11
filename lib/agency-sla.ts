@@ -19,7 +19,7 @@
  */
 
 import { supabase } from '@/lib/supabase';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 import { notifyAgency } from '@/lib/agency-notify';
 import { sendPushToSpace } from '@/lib/push';
 import { logger } from '@/lib/logger';

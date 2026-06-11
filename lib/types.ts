@@ -155,7 +155,7 @@ export type SpaceSetting = {
   privacyPolicyUrl: string | null;
   privacyPolicyHtml: string | null;
   consentCheckboxLabel: string | null;
-  // Intake trust signals — provider/agency-setup-supplied compliance slots
+  // Intake trust signals — provider/agency-supplied compliance slots
   // rendered in the public intake footer. Koala provides the slot;
   // the provider fills the actual legal text.
   intakeLicenseNumber: string | null;

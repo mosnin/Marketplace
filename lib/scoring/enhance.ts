@@ -164,7 +164,7 @@ function buildBuyerContext(app: ApplicationData | null): string {
   if (app.buyerTimeline) lines.push(`Timeline to buy: ${app.buyerTimeline}`);
   if (app.housingSituation) lines.push(`Current housing: ${app.housingSituation}`);
   if (app.firstTimeBuyer) lines.push(`First-time buyer: ${app.firstTimeBuyer}`);
-  if (app.propertyType) lines.push(`Property type: ${app.propertyType}`);
+  if (app.serviceType) lines.push(`Service type: ${app.serviceType}`);
   if (app.bedrooms) lines.push(`Bedrooms: ${app.bedrooms}`);
   if (app.bathrooms) lines.push(`Bathrooms: ${app.bathrooms}`);
   if (app.mustHaves) {

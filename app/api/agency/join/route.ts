@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { requireAuth } from '@/lib/api-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { audit } from '@/lib/audit';
-import { checkSeatCapacity } from '@/lib/agency-setup-seats';
+import { checkSeatCapacity } from '@/lib/agency-seats';
 import { notifyAgency } from '@/lib/agency-notify';
 import { notificationForMemberJoined } from '@/lib/notification-voice';
 

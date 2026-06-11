@@ -42,7 +42,7 @@
 import { NextResponse } from 'next/server';
 import { requireAgency } from '@/lib/permissions';
 import { supabase } from '@/lib/supabase';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 
 export interface AgencyMorningResponse {
   /**

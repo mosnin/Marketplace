@@ -6,7 +6,7 @@ import { InviteForm } from '@/components/agency/invite-form';
 import { InviteCodeCard } from '@/components/agency/invite-code-card';
 import { RevokeInviteButton } from '@/components/agency/revoke-invite-button';
 import { BulkInviteForm } from '@/components/agency/bulk-invite-form';
-import { getSeatUsage } from '@/lib/agency-setup-seats';
+import { getSeatUsage } from '@/lib/agency-seats';
 import { H1, TITLE_FONT, BODY_MUTED, SECTION_LABEL } from '@/lib/typography';
 import { cn } from '@/lib/utils';
 import { timeAgo } from '@/lib/formatting';

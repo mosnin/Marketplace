@@ -83,7 +83,7 @@ export default function TermsPage() {
           <p>5.1. With respect to Subscriber Data (including Applicant data collected through intake forms), the Subscriber is the <strong className="text-foreground">Data Controller</strong> and Koala is the <strong className="text-foreground">Data Processor</strong>. Providers and agencies are responsible for how they use their own data.</p>
           <p>5.2. Koala processes Subscriber Data solely on the Subscriber&apos;s behalf and in accordance with the Subscriber&apos;s instructions as set forth in these Terms and our <a href="/legal/dpa" className="underline hover:text-foreground">Data Processing Agreement</a>.</p>
           <p>5.3. Subscribers are responsible for ensuring that their collection and use of data through the Service complies with all applicable data protection laws, including obtaining any necessary consents from Applicants.</p>
-          <p>5.4. Applicants who submit data through intake forms agree to both Koala&apos;s <a href="/legal/privacy" className="underline hover:text-foreground">Privacy Policy</a> and the applicable Subscriber&apos;s (provider/agency-setup) privacy policy.</p>
+          <p>5.4. Applicants who submit data through intake forms agree to both Koala&apos;s <a href="/legal/privacy" className="underline hover:text-foreground">Privacy Policy</a> and the applicable Subscriber&apos;s (provider/agency) privacy policy.</p>
           <p>5.5. Koala does not sell Subscriber Data or Applicant data. Koala does not use Subscriber Data or Applicant data to train artificial intelligence models.</p>
         </div>
       </section>

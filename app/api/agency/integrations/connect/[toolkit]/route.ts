@@ -31,8 +31,8 @@ import {
   findActiveAgencyConnection,
   insertAgencyConnection,
   revokeAgencyConnection,
-} from '@/lib/integrations/agency-setup-connections';
-import { agencyEntityId } from '@/lib/integrations/agency-setup-entity';
+} from '@/lib/integrations/agency-connections';
+import { agencyEntityId } from '@/lib/integrations/agency-entity';
 import { logger } from '@/lib/logger';
 
 export async function POST(

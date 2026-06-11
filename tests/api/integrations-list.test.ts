@@ -188,9 +188,9 @@ describe('GET /api/integrations', () => {
     expect(Object.keys(row).sort()).toEqual(
       ['createdAt', 'id', 'label', 'lastError', 'status', 'toolkit', 'triggers'].sort(),
     );
-    expect(row).not.toHaveService('composioConnectionId');
-    expect(row).not.toHaveService('userId');
-    expect(row).not.toHaveService('spaceId');
+    expect(row).not.toHaveProperty('composioConnectionId');
+    expect(row).not.toHaveProperty('userId');
+    expect(row).not.toHaveProperty('spaceId');
     // Smell-test the actual values made it through the projection.
     expect(row.toolkit).toBe('gmail');
     expect(row.status).toBe('active');

@@ -14,7 +14,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { requireAgency } from '@/lib/permissions';
-import { listAgencyConnectionsForUser } from '@/lib/integrations/agency-setup-connections';
+import { listAgencyConnectionsForUser } from '@/lib/integrations/agency-connections';
 import { composioConfigured } from '@/lib/integrations/composio';
 
 export async function GET() {

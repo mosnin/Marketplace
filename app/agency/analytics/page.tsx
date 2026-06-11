@@ -12,7 +12,7 @@
 
 import { redirect } from 'next/navigation';
 import { resolveAgencyContext } from '@/lib/agent/agency-context';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 import { supabase } from '@/lib/supabase';
 import type { Metadata } from 'next';
 import {

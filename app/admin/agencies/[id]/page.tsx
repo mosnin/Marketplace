@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { formatCompact } from '@/lib/formatting';
-import { AgencyActions } from './agency-setup-actions';
+import { AgencyActions } from './agency-actions';
 import { H1, TITLE_FONT, SECTION_LABEL, STAT_NUMBER_COMPACT } from '@/lib/typography';
 
 type Params = { params: Promise<{ id: string }> };

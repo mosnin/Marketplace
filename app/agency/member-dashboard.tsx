@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { getAgencyMembers } from '@/lib/agency-setup-members';
+import { getAgencyMembers } from '@/lib/agency-members';
 import { HOT_LEAD_THRESHOLD, WARM_LEAD_THRESHOLD } from '@/lib/constants';
 import {
   PhoneIncoming,

@@ -14,7 +14,7 @@ import { requireAgency, canEditSettings } from '@/lib/permissions';
 import {
   getAgencyConnectionById,
   revokeAgencyConnection,
-} from '@/lib/integrations/agency-setup-connections';
+} from '@/lib/integrations/agency-connections';
 
 export async function DELETE(
   _req: NextRequest,

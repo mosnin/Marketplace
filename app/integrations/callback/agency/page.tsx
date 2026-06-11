@@ -20,7 +20,7 @@ import {
   upsertAgencyByComposioId,
   findActiveAgencyConnection,
   revokeAgencyConnection,
-} from '@/lib/integrations/agency-setup-connections';
+} from '@/lib/integrations/agency-connections';
 import { findIntegration } from '@/lib/integrations/catalog';
 import { logger } from '@/lib/logger';
 

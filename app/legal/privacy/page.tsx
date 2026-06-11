@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
         <div className="mt-3 text-sm text-muted-foreground space-y-3 leading-6">
           <p>2.1. Providers and agencies who use the Service are the Data Controllers of the data they collect through intake forms, deal pipelines, and other Service features. They are responsible for how they use their own data.</p>
           <p>2.2. Subscribers are responsible for obtaining all necessary consents from Applicants and complying with applicable data protection laws.</p>
-          <p>2.3. Applicants who submit data through intake forms agree to both Koala&apos;s Privacy Policy and the applicable Subscriber&apos;s (provider/agency-setup) privacy policy.</p>
+          <p>2.3. Applicants who submit data through intake forms agree to both Koala&apos;s Privacy Policy and the applicable Subscriber&apos;s (provider/agency) privacy policy.</p>
           <p>2.4. For details on how we process data on behalf of Subscribers, please refer to our <a href="/legal/dpa" className="underline hover:text-foreground">Data Processing Agreement</a>.</p>
         </div>
       </section>
@@ -62,7 +62,7 @@ export default function PrivacyPolicyPage() {
             <li>Any other information the Subscriber&apos;s intake form requests.</li>
           </ul>
           <p>4.2. Applicant data is processed solely for the purpose of providing the Service to the Subscriber. The Subscriber determines what data is collected through their intake forms.</p>
-          <p>4.3. Applicants with questions about how their data is used should contact the Subscriber (provider/agency-setup) who collected their information.</p>
+          <p>4.3. Applicants with questions about how their data is used should contact the Subscriber (provider/agency) who collected their information.</p>
         </div>
       </section>
 

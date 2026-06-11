@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { supabase } from '@/lib/supabase';
 import { requireAgency, canManageLeads } from '@/lib/permissions';
 import { getSpaceByOwnerId } from '@/lib/space';
-import { routeAgencyLead } from '@/lib/agency-setup-routing';
+import { routeAgencyLead } from '@/lib/agency-routing';
 import { logger } from '@/lib/logger';
 
 const addLeadSchema = z.object({
