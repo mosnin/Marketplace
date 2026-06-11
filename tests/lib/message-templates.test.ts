@@ -31,7 +31,7 @@ describe('renderTemplate', () => {
 describe('extractTemplateVariables', () => {
   it('returns the deduplicated set of variables used', () => {
     const vars = extractTemplateVariables('Hi {{contactName}}, {{contactName}} — appointment {{appointmentDate}}');
-    expect(vars.sort()).toEqual(['contactName', 'appointmentDate']);
+    expect(vars.sort()).toEqual(['appointmentDate', 'contactName']);
   });
 
   it('returns an empty array when there are no tokens', () => {

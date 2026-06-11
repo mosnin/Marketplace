@@ -7,10 +7,10 @@
 
 ## At a glance
 
-- **Page routes:** 187
-- **API endpoints:** 315
+- **Page routes:** 193
+- **API endpoints:** 317
 - **Cron jobs:** 10
-- **DB tables:** 101  ·  **RPCs:** 23  ·  **migrations:** 162
+- **DB tables:** 102  ·  **RPCs:** 23  ·  **migrations:** 163
 - **Agent tools — TS (lib/ai-tools):** 56 declared, 55 wired into `ALL_TOOLS`
 - **Agent tools — Python (agent/):** 53 declared
 
@@ -23,13 +23,13 @@
 **admin** (17)
 
 - `/admin`
+- `/admin/agencies`
+- `/admin/agencies/[id]`
 - `/admin/agent-stats`
 - `/admin/announcements`
 - `/admin/audit-log`
 - `/admin/billing`
 - `/admin/broadcast`
-- `/admin/agencies`
-- `/admin/agencies/[id]`
 - `/admin/cohorts`
 - `/admin/form-analytics`
 - `/admin/invitations`
@@ -40,6 +40,49 @@
 - `/admin/users`
 - `/admin/users/[userId]`
 
+**agencies** (1)
+
+- `/agencies`
+
+**agency** (32)
+
+- `/agency`
+- `/agency/activity`
+- `/agency/agent-activity`
+- `/agency/analytics`
+- `/agency/billing`
+- `/agency/brief`
+- `/agency/commissions`
+- `/agency/deals`
+- `/agency/forecast`
+- `/agency/import-export`
+- `/agency/integrations`
+- `/agency/invitations`
+- `/agency/koala`
+- `/agency/leaderboard`
+- `/agency/leads`
+- `/agency/members`
+- `/agency/my-leads`
+- `/agency/people`
+- `/agency/pipeline`
+- `/agency/providers`
+- `/agency/providers/[userId]`
+- `/agency/reviews`
+- `/agency/reviews/[id]`
+- `/agency/services`
+- `/agency/settings`
+- `/agency/settings/auto-assignment`
+- `/agency/settings/form-builder`
+- `/agency/settings/mcp`
+- `/agency/settings/profile`
+- `/agency/settings/routing-rules`
+- `/agency/templates`
+- `/agency/usage`
+
+**agency-setup** (1)
+
+- `/agency-setup`
+
 **apply** (5)
 
 - `/apply/[slug]`
@@ -47,6 +90,10 @@
 - `/apply/[slug]/privacy`
 - `/apply/[slug]/status`
 - `/apply/b/[agencyId]`
+
+**appointment** (1)
+
+- `/appointment/[token]`
 
 **auth** (1)
 
@@ -65,48 +112,11 @@
 - `/book/[slug]`
 - `/book/[slug]/embed`
 
-**agency** (32)
+**buyer** (3)
 
-- `/agency`
-- `/agency/activity`
-- `/agency/agent-activity`
-- `/agency/analytics`
-- `/agency/billing`
-- `/agency/brief`
-- `/agency/koala`
-- `/agency/commissions`
-- `/agency/deals`
-- `/agency/forecast`
-- `/agency/import-export`
-- `/agency/integrations`
-- `/agency/invitations`
-- `/agency/leaderboard`
-- `/agency/leads`
-- `/agency/members`
-- `/agency/my-leads`
-- `/agency/people`
-- `/agency/pipeline`
-- `/agency/services`
-- `/agency/providers`
-- `/agency/providers/[userId]`
-- `/agency/reviews`
-- `/agency/reviews/[id]`
-- `/agency/settings`
-- `/agency/settings/auto-assignment`
-- `/agency/settings/form-builder`
-- `/agency/settings/mcp`
-- `/agency/settings/profile`
-- `/agency/settings/routing-rules`
-- `/agency/templates`
-- `/agency/usage`
-
-**agency** (1)
-
-- `/agency`
-
-**agencies** (1)
-
-- `/agencies`
+- `/buyer`
+- `/buyer/purchases`
+- `/buyer/purchases/[id]`
 
 **clients** (8)
 
@@ -161,6 +171,12 @@
 - `/login/agency/[[...sign-in]]`
 - `/login/provider/[[...sign-in]]`
 
+**marketplace** (3)
+
+- `/marketplace`
+- `/marketplace/category/[category]`
+- `/marketplace/s/[id]`
+
 **p** (1)
 
 - `/p/[slug]`
@@ -191,27 +207,15 @@
 - `/s/[slug]/agents/new`
 - `/s/[slug]/ai`
 - `/s/[slug]/analytics`
+- `/s/[slug]/analytics/appointments`
 - `/s/[slug]/analytics/clients`
 - `/s/[slug]/analytics/form-traffic`
 - `/s/[slug]/analytics/leads`
 - `/s/[slug]/analytics/pipeline`
-- `/s/[slug]/analytics/appointments`
+- `/s/[slug]/appointments`
 - `/s/[slug]/billing`
 - `/s/[slug]/calendar`
 - `/s/[slug]/calls`
-- `/s/[slug]/koala`
-- `/s/[slug]/koala/activity`
-- `/s/[slug]/koala/approvals`
-- `/s/[slug]/koala/brief`
-- `/s/[slug]/koala/drafts`
-- `/s/[slug]/koala/full-day`
-- `/s/[slug]/koala/history`
-- `/s/[slug]/koala/inbox`
-- `/s/[slug]/koala/log`
-- `/s/[slug]/koala/memory`
-- `/s/[slug]/koala/tasks`
-- `/s/[slug]/koala/tasks/[taskId]`
-- `/s/[slug]/koala/today`
 - `/s/[slug]/cma`
 - `/s/[slug]/commissions`
 - `/s/[slug]/communication`
@@ -233,20 +237,33 @@
 - `/s/[slug]/intake/share`
 - `/s/[slug]/intake/tracking`
 - `/s/[slug]/integrations`
+- `/s/[slug]/koala`
+- `/s/[slug]/koala/activity`
+- `/s/[slug]/koala/approvals`
+- `/s/[slug]/koala/brief`
+- `/s/[slug]/koala/drafts`
+- `/s/[slug]/koala/full-day`
+- `/s/[slug]/koala/history`
+- `/s/[slug]/koala/inbox`
+- `/s/[slug]/koala/log`
+- `/s/[slug]/koala/memory`
+- `/s/[slug]/koala/tasks`
+- `/s/[slug]/koala/tasks/[taskId]`
+- `/s/[slug]/koala/today`
 - `/s/[slug]/leads`
 - `/s/[slug]/leads/[id]`
 - `/s/[slug]/profile`
 - `/s/[slug]/profile-page`
+- `/s/[slug]/reviews`
+- `/s/[slug]/reviews/[id]`
+- `/s/[slug]/routines`
 - `/s/[slug]/services`
 - `/s/[slug]/services/[id]`
 - `/s/[slug]/services/commissions`
 - `/s/[slug]/services/new`
-- `/s/[slug]/reviews`
-- `/s/[slug]/reviews/[id]`
-- `/s/[slug]/routines`
 - `/s/[slug]/settings`
-- `/s/[slug]/settings/appearance`
 - `/s/[slug]/settings/agency`
+- `/s/[slug]/settings/appearance`
 - `/s/[slug]/settings/content`
 - `/s/[slug]/settings/form-fields`
 - `/s/[slug]/settings/integrations`
@@ -266,7 +283,6 @@
 - `/s/[slug]/swarm`
 - `/s/[slug]/swarm/[runId]`
 - `/s/[slug]/sync`
-- `/s/[slug]/appointments`
 - `/s/[slug]/whatsapp`
 - `/s/[slug]/whatsapp/[id]`
 
@@ -294,10 +310,6 @@
 
 - `/terms`
 
-**appointment** (1)
-
-- `/appointment/[token]`
-
 **trial** (1)
 
 - `/trial`
@@ -312,13 +324,13 @@
 **/api/admin** (18)
 
 - `/api/admin/actions`
+- `/api/admin/agencies`
+- `/api/admin/agencies/[id]`
 - `/api/admin/agent-stats`
 - `/api/admin/announcements`
 - `/api/admin/announcements/[id]`
 - `/api/admin/billing`
 - `/api/admin/broadcast`
-- `/api/admin/agencies`
-- `/api/admin/agencies/[id]`
 - `/api/admin/dlq`
 - `/api/admin/dlq/[eventId]`
 - `/api/admin/invitations`
@@ -333,6 +345,58 @@
 **/api/affiliate** (1)
 
 - `/api/affiliate`
+
+**/api/agencies** (1)
+
+- `/api/agencies/leads`
+
+**/api/agency** (45)
+
+- `/api/agency/activity`
+- `/api/agency/agent-activity`
+- `/api/agency/assign-lead`
+- `/api/agency/billing/cancel`
+- `/api/agency/billing/portal`
+- `/api/agency/commissions/export`
+- `/api/agency/commissions/ledger/[id]`
+- `/api/agency/contacts`
+- `/api/agency/create`
+- `/api/agency/export`
+- `/api/agency/form-config`
+- `/api/agency/form-config/push`
+- `/api/agency/integrations`
+- `/api/agency/integrations/[id]`
+- `/api/agency/integrations/connect/[toolkit]`
+- `/api/agency/invitations/[id]`
+- `/api/agency/invite`
+- `/api/agency/invite/bulk`
+- `/api/agency/join`
+- `/api/agency/join-code`
+- `/api/agency/lead-note`
+- `/api/agency/leads/[id]`
+- `/api/agency/leads/export`
+- `/api/agency/leads/import`
+- `/api/agency/members/[id]`
+- `/api/agency/members/[id]/offboard`
+- `/api/agency/members/[id]/role`
+- `/api/agency/morning`
+- `/api/agency/notifications`
+- `/api/agency/profile`
+- `/api/agency/providers/[userId]`
+- `/api/agency/reviews`
+- `/api/agency/reviews/[id]`
+- `/api/agency/reviews/[id]/comments`
+- `/api/agency/routing-rules`
+- `/api/agency/routing-rules/[id]`
+- `/api/agency/services`
+- `/api/agency/services/[id]/assign`
+- `/api/agency/settings`
+- `/api/agency/stats`
+- `/api/agency/team-activity`
+- `/api/agency/templates`
+- `/api/agency/templates/[id]`
+- `/api/agency/templates/[id]/publish`
+- `/api/agency/unassign-lead`
 
 **/api/agent** (52)
 
@@ -391,11 +455,11 @@
 
 **/api/ai** (14)
 
-- `/api/ai/attachments`
 - `/api/ai/agency-conversations`
 - `/api/ai/agency-conversations/[id]`
 - `/api/ai/agency-messages`
 - `/api/ai/agency-task`
+- `/api/ai/attachments`
 - `/api/ai/conversations`
 - `/api/ai/conversations/[id]`
 - `/api/ai/health`
@@ -417,10 +481,29 @@
 - `/api/applications/compare`
 - `/api/applications/pdf`
 - `/api/applications/portal`
-- `/api/applications/portal/message`
 - `/api/applications/portal/appointment-request`
 - `/api/applications/portal/appointment/[appointmentId]/respond`
+- `/api/applications/portal/message`
 - `/api/applications/status`
+
+**/api/appointments** (16)
+
+- `/api/appointments`
+- `/api/appointments/[id]`
+- `/api/appointments/[id]/prep`
+- `/api/appointments/available`
+- `/api/appointments/book`
+- `/api/appointments/convert`
+- `/api/appointments/feedback`
+- `/api/appointments/gcal`
+- `/api/appointments/manage`
+- `/api/appointments/overrides`
+- `/api/appointments/overrides/[id]`
+- `/api/appointments/reminders`
+- `/api/appointments/services`
+- `/api/appointments/services/[id]`
+- `/api/appointments/waitlist`
+- `/api/appointments/waitlist/notify`
 
 **/api/auth** (1)
 
@@ -437,57 +520,10 @@
 
 - `/api/brief/unsubscribe`
 
-**/api/agency** (45)
+**/api/buyer** (2)
 
-- `/api/agency/activity`
-- `/api/agency/agent-activity`
-- `/api/agency/assign-lead`
-- `/api/agency/billing/cancel`
-- `/api/agency/billing/portal`
-- `/api/agency/commissions/export`
-- `/api/agency/commissions/ledger/[id]`
-- `/api/agency/contacts`
-- `/api/agency/create`
-- `/api/agency/export`
-- `/api/agency/form-config`
-- `/api/agency/form-config/push`
-- `/api/agency/integrations`
-- `/api/agency/integrations/[id]`
-- `/api/agency/integrations/connect/[toolkit]`
-- `/api/agency/invitations/[id]`
-- `/api/agency/invite`
-- `/api/agency/invite/bulk`
-- `/api/agency/join`
-- `/api/agency/join-code`
-- `/api/agency/lead-note`
-- `/api/agency/leads/[id]`
-- `/api/agency/leads/export`
-- `/api/agency/leads/import`
-- `/api/agency/members/[id]`
-- `/api/agency/members/[id]/offboard`
-- `/api/agency/members/[id]/role`
-- `/api/agency/morning`
-- `/api/agency/notifications`
-- `/api/agency/profile`
-- `/api/agency/services`
-- `/api/agency/services/[id]/assign`
-- `/api/agency/providers/[userId]`
-- `/api/agency/reviews`
-- `/api/agency/reviews/[id]`
-- `/api/agency/reviews/[id]/comments`
-- `/api/agency/routing-rules`
-- `/api/agency/routing-rules/[id]`
-- `/api/agency/settings`
-- `/api/agency/stats`
-- `/api/agency/team-activity`
-- `/api/agency/templates`
-- `/api/agency/templates/[id]`
-- `/api/agency/templates/[id]/publish`
-- `/api/agency/unassign-lead`
-
-**/api/agencies** (1)
-
-- `/api/agencies/leads`
+- `/api/buyer/purchases`
+- `/api/buyer/purchases/[id]`
 
 **/api/calendar** (1)
 
@@ -502,13 +538,6 @@
 
 - `/api/cards/[type]/[id]`
 - `/api/cards/contact/[id]`
-
-**/api/koala** (4)
-
-- `/api/koala/approvals`
-- `/api/koala/post-appointment`
-- `/api/koala/post-appointment/execute`
-- `/api/koala/transcribe`
 
 **/api/clients** (11)
 
@@ -545,8 +574,8 @@
 
 **/api/cron** (10)
 
-- `/api/cron/agent-sweep`
 - `/api/cron/agency-weekly-report`
+- `/api/cron/agent-sweep`
 - `/api/cron/cleanup`
 - `/api/cron/daily-briefing`
 - `/api/cron/draft-outcomes`
@@ -646,6 +675,13 @@
 
 - `/api/invitations/[token]`
 
+**/api/koala** (4)
+
+- `/api/koala/approvals`
+- `/api/koala/post-appointment`
+- `/api/koala/post-appointment/execute`
+- `/api/koala/transcribe`
+
 **/api/mcp** (3)
 
 - `/api/mcp`
@@ -695,13 +731,6 @@
 - `/api/profile-page/cover-photo`
 - `/api/profile-page/profile-photo`
 
-**/api/services** (4)
-
-- `/api/services`
-- `/api/services/[id]`
-- `/api/services/[id]/packets`
-- `/api/services/[id]/packets/[packetId]`
-
 **/api/public** (3)
 
 - `/api/public/apply`
@@ -720,6 +749,13 @@
 **/api/search** (1)
 
 - `/api/search`
+
+**/api/services** (4)
+
+- `/api/services`
+- `/api/services/[id]`
+- `/api/services/[id]/packets`
+- `/api/services/[id]/packets/[packetId]`
 
 **/api/settings** (1)
 
@@ -764,25 +800,6 @@
 
 - `/api/sync`
 
-**/api/appointments** (16)
-
-- `/api/appointments`
-- `/api/appointments/[id]`
-- `/api/appointments/[id]/prep`
-- `/api/appointments/available`
-- `/api/appointments/book`
-- `/api/appointments/convert`
-- `/api/appointments/feedback`
-- `/api/appointments/gcal`
-- `/api/appointments/manage`
-- `/api/appointments/overrides`
-- `/api/appointments/overrides/[id]`
-- `/api/appointments/services`
-- `/api/appointments/services/[id]`
-- `/api/appointments/reminders`
-- `/api/appointments/waitlist`
-- `/api/appointments/waitlist/notify`
-
 **/api/upload** (2)
 
 - `/api/upload`
@@ -809,8 +826,8 @@
 
 | Path | Schedule |
 |------|----------|
-| `/api/cron/agent-sweep` | `0 */4 * * *` |
 | `/api/cron/agency-weekly-report` | `0 9 * * 1` |
+| `/api/cron/agent-sweep` | `0 */4 * * *` |
 | `/api/cron/cleanup` | `0 3 * * *` |
 | `/api/cron/daily-briefing` | `0 * * * *` |
 | `/api/cron/draft-outcomes` | `0 3 * * *` |
@@ -834,17 +851,17 @@ the runtimes diverge — this table makes the drift visible.
 
 - **In both runtimes (7):** `add_service`, `create_deal`, `create_plan`, `find_stuck_deals`, `read_attachment`, `request_deal_review`, `send_service_packet`
 
-- **TS only (49):** `add_checklist_item`, `add_person`, `analyze_provider`, `archive_person`, `assign_lead_to_provider`, `attach_file_to_service`, `attach_service_to_deal`, `block_time`, `cancel_appointment`, `check_availability`, `clear_followup`, `delegate_task`, `draft_email`, `draft_sms`, `find_comparable_services`, `find_deal`, `find_overdue_followups`, `find_person`, `find_service`, `find_quiet_hot_persons`, `find_appointments`, `list_files`, `log_call`, `log_email_sent`, `log_meeting`, `log_sms_sent`, `mark_deal_lost`, `mark_deal_won`, `mark_person_cold`, `mark_person_hot`, `merge_persons`, `move_deal_stage`, `note_on_deal`, `note_on_person`, `note_on_service`, `pipeline_summary`, `propose_appointment_times`, `read_file`, `recall_history`, `reschedule_appointment`, `schedule_appointment`, `send_email`, `send_sms`, `set_followup`, `summarize_provider`, `update_deal_close_date`, `update_deal_probability`, `update_deal_value`, `update_service_status`
+- **TS only (49):** `add_checklist_item`, `add_person`, `analyze_provider`, `archive_person`, `assign_lead_to_provider`, `attach_file_to_service`, `attach_service_to_deal`, `block_time`, `cancel_appointment`, `check_availability`, `clear_followup`, `delegate_task`, `draft_email`, `draft_sms`, `find_appointments`, `find_comparable_services`, `find_deal`, `find_overdue_followups`, `find_person`, `find_quiet_hot_persons`, `find_service`, `list_files`, `log_call`, `log_email_sent`, `log_meeting`, `log_sms_sent`, `mark_deal_lost`, `mark_deal_won`, `mark_person_cold`, `mark_person_hot`, `merge_persons`, `move_deal_stage`, `note_on_deal`, `note_on_person`, `note_on_service`, `pipeline_summary`, `propose_appointment_times`, `read_file`, `recall_history`, `reschedule_appointment`, `schedule_appointment`, `send_email`, `send_sms`, `set_followup`, `summarize_provider`, `update_deal_close_date`, `update_deal_probability`, `update_deal_value`, `update_service_status`
 
-- **Python only (46):** `add_intake_question`, `advance_deal_stage`, `analyze_portfolio`, `ask_provider`, `audit_response_times`, `book_appointment`, `call_integration_tool`, `change_member_role`, `commission_report`, `create_contact`, `draft_message`, `edit_studio_image`, `find_at_risk_agents`, `find_breached_leads`, `find_contacts`, `find_deals`, `find_integration_tool`, `find_unassigned_leads`, `flag_deal_for_agency_review`, `generate_priority_list`, `generate_studio_image`, `get_contact_activity`, `get_intake_form`, `log_activity_run`, `manage_goal`, `manage_routines`, `offboard_member`, `outcome`, `process_inbound_message`, `read_provider_morning_story`, `provider_performance`, `reassign_lead`, `recall_docs`, `recall_memory`, `remove_intake_question`, `route_lead`, `save_intake_form`, `send_email_now`, `send_sms_now`, `send_team_announcement`, `set_routing_rule`, `store_memory`, `team_health`, `update_contact`, `update_deal`, `update_intake_question`
+- **Python only (46):** `add_intake_question`, `advance_deal_stage`, `analyze_portfolio`, `ask_provider`, `audit_response_times`, `book_appointment`, `call_integration_tool`, `change_member_role`, `commission_report`, `create_contact`, `draft_message`, `edit_studio_image`, `find_at_risk_agents`, `find_breached_leads`, `find_contacts`, `find_deals`, `find_integration_tool`, `find_unassigned_leads`, `flag_deal_for_agency_review`, `generate_priority_list`, `generate_studio_image`, `get_contact_activity`, `get_intake_form`, `log_activity_run`, `manage_goal`, `manage_routines`, `offboard_member`, `outcome`, `process_inbound_message`, `provider_performance`, `read_provider_morning_story`, `reassign_lead`, `recall_docs`, `recall_memory`, `remove_intake_question`, `route_lead`, `save_intake_form`, `send_email_now`, `send_sms_now`, `send_team_announcement`, `set_routing_rule`, `store_memory`, `team_health`, `update_contact`, `update_deal`, `update_intake_question`
 
 ## Data model (supabase/schema.sql)
 
-**Tables (101):** `AIUserProfile`, `AffiliateAccount`, `AgentActivityLog`, `AgentDraft`, `AgentGoal`, `AgentMemory`, `AgentPausedRun`, `AgentQuestion`, `AgentSettings`, `AgentTask`, `AgentTrajectory`, `Announcement`, `AnnouncementDismissal`, `AppKnowledgeDoc`, `ApplicationMessage`, `ApplicationStatusUpdate`, `Artifact`, `ArtifactVersion`, `Attachment`, `AuditLog`, `Brief`, `BriefTipHistory`, `AgencyConversation`, `AgencyMessage`, `AgencyNotification`, `Agency`, `AgencyIntegrationConnection`, `AgencyMembership`, `AgencyRemoval`, `AgencyTemplate`, `CalendarEvent`, `CalendarEventMirror`, `CalendarNote`, `CallLog`, `ChatUsage`, `ClientAuthCode`, `ClientDocument`, `ClientInfoRequest`, `ClientMessage`, `ClientUser`, `CmaReport`, `CommissionLedger`, `CommissionSplit`, `Contact`, `ContactDocument`, `Conversation`, `CreditLot`, `CreditTxn`, `CustomAgent`, `DeadLetterEvent`, `Deal`, `DealActivity`, `DealChecklistItem`, `DealContact`, `DealDocument`, `DealReviewComment`, `DealReviewRequest`, `DealRoutingRule`, `DealStage`, `DisabledSpace`, `DocumentEmbedding`, `EmailBroadcast`, `ExecutionStep`, `File`, `FormAnalyticsEvent`, `FormDraft`, `GoalDecomposition`, `GoogleCalendarToken`, `IntegrationConnection`, `IntegrationTrigger`, `Invitation`, `McpApiKey`, `McpAuthCode`, `Message`, `MessageTemplate`, `Note`, `Pipeline`, `ProfilePage`, `Service`, `ServicePacket`, `PushSubscription`, `Routine`, `SignatureRequest`, `Space`, `SpaceSetting`, `StudioBrand`, `StudioGeneration`, `StudioPost`, `SupportTicket`, `SwarmEvent`, `SwarmMember`, `SwarmRun`, `TaskCheckpoint`, `TaskDependency`, `TelemetryEvent`, `Appointment`, `AppointmentAvailabilityOverride`, `AppointmentFeedback`, `AppointmentServiceProfile`, `AppointmentWaitlist`, `User`
+**Tables (102):** `AIUserProfile`, `AffiliateAccount`, `Agency`, `AgencyConversation`, `AgencyIntegrationConnection`, `AgencyMembership`, `AgencyMessage`, `AgencyNotification`, `AgencyRemoval`, `AgencyTemplate`, `AgentActivityLog`, `AgentDraft`, `AgentGoal`, `AgentMemory`, `AgentPausedRun`, `AgentQuestion`, `AgentSettings`, `AgentTask`, `AgentTrajectory`, `Announcement`, `AnnouncementDismissal`, `AppKnowledgeDoc`, `ApplicationMessage`, `ApplicationStatusUpdate`, `Appointment`, `AppointmentAvailabilityOverride`, `AppointmentFeedback`, `AppointmentServiceProfile`, `AppointmentWaitlist`, `Artifact`, `ArtifactVersion`, `Attachment`, `AuditLog`, `Brief`, `BriefTipHistory`, `CalendarEvent`, `CalendarEventMirror`, `CalendarNote`, `CallLog`, `ChatUsage`, `ClientAuthCode`, `ClientDocument`, `ClientInfoRequest`, `ClientMessage`, `ClientUser`, `CmaReport`, `CommissionLedger`, `CommissionSplit`, `Contact`, `ContactDocument`, `Conversation`, `CreditLot`, `CreditTxn`, `CustomAgent`, `DeadLetterEvent`, `Deal`, `DealActivity`, `DealChecklistItem`, `DealContact`, `DealDocument`, `DealReviewComment`, `DealReviewRequest`, `DealRoutingRule`, `DealStage`, `DisabledSpace`, `DocumentEmbedding`, `EmailBroadcast`, `ExecutionStep`, `File`, `FormAnalyticsEvent`, `FormDraft`, `GoalDecomposition`, `GoogleCalendarToken`, `IntegrationConnection`, `IntegrationTrigger`, `Invitation`, `McpApiKey`, `McpAuthCode`, `Message`, `MessageTemplate`, `Note`, `Pipeline`, `ProfilePage`, `Purchase`, `PushSubscription`, `Routine`, `Service`, `ServicePacket`, `SignatureRequest`, `Space`, `SpaceSetting`, `StudioBrand`, `StudioGeneration`, `StudioPost`, `SupportTicket`, `SwarmEvent`, `SwarmMember`, `SwarmRun`, `TaskCheckpoint`, `TaskDependency`, `TelemetryEvent`, `User`
 
 **RPCs (23):** `book_appointment_atomic`, `charge_credits_for_chat_usage`, `cleanup_agent_data`, `create_agency_with_owner`, `create_space_with_defaults`, `current_user_internal_id`, `ensure_agent_settings_for_space`, `grant_credits`, `match_agent_memory`, `match_documents`, `match_documents_hybrid`, `offboard_agency_member`, `purge_credit_rows_for_account`, `refund_credit_txn`, `reorder_deal`, `resolve_billing_account_for_space`, `routine_next_run_at`, `routine_set_next_run`, `search_knowledge_docs`, `spend_credits`, `stamp_brief_enabled_at`, `sync_commission_ledger`, `update_updated_at_column`
 
-**Migrations:** 162 (latest: `20260702000000_enable_rls_on_unprotected_tables.sql`)
+**Migrations:** 163 (latest: `20260702000000_enable_rls_on_unprotected_tables.sql`)
 
 ## External services
 
